@@ -1,4 +1,4 @@
-import { View, Text, Image, Pressable, TextInput, TouchableOpacity, StyleProp, ViewStyle } from 'react-native';
+import { View, Text, Image, Pressable, TextInput, TouchableOpacity, StyleProp, ViewStyle, TextInputProps, NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import React, { useState } from 'react';
 import { SafeAreaView } from "react-native-safe-area-context";
 import COLORS from './constants/colors';
@@ -8,10 +8,41 @@ import Button from './components/Button';
 
 import {router} from "expo-router"
 
+// TODO : Add Form Validation. Validate each of the fields.
 
 const Signup = () => {
   const [isPasswordShown, setIsPasswordShown] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+
+  const [password , setPassword] = useState("");
+  const [email , setEmail] = useState("");
+  const [number , setNumber] = useState("")
+  const [message , setMessage] = useState("")
+
+  const handleSignup = async () => {
+        // e.preventDefault();
+        try {
+            const response = await fetch('http://localhost:3000/auth/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({"email" : email,"phone_number" : number  , "password" : password})
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                setMessage(data.message);
+            } else {
+                setMessage('Error: ' + data.message);
+            }
+            setEmail("")
+            setNumber("")
+            setPassword("")
+        } catch (error : any) {
+            setMessage('Error: ' + error.message);
+        }
+    };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
@@ -29,8 +60,9 @@ const Signup = () => {
           <Text style={{
             fontSize: 16,
             color: COLORS.black
-          }}>Connect with your friend today!</Text>
+          }}>Shopping at your fingertips!</Text>
         </View>
+
 
         <View style={{ marginBottom: 12 }}>
           <Text style={{
@@ -51,6 +83,7 @@ const Signup = () => {
           }}>
             <TextInput
               placeholder='Enter your email address'
+              onChangeText={(text : string) => setEmail(text)}
               placeholderTextColor={COLORS.black}
               keyboardType='email-address'
               style={{
@@ -79,7 +112,8 @@ const Signup = () => {
             paddingLeft: 22
           }}>
             <TextInput
-              placeholder='+91'
+              value='+92'
+              editable={false}
               placeholderTextColor={COLORS.black}
               keyboardType='numeric'
               style={{
@@ -93,6 +127,7 @@ const Signup = () => {
             <TextInput
               placeholder='Enter your phone number'
               placeholderTextColor={COLORS.black}
+              onChangeText={(text : string) => setNumber(`+92 ${text}`)}
               keyboardType='numeric'
               style={{
                 width: "80%"
@@ -120,6 +155,7 @@ const Signup = () => {
           }}>
             <TextInput
               placeholder='Enter your password'
+              onChangeText={(text : string) => setPassword(text)}
               placeholderTextColor={COLORS.black}
               secureTextEntry={!isPasswordShown}
               style={{
@@ -164,10 +200,14 @@ const Signup = () => {
             marginTop: 18,
             marginBottom: 4
           }}
-          onPress={() => router.navigate("/sign-in")}
+          onPress={async () => {
+            await handleSignup()
+            alert(message)
+            router.navigate("/sign-in")
+          }}
         />
 
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 20 }}>
+        {/* <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 20 }}>
           <View
             style={{
               flex: 1,
@@ -244,7 +284,7 @@ const Signup = () => {
 
             <Text>Google</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
 
         <View style={{
           flexDirection: "row",

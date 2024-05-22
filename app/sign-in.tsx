@@ -14,6 +14,38 @@ const Login = () => {
   const [isPasswordShown, setIsPasswordShown] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
 
+  const [email , setEmail] = useState("")
+  const [password , setPassword] = useState("")
+  const [token, setToken] = useState("")
+  const [message , setMessage] = useState("")
+
+  const handleLogin = async () => {
+        // e.preventDefault();
+        try {
+            const response = await fetch('http://localhost:3000/auth/signin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ "email" : email, "password" : password })
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                setMessage('Sign in successful');
+                setToken(data.token)
+            } else {
+                setMessage('Error: ' + data.message);
+            }
+
+            setEmail('')
+            setPassword('')
+
+        } catch (error : any) {
+            setMessage('Error: ' + error.message);
+        }
+    };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <View style={{ flex: 1, marginHorizontal: 22 }}>
@@ -24,13 +56,13 @@ const Login = () => {
             marginVertical: 12,
             color: COLORS.black
           }}>
-            Hi Welcome Back ! 👋
+            Welcome Back ! 👋
           </Text>
 
           <Text style={{
             fontSize: 16,
             color: COLORS.black
-          }}>Hello again you have been missed!</Text>
+          }}>You have been missed!</Text>
         </View>
 
         <View style={{ marginBottom: 12 }}>
@@ -52,6 +84,7 @@ const Login = () => {
           }}>
             <TextInput
               placeholder='Enter your email address'
+              onChangeText={(text : string) => setEmail(text)}
               placeholderTextColor={COLORS.black}
               keyboardType='email-address'
               style={{
@@ -80,6 +113,8 @@ const Login = () => {
           }}>
             <TextInput
               placeholder='Enter your password'
+            //   value={password}
+              onChangeText={(text:string) => setPassword(text)}
               placeholderTextColor={COLORS.black}
               secureTextEntry={!isPasswordShown}
               style={{
@@ -128,8 +163,18 @@ const Login = () => {
           }}
           onPress={async () => {
             try {
-            await AsyncStorage.setItem("authenticated" , "true")
-            router.navigate("/")
+                await handleLogin()
+                if(message == ""){
+                    alert(`try hitting the sign in button again!`)
+                    return
+                }
+                alert(message)
+                if (token === ""){
+                    return
+                }
+                await AsyncStorage.setItem("authenticated" , "true")
+                await AsyncStorage.setItem("token" ,  token)
+                router.navigate("/")
             } catch (e){
                 alert(`couldn't log in. error = ${e}`)
             }
@@ -137,7 +182,7 @@ const Login = () => {
           }}
         />
 
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 20 }}>
+        {/* <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 20 }}>
           <View
             style={{
               flex: 1,
@@ -214,7 +259,7 @@ const Login = () => {
 
             <Text>Google</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
 
         <View style={{
           flexDirection: "row",
@@ -223,7 +268,7 @@ const Login = () => {
         }}>
           <Text style={{ fontSize: 16, color: COLORS.black }}>Don't have an account ? </Text>
           <Pressable
-            onPress={() => router.navigate("/sign-in")}
+            onPress={() => router.navigate("/sign-up")}
           >
             <Text style={{
               fontSize: 16,
