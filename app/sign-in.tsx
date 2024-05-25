@@ -8,7 +8,7 @@ import Button from './components/Button';
 import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
+// TODO : Error handling when message = ""
 
 const Login = () => {
   const [isPasswordShown, setIsPasswordShown] = useState(false);
@@ -22,7 +22,7 @@ const Login = () => {
   const handleLogin = async () => {
         // e.preventDefault();
         try {
-            const response = await fetch('http://localhost:3000/auth/signin', {
+            const response = await fetch('http://192.168.18.16:3000/auth/signin', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

@@ -9,6 +9,7 @@ import Button from './components/Button';
 import {router} from "expo-router"
 
 // TODO : Add Form Validation. Validate each of the fields.
+// TODO : Error handling when the message = ""
 
 const Signup = () => {
   const [isPasswordShown, setIsPasswordShown] = useState(false);
@@ -22,7 +23,7 @@ const Signup = () => {
   const handleSignup = async () => {
         // e.preventDefault();
         try {
-            const response = await fetch('http://localhost:3000/auth/signup', {
+            const response = await fetch('http://192.168.18.16:3000/auth/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -202,7 +203,11 @@ const Signup = () => {
           }}
           onPress={async () => {
             await handleSignup()
-            alert(message)
+            if (message === "") {
+                alert("created account!")
+            } else {
+                alert(message)
+            }
             router.navigate("/sign-in")
           }}
         />
