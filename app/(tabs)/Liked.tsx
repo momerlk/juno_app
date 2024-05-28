@@ -14,6 +14,7 @@ const fetchFonts = () => {
 
 export default function TabTwoScreen() {
   const [data, setData] = useState<any>([]);
+  const [req , setReq] = useState(0);
   fetchFonts();
 
   useEffect(() => {
@@ -27,16 +28,19 @@ export default function TabTwoScreen() {
       };
 
       try {
-        const response = await fetch("http://localhost:3000/user/liked", requestOptions);
+        const response = await fetch("http://localhost:3001/user/liked", requestOptions);
         const result = await response.json();
         setData(result);
       } catch (error) {
-        alert(`Error fetching data: ${error}`);
+        console.log(`Error fetching data: ${error}`);
         setData(mockData)
+        setReq(1);
       }
     };
 
-    fetchData();
+    if(req == 0){
+      fetchData();
+    }
   }, []); // Empty dependency array to run only once when the component mounts
 
   return (
