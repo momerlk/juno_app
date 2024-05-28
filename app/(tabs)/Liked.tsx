@@ -29,3 +29,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
 });
+
+function likedImage(){
+  
+}
