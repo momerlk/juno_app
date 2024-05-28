@@ -27,34 +27,21 @@ export default function RootLayout() {
   if (!loaded) {
     return null;
   }
-
-  
-  if (true){
-    return (
-      <Stack
-            screenOptions={{
-              // Hide the header for all other routes.
-              headerShown: false,
+  return (
+    <Stack
+          screenOptions={{
+            // Hide the header for all other routes.
+            headerShown: false,
+          }}
+        >
+          <Stack.Screen
+            name="details"
+            options={{
+              // Hide the header for this route
+              headerShown: true,
             }}
-          >
-            <Stack.Screen
-              name="welcome"
-              options={{
-                // Hide the header for this route
-                headerShown: false,
-              }}
-            />
-          </Stack>
-    )
-  } else {
-
-    return (
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="+not-found" />
+          />
         </Stack>
-      </ThemeProvider>
-    );
-  }
+  )
+
 }

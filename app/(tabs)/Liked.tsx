@@ -3,6 +3,7 @@ import { StyleSheet, Image, View, Text, ScrollView } from 'react-native';
 import * as Font from "expo-font";
 
 // TODO : Add header
+// TODO : Add proper token
 
 const fetchFonts = () => {
   return Font.loadAsync({
@@ -20,7 +21,8 @@ export default function TabTwoScreen() {
   useEffect(() => {
     const fetchData = async () => {
       const myHeaders = new Headers();
-      myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjRmODY0NzNlY2QwZTQ2MWE2N2NiYTQiLCJpYXQiOjE3MTY5MjcxNTEsImV4cCI6MTcxNjkzMDc1MX0.jRqqPkQtdFBrMRz1lu0znNZM8rBRzUu5Q9s29eC0DvM");
+      const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjRmODY0NzNlY2QwZTQ2MWE2N2NiYTQiLCJpYXQiOjE3MTY5MzEzMDEsImV4cCI6MTcxNjkzNDkwMX0.ukU62aimrL6C_5SNy4TTb9ghT01xqTWuZIWnw-kSrzU"
+      myHeaders.append("Authorization", `Bearer ${token}`);
 
       const requestOptions = {
         method: "GET",
@@ -28,7 +30,7 @@ export default function TabTwoScreen() {
       };
 
       try {
-        const response = await fetch("http://localhost:3001/user/liked", requestOptions);
+        const response = await fetch("http://localhost:3000/user/liked", requestOptions);
         const result = await response.json();
         setData(result);
       } catch (error) {
@@ -88,22 +90,26 @@ const styles = StyleSheet.create({
  
   },
   likedImage:{
-    width: 360,
-    height: 205,  
+    flex: 1,
+    justifyContent : "center",            
+    resizeMode: 'cover',
     borderRadius: 20,
-    marginVertical: 50,
-    justifyContent: 'center',
-    resizeMode : "cover"
   }
 
 });
 
 function LikedCard(props : any){
-  return <div style={styles.likedContainer}>
+  return <ScrollView style={styles.likedContainer}>
+    
     <Image source={{uri: props.url}} style={styles.likedImage}/>
     <Text style={styles.likedImageBrand}> {props.title} </Text>
+    <Text>By {props.vendor}</Text>
+
+    {/* acts as a spacer */}
+    <View style={{marginVertical : 20}}></View> 
+
     <Text style={styles.likedImagePrice} > {props.price} </Text>
-  </div>
+  </ScrollView>
 }
 
 

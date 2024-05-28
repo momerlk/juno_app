@@ -332,7 +332,7 @@ export default class App extends React.Component<{}, AppState> {
                 marginHorizontal : 20,
               }}
               title="View Details" 
-              onPress={() => {alert("routing to details page")}} 
+              onPress={() => {router.navigate("/details")}} 
               filled={true} 
             />
       </View>
