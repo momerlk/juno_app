@@ -1,5 +1,5 @@
 import { View, Text, Pressable, Image, StyleProp, ViewStyle, TextStyle } from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect , useState} from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import COLORS from './constants/colors';
 import Button from './components/Button';
@@ -8,6 +8,25 @@ import {router} from "expo-router"
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
+function LikedCard(props : any){
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <span>Count is {count}</span>
+      <button onClick={() => {setCount(count + 1)}}>+</button>
+      <button onClick={() => {setCount(count - 1)}}>-</button>
+    </div>
+  )
+}
+
+function Amr(){
+  return (
+    <div>
+      <LikedCard />
+    </div>
+  )
+}
 
 
 const Welcome = () => {
