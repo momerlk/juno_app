@@ -90,26 +90,22 @@ const styles = StyleSheet.create({
  
   },
   likedImage:{
-    flex: 1,
-    justifyContent : "center",            
-    resizeMode: 'cover',
+    width: 360,
+    height: 205,  
     borderRadius: 20,
+    marginVertical: 50,
+    justifyContent: 'center',
+    resizeMode : "cover"
   }
 
 });
 
 function LikedCard(props : any){
-  return <ScrollView style={styles.likedContainer}>
-    
+  return <div style={styles.likedContainer}>
     <Image source={{uri: props.url}} style={styles.likedImage}/>
     <Text style={styles.likedImageBrand}> {props.title} </Text>
-    <Text>By {props.vendor}</Text>
-
-    {/* acts as a spacer */}
-    <View style={{marginVertical : 20}}></View> 
-
     <Text style={styles.likedImagePrice} > {props.price} </Text>
-  </ScrollView>
+  </div>
 }
 
 
