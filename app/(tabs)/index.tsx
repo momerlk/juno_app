@@ -124,6 +124,8 @@ export default class App extends React.Component<{}, AppState> {
       outputRange: [1, 0.8, 1],
       extrapolate: 'clamp',
     });
+
+    fetchFonts();
   }
 
   UNSAFE_componentWillMount() {
@@ -261,14 +263,30 @@ export default class App extends React.Component<{}, AppState> {
               marginHorizontal : 10,
               marginTop : 10,
             }}>
-              <Text style={{fontSize : 24}}>{item.vendor}</Text>
-              <Text style={{fontSize : 20, marginVertical : 4}}>Rs. {item.price}</Text>
+              <Text style={{
+                fontSize : 22, fontFamily : "Montserrat",
+                }}>{item.vendor}</Text>
+              <Text style={{
+                fontSize : 17, marginVertical : 5,
+                }}>Rs. {(() => {
+                  let l = item.price.length;
+                  let pos = (l) - 3;
+                  if(pos > 0){
+                    const firstPart = item.price.slice(0, pos);
+                    const secondPart = item.price.slice(pos);
+
+                    // Concatenate the first part, substring, and second part
+                    const newString = firstPart + "," + secondPart;
+                    return newString;
+                  } else {
+                  return item.price
+                  }
+                })()}</Text>
             </View>
-            
-            <Button style={{
-              marginVertical : 8,
-            }}
-            title="View Details" onPress={() => {}} filled={true} />
+
+            <View style={{marginBottom : 60}}>
+              <Text></Text>
+            </View>
             
           </Animated.View>
         );
@@ -307,8 +325,16 @@ export default class App extends React.Component<{}, AppState> {
     return (
       <View style={{ flex: 1}}>
         <View style={{ height: 60 }}></View>
-        <View style={{ flex: 1 }}>{this.renderUsers()}</View>
-        <View style={{ height: 60 }}></View>
+        <View style={{ flex: 1}}>{this.renderUsers()}</View>
+        <Button 
+              style={{
+                marginVertical : 8,
+                marginHorizontal : 20,
+              }}
+              title="View Details" 
+              onPress={() => {alert("routing to details page")}} 
+              filled={true} 
+            />
       </View>
     );
   }
