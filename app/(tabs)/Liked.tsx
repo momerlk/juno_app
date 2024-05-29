@@ -21,7 +21,8 @@ export default function TabTwoScreen() {
   useEffect(() => {
     const fetchData = async () => {
       const myHeaders = new Headers();
-      const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjRmODY0NzNlY2QwZTQ2MWE2N2NiYTQiLCJpYXQiOjE3MTY5NjIzMDIsImV4cCI6MTcxNjk2NTkwMn0.hfYWQv9IhlmDp6uRIkHROif6w1J6NMhfm35aXA0XLWA"
+      // TODO : Replace with actual token
+      const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiOTZlOTNjOWItODI1Mi00NjM5LWJkMGUtOWQ2ZjE2NmRjYzg0IiwiaWF0IjoxNzE2OTcxNTU3LCJleHAiOjE3MTY5ODIzNTd9.uQOai0xwSWjXbQMWDX2t5q2DUGOctjsKM_KU_IrXf9A"
       myHeaders.append("Authorization", `Bearer ${token}`);
 
       const requestOptions = {
@@ -30,11 +31,12 @@ export default function TabTwoScreen() {
       };
 
       try {
-        const response = await fetch("http://192.168.18.16:3000/user/liked", requestOptions);
+        const response = await fetch("http://192.168.18.16:3000/user/liked", requestOptions);const result = await response.json();
         if(response.status !== 200){
+          alert(`failed to get liked products. error : ${result.message}`)
           return;
         }
-        const result = await response.json();
+        
         setData(result);
       } catch (error) {
         console.log(`Error fetching data: ${error}`);

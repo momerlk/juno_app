@@ -61,6 +61,7 @@ interface AppState {
   currentIndex: number;
 }
 
+// TODO : If token/not authorised redirect to Welcome page
 export default class App extends React.Component<{}, AppState> {
   position: Animated.ValueXY;
   rotate: Animated.AnimatedInterpolation<string>;
