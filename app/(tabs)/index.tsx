@@ -32,6 +32,7 @@ interface AppData extends React.Component {
 }
 
 
+// TODO : Change users to products
 const Users : any[] = [{
         "product_id": "92649134-f9dd-4a47-8c88-346dd54fdd52",
         "product_url": "https://www.afrozeh.com/products/mahjabeen-1",
@@ -333,7 +334,12 @@ export default class App extends React.Component<{}, AppState> {
                 marginHorizontal : 20,
               }}
               title="View Details" 
-              onPress={() => {router.navigate("/details")}} 
+              onPress={() => {
+                router.navigate({
+                  pathname : "/details",
+                  params : Users[this.state.currentIndex]
+                })}
+              } 
               filled={true} 
             />
       </View>

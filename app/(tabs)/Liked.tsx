@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Image, View, Text, ScrollView } from 'react-native';
+import { StyleSheet, Image, View, Text, ScrollView, Pressable} from 'react-native';
 import * as Font from "expo-font";
+import {router} from "expo-router";
+import Button from '../components/Button';
+import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // TODO : Add header
 // TODO : Add proper token
@@ -22,7 +26,13 @@ export default function TabTwoScreen() {
     const fetchData = async () => {
       const myHeaders = new Headers();
       // TODO : Replace with actual token
-      const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiOTZlOTNjOWItODI1Mi00NjM5LWJkMGUtOWQ2ZjE2NmRjYzg0IiwiaWF0IjoxNzE2OTcxNTU3LCJleHAiOjE3MTY5ODIzNTd9.uQOai0xwSWjXbQMWDX2t5q2DUGOctjsKM_KU_IrXf9A"
+      let token = null
+      try {
+        token = await AsyncStorage.getItem("token")
+      } catch (e){
+        alert(`failed to get authentication token! Sign in again`)
+        router.replace("/sign-in")
+      }
       myHeaders.append("Authorization", `Bearer ${token}`);
 
       const requestOptions = {
@@ -36,7 +46,6 @@ export default function TabTwoScreen() {
           alert(`failed to get liked products. error : ${result.message}`)
           return;
         }
-        
         setData(result);
       } catch (error) {
         console.log(`Error fetching data: ${error}`);
@@ -58,6 +67,12 @@ export default function TabTwoScreen() {
           title={product.title}
           price={`Rs. ${product.price}`}
           url={product.image_url}
+          onPress={() => {
+            router.navigate({
+                  pathname : "/details",
+                  params : product,
+                })}
+          }
         />
       ))}
     </ScrollView>
@@ -110,37 +125,29 @@ function LikedCard(props : any){
     <Image source={{uri: props.url}} style={styles.likedImage}/>
     <Text style={styles.likedImageBrand}> {props.title} </Text>
     <Text style={styles.likedImagePrice} > {props.price} </Text>
+    <Button 
+      onPress={props.onPress} 
+      title="View Details"
+      style={{
+        width : scale(140) , 
+        height : verticalScale(42) , 
+        marginVertical : moderateScale(20)
+      }}
+      filled={true}
+    ></Button>
   </div>
 }
 
 
 const mockData = [{
-  "_id": {
-    "$oid": "6650985355cb0cafd49c14c2"
-  },
-  "product_id": "cc0143d6-acfd-442f-83c4-658f9567b2d2",
-  "product_url": "https://www.afrozeh.com/products/mahjabeen-1",
-  "shopify_id": {
-    "$numberLong": "8002372829418"
-  },
-  "handle": "mahjabeen-1",
-  "title": "MAHJABEEN-22",
-  "vendor": "afrozeh",
+  "product_id": "",
+  "product_url": "",
+  "handle": "",
+  "title": "Nothing here !",
+  "vendor": "",
   "category": "",
-  "image_url": "https://cdn.shopify.com/s/files/1/0052/2030/2897/products/5.jpg?v=1668433218",
-  "description": "net embellished embroidered front back body mnet embellished embroidered front back panel pcsnet embroidered sleeve metersnet embroidered sleeve border metersraw silk embroidered sleeve border metersraw silk embroidered front back border metersnet embroidered dupatta side border metersnet embroidered dupatta meter",
-  "price": "29900",
+  "image_url": "",
+  "description": "",
+  "price": "",
   "currency": "PKR",
-  "options": [
-    {
-      "name": "Type",
-      "position": 1,
-      "values": [
-        "Unstitched",
-        "Stitched"
-      ]
-    }
-  ],
-  "tags": [],
-  "available": true
 }]

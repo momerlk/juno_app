@@ -1,48 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Image, View, Text, ScrollView } from 'react-native';
 import * as Font from "expo-font";
+import { useWindowDimensions } from 'react-native';
 
-import {router} from "expo-router";
+
+
+import {router, useLocalSearchParams} from "expo-router";
 
 import { ImageBackground, Pressable } from 'react-native';
 import { scale } from 'react-native-size-matters';
 import Feather from 'react-native-vector-icons/Feather';
 
-interface Item {
-  id: string;
-  title: string;
-  name: string;
-  description: string;
-  detail: string;
-  price: number;
-  size: string;
-  color: string;
-  image: string;
-  isFav: boolean;
-  rating: number;
-}
 
-interface Props {
-  navigation: any;
-  route: { params: { item: Item } };
-}
 
 // TODO : take params from router navigation
 
-const ProductDetail: React.FC<Props> = () => {
-  const { title, vendor, description, price, image_url , product_url} = mockData[0];
+const ProductDetail: React.FC<any> = () => {
+  const params = useLocalSearchParams();
 
-  const onAddToCart = () => {
-    // Handle add to cart functionality
-  };
+  const { 
+    title, vendor, description, body_html , price, image_url , product_url
+  } = params;
+
+  const {width} = useWindowDimensions();
+
 
   const _renderBottom = () => {
     return (
       <View style={styles.bottomButtons}>
         <Pressable
           onPress={() => {
-            onAddToCart();
-            router.navigate(product_url);
+            router.navigate(product_url as string);
           }}
           style={styles.addButton}>
           <Text style={styles.buttonLabel}>Check Website</Text>
@@ -58,7 +46,7 @@ const ProductDetail: React.FC<Props> = () => {
         <ImageBackground
           style={styles.imageBackground}
           resizeMode="cover"
-          source={{ uri: image_url }}>
+          source={{ uri: image_url as string }}>
           <View style={styles.topBar}>
             <Pressable
               onPress={() => router.back()}
@@ -226,35 +214,3 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
-
-
-const mockData = [{
-  "_id": {
-    "$oid": "6650985355cb0cafd49c14c2"
-  },
-  "product_id": "cc0143d6-acfd-442f-83c4-658f9567b2d2",
-  "product_url": "https://www.afrozeh.com/products/mahjabeen-1",
-  "shopify_id": {
-    "$numberLong": "8002372829418"
-  },
-  "handle": "mahjabeen-1",
-  "title": "MAHJABEEN-22",
-  "vendor": "afrozeh",
-  "category": "",
-  "image_url": "https://cdn.shopify.com/s/files/1/0052/2030/2897/products/5.jpg?v=1668433218",
-  "description": "net embellished embroidered front back body mnet embellished embroidered front back panel pcsnet embroidered sleeve metersnet embroidered sleeve border metersraw silk embroidered sleeve border metersraw silk embroidered front back border metersnet embroidered dupatta side border metersnet embroidered dupatta meter",
-  "price": "29900",
-  "currency": "PKR",
-  "options": [
-    {
-      "name": "Type",
-      "position": 1,
-      "values": [
-        "Unstitched",
-        "Stitched"
-      ]
-    }
-  ],
-  "tags": [],
-  "available": true
-}]
