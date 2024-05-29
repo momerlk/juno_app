@@ -1,68 +1,39 @@
 import React from 'react';
-import {StyleSheet, Text, View, StyleProp, ViewStyle, ImageBackground} from 'react-native';
-import Button from "../components/Button"
+import { StyleSheet, Text, View, Animated, PanResponder, Dimensions, Image } from 'react-native';
+import Button from "../components/Button";
 import * as Font from 'expo-font';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
 
-import {Dimensions, Image, Animated, PanResponder } from 'react-native';
-
-const SCREEN_HEIGHT = Dimensions.get('window').height
-const SCREEN_WIDTH = Dimensions.get('window').width
-import LottieView from 'lottie-react-native';
-
+const SCREEN_HEIGHT = Dimensions.get('window').height;
+const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const fetchFonts = () => {
   return Font.loadAsync({
     'Poppins': require('./Poppins-Medium.ttf'),
-    "Montserrat" : require("./Montserrat.ttf"),
+    'Montserrat': require('./Montserrat.ttf'),
   });
 };
 
-interface State {
-  cards: any[];
-  swipedAllCards: boolean;
-  swipeDirection: string;
-  cardIndex: number;
-  socket : WebSocket;
-}
-
-interface AppData extends React.Component {
-  position : any
-}
-
-
-// TODO : Change users to products
-const Users : any[] = [{
-        "product_id": "92649134-f9dd-4a47-8c88-346dd54fdd52",
-        "product_url": "https://www.afrozeh.com/products/mahjabeen-1",
-        "shopify_id": 34324234324324,
-        "handle": "mahjabeen-1",
-        "title": "MAHJABEEN-22",
-        "vendor": "Afrozeh",
-        "category": "",
-        "image_url": "https://cdn.shopify.com/s/files/1/0052/2030/2897/products/5.jpg?v=1668433218",
-        "description": "net embellished embroidered front back body mnet embellished embroidered front back panel pcsnet embroidered sleeve metersnet embroidered sleeve border metersraw silk embroidered sleeve border metersraw silk embroidered front back border metersnet embroidered dupatta side border metersnet embroidered dupatta meter",
-        "price": "29900",
-        "currency": "PKR",
-        "options": [
-          {
-            "name": "Type",
-            "position": 1,
-            "values": [
-              "Unstitched",
-              "Stitched"
-            ]
-          }
-        ],
-        "tags": [],
-        "available": true
+const Users = [{
+  "product_id": "",
+  "product_url": "",
+  "handle": "",
+  "title": "Nothing here !",
+  "vendor": "",
+  "category": "",
+  "image_url": "",
+  "description": "",
+  "price": "",
+  "currency": "PKR",
 }]
+
 interface AppState {
   currentIndex: number;
+  cards: any[];
+  socket: WebSocket;
 }
 
-// TODO : If token/not authorised redirect to Welcome page
 export default class App extends React.Component<{}, AppState> {
   position: Animated.ValueXY;
   rotate: Animated.AnimatedInterpolation<string>;
@@ -78,9 +49,6 @@ export default class App extends React.Component<{}, AppState> {
     super(props);
 
     this.position = new Animated.ValueXY();
-    this.state = {
-      currentIndex: 0,
-    };
 
     this.rotate = this.position.x.interpolate({
       inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
@@ -117,7 +85,7 @@ export default class App extends React.Component<{}, AppState> {
 
     this.nextCardOpacity = this.position.x.interpolate({
       inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
-      outputRange: [1, 0, 1],
+      outputRange: [1, 0.8, 1],
       extrapolate: 'clamp',
     });
 
@@ -127,7 +95,56 @@ export default class App extends React.Component<{}, AppState> {
       extrapolate: 'clamp',
     });
 
+    this.state = {
+      currentIndex: 0,
+      cards: Users,
+      socket: new WebSocket(""),
+    };
+
     fetchFonts();
+  }
+
+  async componentDidMount() {
+    try {
+      const value = await AsyncStorage.getItem("authenticated");
+      if (value === null || value === "false") {
+        router.navigate("/welcome");
+      }
+    } catch (e) {
+      alert(`error = ${e}`);
+    }
+
+    setTimeout(() => {
+      const socket = new WebSocket("ws://localhost:9001/feed");
+      socket.onmessage = (ev: MessageEvent<any>) => {
+        const parsed = JSON.parse(ev.data);
+        if (parsed["products"] === undefined) {
+          alert(`failed to get new recommendations`);
+          return;
+        }
+
+        if (parsed["products"].length < 1) {
+          alert(`failed to get new recommendations`);
+          return;
+        }
+
+        if (parsed["products"].length === 1 && parsed["products"][0]["image_url"] === undefined) {
+          alert("failed to get new recommendations");
+          return;
+        }
+
+        let products = [];
+        if (this.state.cards.length === 1) {
+          products = parsed["products"];
+        } else {
+          products = this.state.cards.concat(parsed["products"]);
+        }
+
+        this.setState({ currentIndex: 0, cards: products });
+      };
+
+      this.setState({ socket: socket });
+    }, 500);
   }
 
   UNSAFE_componentWillMount() {
@@ -137,46 +154,62 @@ export default class App extends React.Component<{}, AppState> {
         this.position.setValue({ x: gestureState.dx, y: gestureState.dy });
       },
       onPanResponderRelease: (evt, gestureState) => {
-        if (gestureState.dx > 120) {
-          Animated.spring(this.position, {
-            toValue: { x: SCREEN_WIDTH + 100, y: gestureState.dy },
-            useNativeDriver: false,
-          }).start(() => {
-            this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
-              this.position.setValue({ x: 0, y: 0 });
-            });
-          });
-        } else if (gestureState.dx < -120) {
-          Animated.spring(this.position, {
-            toValue: { x: -SCREEN_WIDTH - 100, y: gestureState.dy },
-            useNativeDriver: false,
-          }).start(() => {
-            this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
-              this.position.setValue({ x: 0, y: 0 });
-            });
-          });
-        } else if (gestureState.dy < -120) {
-          Animated.spring(this.position, {
-            toValue: { x: gestureState.dx, y: -SCREEN_HEIGHT - 100 },
-            useNativeDriver: false,
-          }).start(() => {
-            this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
-              this.position.setValue({ x: 0, y: 0 });
-            });
-          });
-        } else {
-          Animated.spring(this.position, {
-            toValue: { x: 0, y: 0 },
-            friction: 4,
-            useNativeDriver: false,
-          }).start();
-        }
+        this.handleSwipe(gestureState);
       },
     });
   }
 
-  renderUsers = () => {
-    return Users.map((item, i) => {
+  handleSwipe = (gestureState : any) => {
+    if (gestureState.dx > 120) {
+      // Swipe right
+      Animated.spring(this.position, {
+        toValue: { x: SCREEN_WIDTH + 100, y: gestureState.dy },
+        useNativeDriver: true,
+      }).start(() => {
+        alert("swiped right")
+        this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
+          this.position.setValue({ x: 0, y: 0 });
+        });
+      });
+    } else if (gestureState.dx < -120) {
+      // Swipe left
+      Animated.spring(this.position, {
+        toValue: { x: -SCREEN_WIDTH - 100, y: gestureState.dy },
+        useNativeDriver: true,
+      }).start(() => {
+        alert("swiped left")
+        this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
+          this.position.setValue({ x: 0, y: 0 });
+        });
+      });
+    } else if (gestureState.dy < -120) {
+      // Swipe up
+      Animated.spring(this.position, {
+        toValue: { x: gestureState.dx, y: -SCREEN_HEIGHT - 100 },
+        useNativeDriver: true,
+      }).start(() => {
+        alert("swiped up")
+        this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
+          this.position.setValue({ x: 0, y: 0 });
+        });
+      });
+    } else {
+      // If the swipe is not significant, reset position
+      Animated.spring(this.position, {
+        toValue: { x: 0, y: 0 },
+        friction: 4,
+        useNativeDriver: true,
+      }).start();
+    }
+  };
+
+  shouldComponentUpdate(nextProps : any , nextState : any) {
+    return this.state.currentIndex !== nextState.currentIndex ||
+      this.state.cards !== nextState.cards;
+  }
+
+  renderProducts = () => {
+    return this.state.cards.map((item, i) => {
       if (i < this.state.currentIndex) {
         return null;
       } else if (i === this.state.currentIndex) {
@@ -203,10 +236,9 @@ export default class App extends React.Component<{}, AppState> {
                 zIndex: 1000,
               }}
             >
-              <LottieView
-                source={require('./heart.json')}
-                autoPlay
-                loop={false}
+              <Image
+                source={{ uri: 'https://via.placeholder.com/100.png?text=Like'
+              }}
                 style={{ width: 100, height: 100 }}
               />
             </Animated.View>
@@ -220,10 +252,8 @@ export default class App extends React.Component<{}, AppState> {
                 zIndex: 1000,
               }}
             >
-              <LottieView
-                source={require('./heart_broken.json')}
-                autoPlay
-                loop={false}
+              <Image
+                source={{ uri: 'https://via.placeholder.com/100.png?text=Dislike' }}
                 style={{ width: 100, height: 100 }}
               />
             </Animated.View>
@@ -237,15 +267,11 @@ export default class App extends React.Component<{}, AppState> {
                 zIndex: 1000,
               }}
             >
-              <LottieView
-                source={require('./add_to_cart.json')}
-                autoPlay
-                loop={false}
+              <Image
+                source={{ uri: 'https://via.placeholder.com/100.png?text=SuperLike' }}
                 style={{ width: 100, height: 100 }}
               />
             </Animated.View>
-
-            
 
             <Image
               style={{
@@ -259,21 +285,21 @@ export default class App extends React.Component<{}, AppState> {
             />
 
             <View style={{
-              display : "flex" , 
-              flexDirection : "row" , 
-              justifyContent : "space-between",
-              marginHorizontal : 10,
-              marginTop : 10,
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              marginHorizontal: 10,
+              marginTop: 10,
             }}>
               <Text style={{
-                fontSize : 22, fontFamily : "Montserrat",
-                }}>{item.vendor}</Text>
+                fontSize: 22, fontFamily: "Montserrat",
+              }}>{item.vendor}</Text>
               <Text style={{
-                fontSize : 17, marginVertical : 5,
-                }}>Rs. {(() => {
+                fontSize: 17, marginVertical: 5,
+              }}>Rs. {(() => {
                   let l = item.price.length;
                   let pos = (l) - 3;
-                  if(pos > 0){
+                  if (pos > 0) {
                     const firstPart = item.price.slice(0, pos);
                     const secondPart = item.price.slice(pos);
 
@@ -281,21 +307,20 @@ export default class App extends React.Component<{}, AppState> {
                     const newString = firstPart + "," + secondPart;
                     return newString;
                   } else {
-                  return item.price
+                    return item.price
                   }
                 })()}</Text>
             </View>
 
-            <View style={{marginBottom : 60}}>
+            <View style={{ marginBottom: 60 }}>
               <Text></Text>
             </View>
-            
           </Animated.View>
         );
       } else {
         return (
           <Animated.View
-            key={item.id}
+            key={item.product_id}
             style={[
               {
                 opacity: this.nextCardOpacity,
@@ -315,7 +340,7 @@ export default class App extends React.Component<{}, AppState> {
                 resizeMode: 'cover',
                 borderRadius: 20,
               }}
-              source={{ uri: item.uri }}
+              source={{ uri: item.image_url }}
             />
           </Animated.View>
         );
@@ -325,105 +350,106 @@ export default class App extends React.Component<{}, AppState> {
 
   render() {
     return (
-      <View style={{ flex: 1}}>
+      <View style={{ flex: 1 }}>
         <View style={{ height: 60 }}></View>
-        <View style={{ flex: 1}}>{this.renderUsers()}</View>
-        <Button 
-              style={{
-                marginVertical : 8,
-                marginHorizontal : 20,
-              }}
-              title="View Details" 
-              onPress={() => {
-                router.navigate({
-                  pathname : "/details",
-                  params : Users[this.state.currentIndex]
-                })}
-              } 
-              filled={true} 
-            />
+        <View style={{ flex: 1 }}>{this.renderProducts()}</View>
+        <Button
+          style={{
+            marginVertical: 8,
+            marginHorizontal: 20,
+          }}
+          title="View Details"
+          onPress={() => {
+            router.navigate({
+              pathname: "/details",
+              params: this.state.cards[this.state.currentIndex]
+            })
+          }}
+          filled={true}
+        />
       </View>
     );
   }
 }
 
+
 // export class HomeScreen extends React.Component<{}, State> {
 //   swiper: Swiper<any> | null = null;
 
-//   constructor(props: {}) {
-//     super(props);
-//     this.state = {
-//       cards: [{
-    //     "product_id": "92649134-f9dd-4a47-8c88-346dd54fdd52",
-    //     "product_url": "https://www.afrozeh.com/products/mahjabeen-1",
-    //     "shopify_id": 34324234324324,
-    //     "handle": "mahjabeen-1",
-    //     "title": "MAHJABEEN-22",
-    //     "vendor": "afrozeh",
-    //     "category": "",
-    //     "image_url": "https://cdn.shopify.com/s/files/1/0052/2030/2897/products/5.jpg?v=1668433218",
-    //     "description": "net embellished embroidered front back body mnet embellished embroidered front back panel pcsnet embroidered sleeve metersnet embroidered sleeve border metersraw silk embroidered sleeve border metersraw silk embroidered front back border metersnet embroidered dupatta side border metersnet embroidered dupatta meter",
-    //     "price": "29900",
-    //     "currency": "PKR",
-    //     "options": [
-    //       {
-    //         "name": "Type",
-    //         "position": 1,
-    //         "values": [
-    //           "Unstitched",
-    //           "Stitched"
-    //         ]
-    //       }
-    //     ],
-    //     "tags": [],
-    //     "available": true
-    //   }],
-    //   swipedAllCards: false,
-    //   swipeDirection: '',
-    //   cardIndex: 0,
-    //   socket : new WebSocket(""),
-    // };
+  // constructor(props: {}) {
+  //   super(props);
+  //   this.state = {
+  //     cards: [{
+  //       "product_id": "92649134-f9dd-4a47-8c88-346dd54fdd52",
+  //       "product_url": "https://www.afrozeh.com/products/mahjabeen-1",
+  //       "shopify_id": 34324234324324,
+  //       "handle": "mahjabeen-1",
+  //       "title": "MAHJABEEN-22",
+  //       "vendor": "afrozeh",
+  //       "category": "",
+  //       "image_url": "https://cdn.shopify.com/s/files/1/0052/2030/2897/products/5.jpg?v=1668433218",
+  //       "description": "net embellished embroidered front back body mnet embellished embroidered front back panel pcsnet embroidered sleeve metersnet embroidered sleeve border metersraw silk embroidered sleeve border metersraw silk embroidered front back border metersnet embroidered dupatta side border metersnet embroidered dupatta meter",
+  //       "price": "29900",
+  //       "currency": "PKR",
+  //       "options": [
+  //         {
+  //           "name": "Type",
+  //           "position": 1,
+  //           "values": [
+  //             "Unstitched",
+  //             "Stitched"
+  //           ]
+  //         }
+  //       ],
+  //       "tags": [],
+  //       "available": true
+  //     }],
+  //     swipedAllCards: false,
+  //     swipeDirection: '',
+  //     cardIndex: 0,
+  //     socket : new WebSocket(""),
+  //   };
 
-//     fetchFonts();
-//   }
+  //   fetchFonts();
+  // }
 
-//   override async componentDidMount(){
-//     try {
-//       const value = await AsyncStorage.getItem("authenticated");
-//       if (value === null || value === "false"){
-//         router.navigate("/welcome")
-//       }
-//     }
-//     catch (e){
-//       alert(`error = ${e}`)
-//     }
+  // override async componentDidMount(){
+  //   try {
+  //     const value = await AsyncStorage.getItem("authenticated");
+  //     if (value === null || value === "false"){
+  //       router.navigate("/welcome")
+  //     }
+  //   }
+  //   catch (e){
+  //     alert(`error = ${e}`)
+  //   }
 
-//     setTimeout(() => {
-//       const socket = new WebSocket("ws://192.168.18.16:9001/");
-//       socket.onmessage = (ev : MessageEvent<any>) => {
-//         const parsed = JSON.parse(ev.data)
-//         if (parsed["products"] === undefined){
-//           alert(`failed to get new recommendations`)
-//           return;
-//         }
+  //   setTimeout(() => {
+  //     const socket = new WebSocket("ws://localhost:9001/");
+  //     socket.onmessage = (ev : MessageEvent<any>) => {
+  //       const parsed = JSON.parse(ev.data)
+  //       if (parsed["products"] === undefined){
+  //         alert(`failed to get new recommendations`)
+  //         return;
+  //       }
 
-//         if(parsed["products"].length < 1) {
-//           alert(`failed to get new recommendations`)
-//           return;
-//         }
+  //       if(parsed["products"].length < 1) {
+  //         alert(`failed to get new recommendations`)
+  //         return;
+  //       }
 
-//         if (parsed["products"].length === 1 && parsed["products"][0]["image_url"] === undefined){
-//           alert("failed to get new recommendations")
-//           return;
-//         }
+  //       if (parsed["products"].length === 1 && parsed["products"][0]["image_url"] === undefined){
+  //         alert("failed to get new recommendations")
+  //         return;
+  //       }
 
-//         const products = this.state.cards.concat(parsed["products"]);
-//         this.setState({cardIndex : 0, cards :  products})
-//       };
+  //       const products = this.state.cards.concat(parsed["products"]);
+  //       this.setState({cardIndex : 0, cards :  products})
+  //     };
 
-//       this.setState({socket : socket})
-//     }, 1500)
-//   }
+  //     this.setState({socket : socket})
+  //   }, 1500)
+  // }
 
 //   renderCard = (cardData: any, index: number) => {
 //     return (

@@ -23,7 +23,7 @@ const Signup = () => {
   const handleSignup = async () => {
         // e.preventDefault();
         try {
-            const response = await fetch('http://192.168.18.16:3000/auth/signup', {
+            const response = await fetch('http://localhost:3000/auth/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

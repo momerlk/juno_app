@@ -37,7 +37,7 @@ export default function Example() {
           </TouchableOpacity>
 
           <View>
-            <Text style={styles.profileName}>Settings</Text>
+            <Text style={styles.profileName}>Test Route</Text>
 
             <Text style={styles.profileAddress}>
             Customise your experience            

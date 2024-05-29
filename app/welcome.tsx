@@ -7,28 +7,6 @@ import Button from './components/Button';
 import {router} from "expo-router"
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
-function LikedCard(props : any){
-  const [count, setCount] = useState(0);
-
-  return (
-    <div>
-      <span>Count is {count}</span>
-      <button onClick={() => {setCount(count + 1)}}>+</button>
-      <button onClick={() => {setCount(count - 1)}}>-</button>
-    </div>
-  )
-}
-
-function Amr(){
-  return (
-    <div>
-      <LikedCard />
-    </div>
-  )
-}
-
-
 const Welcome = () => {
   useEffect(() => {
     AsyncStorage.setItem("authenticated" , "false")
@@ -125,7 +103,7 @@ const Welcome = () => {
               color: COLORS.white
             }}
           >
-            Let's Thrive
+            Swipe to Shop
           </Text>
 
           <View style={{ marginVertical: 22 }}>
@@ -136,7 +114,7 @@ const Welcome = () => {
                 marginVertical: 4
               }}
             >
-              The World At Your Fingertips
+              Blazingly Swift Delivery.
             </Text>
             <Text
               style={{
@@ -144,7 +122,7 @@ const Welcome = () => {
                 color: COLORS.white
               }}
             >
-              Order From Your Favourite Brands
+              Order From Your Favourite Brands.
             </Text>
           </View>
 
