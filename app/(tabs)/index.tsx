@@ -159,6 +159,21 @@ export default class App extends React.Component<{}, AppState> {
     });
   }
 
+  async handleSwipeAction(action : string){
+    let token = null;
+    try {
+      token = await AsyncStorage.getItem("token")
+    } catch(e){
+      alert(`failed to update feed, reload or login again , error = ${e}`)
+    }
+    this.state.socket.send(JSON.stringify({
+      token : token,
+      action_type : action,
+      action_timestamp : new Date().toJSON(),
+      product_id : this.state.cards[this.state.currentIndex]["product_id"], 
+    }))
+  }
+
   handleSwipe = (gestureState : any) => {
     if (gestureState.dx > 120) {
       // Swipe right
@@ -166,7 +181,7 @@ export default class App extends React.Component<{}, AppState> {
         toValue: { x: SCREEN_WIDTH + 100, y: gestureState.dy },
         useNativeDriver: true,
       }).start(() => {
-        alert("swiped right")
+        this.handleSwipeAction("liked")
         this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
           this.position.setValue({ x: 0, y: 0 });
         });
@@ -177,7 +192,7 @@ export default class App extends React.Component<{}, AppState> {
         toValue: { x: -SCREEN_WIDTH - 100, y: gestureState.dy },
         useNativeDriver: true,
       }).start(() => {
-        alert("swiped left")
+        this.handleSwipeAction("disliked")
         this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
           this.position.setValue({ x: 0, y: 0 });
         });
@@ -188,7 +203,7 @@ export default class App extends React.Component<{}, AppState> {
         toValue: { x: gestureState.dx, y: -SCREEN_HEIGHT - 100 },
         useNativeDriver: true,
       }).start(() => {
-        alert("swiped up")
+        this.handleSwipeAction("added_to_cart")
         this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
           this.position.setValue({ x: 0, y: 0 });
         });
@@ -371,216 +386,3 @@ export default class App extends React.Component<{}, AppState> {
     );
   }
 }
-
-
-// export class HomeScreen extends React.Component<{}, State> {
-//   swiper: Swiper<any> | null = null;
-
-  // constructor(props: {}) {
-  //   super(props);
-  //   this.state = {
-  //     cards: [{
-  //       "product_id": "92649134-f9dd-4a47-8c88-346dd54fdd52",
-  //       "product_url": "https://www.afrozeh.com/products/mahjabeen-1",
-  //       "shopify_id": 34324234324324,
-  //       "handle": "mahjabeen-1",
-  //       "title": "MAHJABEEN-22",
-  //       "vendor": "afrozeh",
-  //       "category": "",
-  //       "image_url": "https://cdn.shopify.com/s/files/1/0052/2030/2897/products/5.jpg?v=1668433218",
-  //       "description": "net embellished embroidered front back body mnet embellished embroidered front back panel pcsnet embroidered sleeve metersnet embroidered sleeve border metersraw silk embroidered sleeve border metersraw silk embroidered front back border metersnet embroidered dupatta side border metersnet embroidered dupatta meter",
-  //       "price": "29900",
-  //       "currency": "PKR",
-  //       "options": [
-  //         {
-  //           "name": "Type",
-  //           "position": 1,
-  //           "values": [
-  //             "Unstitched",
-  //             "Stitched"
-  //           ]
-  //         }
-  //       ],
-  //       "tags": [],
-  //       "available": true
-  //     }],
-  //     swipedAllCards: false,
-  //     swipeDirection: '',
-  //     cardIndex: 0,
-  //     socket : new WebSocket(""),
-  //   };
-
-  //   fetchFonts();
-  // }
-
-  // override async componentDidMount(){
-  //   try {
-  //     const value = await AsyncStorage.getItem("authenticated");
-  //     if (value === null || value === "false"){
-  //       router.navigate("/welcome")
-  //     }
-  //   }
-  //   catch (e){
-  //     alert(`error = ${e}`)
-  //   }
-
-  //   setTimeout(() => {
-  //     const socket = new WebSocket("ws://localhost:9001/");
-  //     socket.onmessage = (ev : MessageEvent<any>) => {
-  //       const parsed = JSON.parse(ev.data)
-  //       if (parsed["products"] === undefined){
-  //         alert(`failed to get new recommendations`)
-  //         return;
-  //       }
-
-  //       if(parsed["products"].length < 1) {
-  //         alert(`failed to get new recommendations`)
-  //         return;
-  //       }
-
-  //       if (parsed["products"].length === 1 && parsed["products"][0]["image_url"] === undefined){
-  //         alert("failed to get new recommendations")
-  //         return;
-  //       }
-
-  //       const products = this.state.cards.concat(parsed["products"]);
-  //       this.setState({cardIndex : 0, cards :  products})
-  //     };
-
-  //     this.setState({socket : socket})
-  //   }, 1500)
-  // }
-
-//   renderCard = (cardData: any, index: number) => {
-//     return (
-//       <View style={styles.card}>
-//     <ImageBackground source={{uri : cardData.image_url}} resizeMode="cover" style={styles.image}>
-//       <View style={styles.text}>
-
-        // <View style={{display : "flex" , flexDirection : "row" , justifyContent : "space-between"}}>
-        // <h2>{cardData.vendor}</h2>
-        // <h3 >{cardData.price}</h3>
-        // </View>
-
-//         <h4>{cardData.title}</h4>
-        
-//       </View>
-//     </ImageBackground>
-//   </View>
-
-//     );
-//   };
-
-
-//   // TODO : Gives error when swipe at a fast rate
-//   onSwiped = (type: string) => {
-//     // TODO : add correct fields
-//     if (type === "general"){
-//       return;
-//     }
-//     // TODO : add proper user id and product id
-//     this.state.socket.send(JSON.stringify({
-//       user_id : "debug",
-//       action_type : type,
-//       action_timestamp : new Date().toJSON(),
-//       product_id : "debug", 
-//     }))
-//     console.log(`on swiped ${type}`);
-//   };
-
-//   onSwipedAllCards = () => {
-//     this.render();
-//     this.setState({
-//       swipedAllCards: true
-//     });
-//   };
-
-//   swipeLeft = () => {
-//     if (this.swiper) {
-//       this.swiper.swipeLeft();
-//     }
-//   };
-
-//   render() {
-//     return (
-//       <View style={styles.container}>
-//         <Swiper
-//           ref={(swiper : any) => {
-//             this.swiper = swiper;
-//           }}
-//           onSwiped={(cardIndex : any) => this.onSwiped('general')}
-//           onSwipedLeft={(cardIndex) => this.onSwiped('disliked')}
-//           onSwipedRight={(cardIndex) => this.onSwiped('liked')}
-//           onSwipedTop={(cardIndex) => this.onSwiped('added_to_cart')}
-//           onSwipedBottom={(cardIndex) => this.onSwiped('bottom')}
-//           onTapCard={(cardIndex) => this.onSwiped("tap")}
-//           cards={this.state.cards}
-//           cardIndex={this.state.cardIndex}
-//           cardVerticalMargin={80}
-//           renderCard={this.renderCard}
-//           onSwipedAll={this.onSwipedAllCards}
-//           stackSize={3}
-//           disableBottomSwipe={true}
-//           stackSeparation={15}
-//           overlayLabels={{
-//             left: {
-//               title: 'DISLIKE',
-//               style: styles.overlayLabel
-//             },
-//             right: {
-//               title: 'LIKE',
-//               style: styles.overlayLabel
-//             },
-//             top: {
-//               title: 'ADD TO CART',
-//               style: styles.overlayLabel
-//             }
-//           }}
-//           animateOverlayLabelsOpacity
-//           animateCardOpacity
-//           swipeBackCard
-//         >
-//         </Swiper>
-//       </View>
-//     );
-//   }
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor : "#87CEEB",
-//     fontFamily : "Poppins",
-//   },
-//   card : {
-//     flex : 1,
-//   },
-//   image: {
-//     flex: 1,
-//     justifyContent: "flex-end",
-//   },
-//   price : {
-//     alignSelf : "flex-end",
-//   },
-//   text: {
-//     color: 'white',
-//     lineHeight : 5,
-//     textAlign : "left",
-//     fontWeight: 'bold',
-//     padding : 20,
-//     backgroundColor: '#000000c0',
-//   },
-//   overlayLabel: {
-//     label: {
-//       backgroundColor: 'black',
-//       borderColor: 'black',
-//       color: 'white',
-//       borderWidth: 1
-//     },
-//     wrapper: {
-//       flexDirection: 'column',
-//       alignItems: 'center',
-//       justifyContent: 'center'
-//     }
-//   }
-// });
