@@ -2,119 +2,230 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Image, View, Text, ScrollView } from 'react-native';
 import * as Font from "expo-font";
 
-// TODO : Add header
-// TODO : Add proper token
-// TODO : Take parameters from expo router
+import {router} from "expo-router";
 
-const fetchFonts = () => {
-  return Font.loadAsync({
-    'Poppins': require('./(tabs)/Poppins-Medium.ttf'),
-    "Montserrat" : require("./(tabs)/Montserrat.ttf"),
-  });
-};
+import { ImageBackground, Pressable } from 'react-native';
+import { scale } from 'react-native-size-matters';
+import Feather from 'react-native-vector-icons/Feather';
 
+interface Item {
+  id: string;
+  title: string;
+  name: string;
+  description: string;
+  detail: string;
+  price: number;
+  size: string;
+  color: string;
+  image: string;
+  isFav: boolean;
+  rating: number;
+}
 
-export default function TabTwoScreen() {
-  const [data, setData] = useState<any>([]);
-  const [req , setReq] = useState(0);
-  fetchFonts();
+interface Props {
+  navigation: any;
+  route: { params: { item: Item } };
+}
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const myHeaders = new Headers();
-      const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjRmODY0NzNlY2QwZTQ2MWE2N2NiYTQiLCJpYXQiOjE3MTY5MzEzMDEsImV4cCI6MTcxNjkzNDkwMX0.ukU62aimrL6C_5SNy4TTb9ghT01xqTWuZIWnw-kSrzU"
-      myHeaders.append("Authorization", `Bearer ${token}`);
+// TODO : take params from router navigation
 
-      const requestOptions = {
-        method: "GET",
-        headers: myHeaders,
-      };
+const ProductDetail: React.FC<Props> = () => {
+  const { title, vendor, description, price, image_url , product_url} = mockData[0];
 
-      try {
-        const response = await fetch("http://localhost:3001", requestOptions);
-        const result = await response.json();
-        setData(result);
-      } catch (error) {
-        console.log(`Error fetching data: ${error}`);
-        setData(mockData)
-        setReq(1);
-      }
-    };
+  const onAddToCart = () => {
+    // Handle add to cart functionality
+  };
 
-    if(req == 0){
-      fetchData();
-    }
-  }, []); // Empty dependency array to run only once when the component mounts
+  const _renderBottom = () => {
+    return (
+      <View style={styles.bottomButtons}>
+        <Pressable
+          onPress={() => {
+            onAddToCart();
+            router.navigate(product_url);
+          }}
+          style={styles.addButton}>
+          <Text style={styles.buttonLabel}>Check Website</Text>
+        </Pressable>
+        <Text style={styles.price}>{`Rs. ${price}`}</Text>
+      </View>
+    );
+  };
 
   return (
-    <ScrollView>
-      {data.map((product: any, index: number) => (
-        <DetailsCard
-          key={index}
-          title={product.title}
-          description={product.description}
-          price={`Rs. ${product.price}`}
-          url={product.image_url}
-        />
-      ))}
-    </ScrollView>
+    <>
+      <ScrollView style={styles.container}>
+        <ImageBackground
+          style={styles.imageBackground}
+          resizeMode="cover"
+          source={{ uri: image_url }}>
+          <View style={styles.topBar}>
+            <Pressable
+              onPress={() => router.back()}
+              style={styles.wishlistButton}>
+              <Feather
+                name="chevron-left"
+                size={scale(20)}
+                color={'#C80321'} // Replacing appColors.primary with '#FF6347'
+              />
+            </Pressable>
+
+            <Pressable
+              onPress={() => {
+                // Handle add to wishlist functionality
+              }}
+              style={styles.wishlistButton}>
+              <Feather
+                name="heart"
+                size={scale(20)}
+                color={'#C80321'} // Replacing appColors.primary with '#FF6347'
+              />
+            </Pressable>
+          </View>
+        </ImageBackground>
+
+        <View style={styles.detailsContainer}>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={{fontSize : 28, marginBottom : 20}}>By {vendor}</Text>
+
+          {/* <View style={styles.sizeAndColorContainer}>
+            <View style={styles.sizeContainer}>
+              <Text style={styles.label}>Size</Text>
+              <Text style={styles.value}>XL</Text>
+            </View>
+
+            <View style={styles.sizeContainer}>
+              <Text style={styles.label}>Colour</Text>
+              <View style={styles.itemColor} />
+            </View>
+          </View> */}
+
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Details</Text>
+            <Text style={styles.description}>{description}</Text>
+          </View>
+
+          {/* <View>
+            <Text style={styles.sectionTitle}>Reviews</Text>
+            <Pressable onPress={() => router.navigate('WriteReview')}>
+              <Text style={styles.writeReview}>Write your review</Text>
+            </Pressable>
+
+            <Text>Review Component</Text>
+          </View> */}
+        </View>
+      </ScrollView>
+      {_renderBottom()}
+    </>
   );
-}
+};
+
+export default ProductDetail;
 
 const styles = StyleSheet.create({
-  likedContainer: {
-    display: 'flex', 
-    flexDirection: 'column',
-    borderWidth: 1,
-    borderColor: 'gray',
-    marginHorizontal: 1500,
-    padding: 15,
-    borderStyle: 'solid',
-    shadowColor: "#000",
-    shadowOffset:{
-	    width: 0,
-	    height: 12,
-    },
-    shadowOpacity: 0.58,
-    shadowRadius: 16.00,
-    elevation: 24,
+  container: {
+    flex: 1,
+    paddingHorizontal: scale(0),
   },
-  likedImageBrand:{
-    fontFamily: "Montserrat",
-    fontSize: 25,
-    marginRight: 10,
-    },
-  likedImagePrice:{
-    fontFamily: "Montserrat",
-    fontSize: 20,
-    color: 'gray',   
-    marginRight: 150,
- 
+  imageBackground: {
+    height: scale(400),
+    width: '100%',
   },
-  likedImage:{
-    width : 200,
-    height : 500,
-    borderRadius: 20,
-    marginVertical: 50,
+  topBar: {
+    marginTop: scale(40),
+    paddingHorizontal: scale(20),
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  wishlistButton: {
+    borderRadius: scale(25),
+    backgroundColor: 'white',
+    height: scale(45),
+    width: scale(45),
     justifyContent: 'center',
-    resizeMode : "cover"
+    alignItems: 'center',
   },
-  description : {
-    margin : 10,
-    fontSize : 20,
-  }
-
+  detailsContainer: {
+    paddingHorizontal: scale(20),
+    marginBottom: scale(100),
+  },
+  title: {
+    fontWeight: '700',
+    fontSize: scale(30),
+    paddingVertical: scale(20),
+  },
+  sizeAndColorContainer: {
+    paddingVertical: scale(10),
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  sizeContainer: {
+    flex: 0.47,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    padding: scale(10),
+    paddingHorizontal: scale(20),
+    borderRadius: scale(20),
+    borderWidth: scale(0.4),
+    borderColor: 'gray',
+  },
+  label: {
+    fontSize: scale(15),
+  },
+  value: {
+    fontWeight: '700',
+    fontSize: scale(15),
+  },
+  itemColor: {
+    height: scale(20),
+    width: scale(20),
+    backgroundColor: '#FF6347', // Replacing appColors.primary with '#FF6347'
+    borderRadius: scale(5),
+  },
+  section: {
+    paddingVertical: scale(20),
+  },
+  sectionTitle: {
+    fontSize: scale(20),
+    fontWeight: '700',
+  },
+  description: {
+    fontSize: scale(14),
+    lineHeight: scale(25),
+    paddingVertical: scale(20),
+  },
+  writeReview: {
+    paddingVertical: scale(10),
+    fontSize: scale(14),
+    color: '#FF6347', // Replacing appColors.primary with '#FF6347'
+  },
+  bottomButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: scale(20),
+    borderTopWidth: scale(1),
+    borderColor: 'gray',
+  },
+  addButton: {
+    backgroundColor: '#C80321', // Replacing appColors.primary with '#FF6347'
+    paddingVertical: scale(10),
+    paddingHorizontal: scale(20),
+    borderRadius: scale(5),
+  },
+  buttonLabel: {
+    color: 'white',
+    fontSize: scale(18),
+  },
+  price: {
+    fontSize: scale(18),
+    fontWeight: '700',
+  },
 });
-
-function DetailsCard(props : any){
-  return <div style={styles.likedContainer}>
-    <Image source={{uri: props.url}} style={styles.likedImage}/>
-    <Text style={styles.likedImageBrand}> {props.title} </Text>
-    <Text style={styles.likedImagePrice} > {props.price} </Text>
-
-    <Text style={styles.description}>{props.description}</Text>
-  </div>
-}
 
 
 const mockData = [{

@@ -38,7 +38,7 @@ export default function RootLayout() {
             name="details"
             options={{
               // Hide the header for this route
-              headerShown: true,
+              headerShown: false,
             }}
           />
         </Stack>

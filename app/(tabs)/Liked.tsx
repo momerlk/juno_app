@@ -21,7 +21,7 @@ export default function TabTwoScreen() {
   useEffect(() => {
     const fetchData = async () => {
       const myHeaders = new Headers();
-      const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjRmODY0NzNlY2QwZTQ2MWE2N2NiYTQiLCJpYXQiOjE3MTY5MzEzMDEsImV4cCI6MTcxNjkzNDkwMX0.ukU62aimrL6C_5SNy4TTb9ghT01xqTWuZIWnw-kSrzU"
+      const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjRmODY0NzNlY2QwZTQ2MWE2N2NiYTQiLCJpYXQiOjE3MTY5NjIzMDIsImV4cCI6MTcxNjk2NTkwMn0.hfYWQv9IhlmDp6uRIkHROif6w1J6NMhfm35aXA0XLWA"
       myHeaders.append("Authorization", `Bearer ${token}`);
 
       const requestOptions = {
@@ -30,7 +30,10 @@ export default function TabTwoScreen() {
       };
 
       try {
-        const response = await fetch("http://localhost:3000/user/liked", requestOptions);
+        const response = await fetch("http://192.168.18.16:3000/user/liked", requestOptions);
+        if(response.status !== 200){
+          return;
+        }
         const result = await response.json();
         setData(result);
       } catch (error) {
