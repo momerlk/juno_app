@@ -34,6 +34,14 @@ interface AppState {
   socket: WebSocket;
 }
 
+// Function to ensure URLs have the correct scheme
+const ensureURLScheme = (url: string) => {
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url;
+  }
+  return `https://${url}`;
+};
+
 export default class App extends React.Component<{}, AppState> {
   position: Animated.ValueXY;
   rotate: Animated.AnimatedInterpolation<string>;
@@ -98,7 +106,7 @@ export default class App extends React.Component<{}, AppState> {
     this.state = {
       currentIndex: 0,
       cards: Users,
-      socket: new WebSocket(""),
+      socket: new WebSocket("http://192.168.18.16:9001/feed"),
     };
 
     fetchFonts();
@@ -114,22 +122,17 @@ export default class App extends React.Component<{}, AppState> {
       alert(`error = ${e}`);
     }
 
-    setTimeout(() => {
-      const socket = new WebSocket("ws://localhost:9001/feed");
+    setTimeout(async () => {
+      // connecting to feed websocket
+      const socket = new WebSocket("ws://192.168.18.16:9001/feed");
+
+
       socket.onmessage = (ev: MessageEvent<any>) => {
         const parsed = JSON.parse(ev.data);
-        if (parsed["products"] === undefined) {
-          alert(`failed to get new recommendations`);
-          return;
-        }
-
-        if (parsed["products"].length < 1) {
-          alert(`failed to get new recommendations`);
-          return;
-        }
-
-        if (parsed["products"].length === 1 && parsed["products"][0]["image_url"] === undefined) {
-          alert("failed to get new recommendations");
+        // no products
+        // TODO : Create an error logger system which logs errors users face
+        if (parsed["products"] === undefined && parsed["status"] !== 200) {
+          alert(`failed to get new recommendations, message = ${parsed["message"]}`);
           return;
         }
 
@@ -140,11 +143,35 @@ export default class App extends React.Component<{}, AppState> {
           products = this.state.cards.concat(parsed["products"]);
         }
 
-        this.setState({ currentIndex: 0, cards: products });
+        if (products === undefined){
+          
+          this.setState({currentIndex : 0})
+        } else { this.setState({ currentIndex: 0, cards: products }); }
       };
 
       this.setState({ socket: socket });
     }, 500);
+
+    let token = null; // token null before loading
+      try {
+        token = await AsyncStorage.getItem("token");
+        // no token so returns user to sign in again
+        if (token == null){
+          alert(`failed to get authentication token, sign in again!`)
+          router.replace("/sign-in");
+          return;
+        }
+      } catch(e){
+        alert(`failed to get authentication token, sign in again!`)
+        router.replace("/sign-in");
+        return;
+      }
+
+    setTimeout( // initial authentication to socket
+      () => this.state.socket.send(JSON.stringify({
+        token : token,
+        action_type : "open" // handshake/webscoket open action
+      })) , 1000)
   }
 
   UNSAFE_componentWillMount() {
@@ -296,7 +323,7 @@ export default class App extends React.Component<{}, AppState> {
                 resizeMode: 'cover',
                 borderRadius: 20,
               }}
-              source={{ uri: item.image_url }}
+              source={{ uri: ensureURLScheme(item.image_url) }}
             />
 
             <View style={{
@@ -355,7 +382,7 @@ export default class App extends React.Component<{}, AppState> {
                 resizeMode: 'cover',
                 borderRadius: 20,
               }}
-              source={{ uri: item.image_url }}
+              source={{ uri: ensureURLScheme(item.image_url) }}
             />
           </Animated.View>
         );

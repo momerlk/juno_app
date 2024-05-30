@@ -4,7 +4,6 @@ import * as Font from "expo-font";
 import { useWindowDimensions } from 'react-native';
 
 
-
 import {router, useLocalSearchParams} from "expo-router";
 
 import { ImageBackground, Pressable } from 'react-native';
@@ -23,7 +22,11 @@ const ProductDetail: React.FC<any> = () => {
   } = params;
 
   const {width} = useWindowDimensions();
-
+  const htmlContent = `
+    <h1>Hello World</h1>
+    <p>This is a <strong>simple</strong> HTML example.</p>
+    <img src="https://reactnative.dev/img/tiny_logo.png" alt="React Native Logo" />
+  `;
 
   const _renderBottom = () => {
     return (

@@ -4,11 +4,11 @@
     "slug": "swift",
     "version": "0.0.1",
     "orientation": "portrait",
-    "icon": "./app/assets/images/icon.png",
+    "icon": "./app/assets/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./app/assets/images/splash.png",
+      "image": "./app/assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,10 +17,10 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./app/assets/icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.geniusprogrammer13.swift"
+      "package": "com.learnables.swift"
     },
     "web": {
       "bundler": "metro",
@@ -38,8 +38,9 @@
         "origin": false
       },
       "eas": {
-        "projectId": "f4eb3ac9-1412-4bb4-b83e-904b55568582"
+        "projectId": "6618548c-a6f9-4f27-8bc8-f228991b8f73"
       }
-    }
+    },
+    "owner": "learnables"
   }
 }

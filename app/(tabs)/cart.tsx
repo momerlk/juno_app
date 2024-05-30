@@ -41,7 +41,7 @@ export default function TabTwoScreen() {
       };
 
       try {
-        const response = await fetch("http://localhost:3000/user/liked", requestOptions);const result = await response.json();
+        const response = await fetch("http://192.168.18.16:3000/user/liked", requestOptions);const result = await response.json();
         if(response.status !== 200){
           alert(`failed to get liked products. error : ${result.message}`)
           return;
