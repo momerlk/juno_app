@@ -7,7 +7,8 @@ import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // TODO : Add header
-// TODO : Add proper token
+// TODO : update liked items with websocket updates
+// TODO : This page doesn't work on mobile for some reason fix the bug
 
 const fetchFonts = () => {
   return Font.loadAsync({

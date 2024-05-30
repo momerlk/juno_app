@@ -136,17 +136,13 @@ export default class App extends React.Component<{}, AppState> {
           return;
         }
 
-        let products = [];
-        if (this.state.cards.length === 1) {
-          products = parsed["products"];
-        } else {
-          products = this.state.cards.concat(parsed["products"]);
-        }
-
+        let products = parsed["products"];
+       
         if (products === undefined){
-          
           this.setState({currentIndex : 0})
-        } else { this.setState({ currentIndex: 0, cards: products }); }
+        } else { 
+          this.setState({ currentIndex: 0, cards: products }); 
+        }
       };
 
       this.setState({ socket: socket });
