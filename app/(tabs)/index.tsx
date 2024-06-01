@@ -1,411 +1,80 @@
-import React from 'react';
-import { StyleSheet, Text, View, Animated, PanResponder, Dimensions, Image } from 'react-native';
-import Button from "../components/Button";
-import * as Font from 'expo-font';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { router } from 'expo-router';
+import { LinearGradient } from "expo-linear-gradient";
+import React from "react"
+import {ScrollView , View , Text, StyleSheet, Pressable, Image} from "react-native";
+import * as size from "react-native-size-matters";
 
-const SCREEN_HEIGHT = Dimensions.get('window').height;
-const SCREEN_WIDTH = Dimensions.get('window').width;
+import {router} from "expo-router";
 
-const fetchFonts = () => {
-  return Font.loadAsync({
-    'Poppins': require('./Poppins-Medium.ttf'),
-    'Montserrat': require('./Montserrat.ttf'),
-  });
-};
+const styles = StyleSheet.create({
+  category : {
+    height : size.verticalScale(120),
+    margin : size.moderateScale(20),
+    borderRadius : size.scale(23),
+    paddingVertical : size.moderateScale(10),
+    paddingHorizontal : size.moderateScale(33),
+  },
+})
 
-const Users = [{
-  "product_id": "",
-  "product_url": "",
-  "handle": "",
-  "title": "Nothing here !",
-  "vendor": "",
-  "category": "",
-  "image_url": "",
-  "description": "",
-  "price": "",
-  "currency": "PKR",
-}]
-
-interface AppState {
-  currentIndex: number;
-  cards: any[];
-  socket: WebSocket;
+function Category(props : any){
+  return (
+    <Pressable onPress={() => router.navigate(props.route)}>
+    <LinearGradient style={styles.category} colors={props.colors}>
+      <Text style={{color : "white" , fontSize : size.moderateScale(30) , fontWeight : "bold"}}>
+        {props.title}
+      </Text>
+      <Image source={props.image} style={{resizeMode : "cover", height : size.verticalScale(90), width : size.verticalScale(70), alignSelf : "flex-end"}}/>
+    </LinearGradient>
+    </Pressable>
+  )
 }
 
-// Function to ensure URLs have the correct scheme
-const ensureURLScheme = (url: string) => {
-  if (url.startsWith('http://') || url.startsWith('https://')) {
-    return url;
-  }
-  return `https://${url}`;
-};
-
-export default class App extends React.Component<{}, AppState> {
-  position: Animated.ValueXY;
-  rotate: Animated.AnimatedInterpolation<string>;
-  rotateAndTranslate: { transform: any[] };
-  likeOpacity: Animated.AnimatedInterpolation<number>;
-  dislikeOpacity: Animated.AnimatedInterpolation<number>;
-  superLikeOpacity: Animated.AnimatedInterpolation<number>;
-  nextCardOpacity: Animated.AnimatedInterpolation<number>;
-  nextCardScale: Animated.AnimatedInterpolation<number>;
-  PanResponder: any;
-
-  constructor(props: any) {
+export default class Home extends React.Component {
+  constructor(props : any){
     super(props);
-
-    this.position = new Animated.ValueXY();
-
-    this.rotate = this.position.x.interpolate({
-      inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
-      outputRange: ['-30deg', '0deg', '10deg'],
-      extrapolate: 'clamp',
-    });
-
-    this.rotateAndTranslate = {
-      transform: [
-        {
-          rotate: this.rotate,
-        },
-        ...this.position.getTranslateTransform(),
-      ],
-    };
-
-    this.likeOpacity = this.position.x.interpolate({
-      inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
-      outputRange: [0, 0, 1],
-      extrapolate: 'clamp',
-    });
-
-    this.dislikeOpacity = this.position.x.interpolate({
-      inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
-      outputRange: [1, 0, 0],
-      extrapolate: 'clamp',
-    });
-
-    this.superLikeOpacity = this.position.y.interpolate({
-      inputRange: [-SCREEN_HEIGHT / 2, 0, SCREEN_HEIGHT / 2],
-      outputRange: [1, 0, 0],
-      extrapolate: 'clamp',
-    });
-
-    this.nextCardOpacity = this.position.x.interpolate({
-      inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
-      outputRange: [1, 0.8, 1],
-      extrapolate: 'clamp',
-    });
-
-    this.nextCardScale = this.position.x.interpolate({
-      inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
-      outputRange: [1, 0.8, 1],
-      extrapolate: 'clamp',
-    });
-
-    this.state = {
-      currentIndex: 0,
-      cards: Users,
-      socket: new WebSocket("http://192.168.18.16:9001/feed"),
-    };
-
-    fetchFonts();
   }
 
-  async componentDidMount() {
-    try {
-      const value = await AsyncStorage.getItem("authenticated");
-      if (value === null || value === "false") {
-        router.navigate("/welcome");
-      }
-    } catch (e) {
-      alert(`error = ${e}`);
-    }
-
-    setTimeout(async () => {
-      // connecting to feed websocket
-      const socket = new WebSocket("ws://192.168.18.16:9001/feed");
-
-
-      socket.onmessage = (ev: MessageEvent<any>) => {
-        const parsed = JSON.parse(ev.data);
-        // no products
-        // TODO : Create an error logger system which logs errors users face
-        if (parsed["products"] === undefined && parsed["status"] !== 200) {
-          alert(`failed to get new recommendations, message = ${parsed["message"]}`);
-          return;
-        }
-
-        let products = parsed["products"];
-       
-        if (products === undefined){
-          this.setState({currentIndex : 0})
-        } else { 
-          this.setState({ currentIndex: 0, cards: products }); 
-        }
-      };
-
-      this.setState({ socket: socket });
-    }, 500);
-
-    let token = null; // token null before loading
-      try {
-        token = await AsyncStorage.getItem("token");
-        // no token so returns user to sign in again
-        if (token == null){
-          alert(`failed to get authentication token, sign in again!`)
-          router.replace("/sign-in");
-          return;
-        }
-      } catch(e){
-        alert(`failed to get authentication token, sign in again!`)
-        router.replace("/sign-in");
-        return;
-      }
-
-    setTimeout( // initial authentication to socket
-      () => this.state.socket.send(JSON.stringify({
-        token : token,
-        action_type : "open" // handshake/webscoket open action
-      })) , 1000)
-  }
-
-  UNSAFE_componentWillMount() {
-    this.PanResponder = PanResponder.create({
-      onStartShouldSetPanResponder: (evt, gestureState) => true,
-      onPanResponderMove: (evt, gestureState) => {
-        this.position.setValue({ x: gestureState.dx, y: gestureState.dy });
-      },
-      onPanResponderRelease: (evt, gestureState) => {
-        this.handleSwipe(gestureState);
-      },
-    });
-  }
-
-  async handleSwipeAction(action : string){
-    let token = null;
-    try {
-      token = await AsyncStorage.getItem("token")
-    } catch(e){
-      alert(`failed to update feed, reload or login again , error = ${e}`)
-    }
-    this.state.socket.send(JSON.stringify({
-      token : token,
-      action_type : action,
-      action_timestamp : new Date().toJSON(),
-      product_id : this.state.cards[this.state.currentIndex]["product_id"], 
-    }))
-  }
-
-  handleSwipe = (gestureState : any) => {
-    if (gestureState.dx > 120) {
-      // Swipe right
-      Animated.spring(this.position, {
-        toValue: { x: SCREEN_WIDTH + 100, y: gestureState.dy },
-        useNativeDriver: true,
-      }).start(() => {
-        this.handleSwipeAction("liked")
-        this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
-          this.position.setValue({ x: 0, y: 0 });
-        });
-      });
-    } else if (gestureState.dx < -120) {
-      // Swipe left
-      Animated.spring(this.position, {
-        toValue: { x: -SCREEN_WIDTH - 100, y: gestureState.dy },
-        useNativeDriver: true,
-      }).start(() => {
-        this.handleSwipeAction("disliked")
-        this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
-          this.position.setValue({ x: 0, y: 0 });
-        });
-      });
-    } else if (gestureState.dy < -120) {
-      // Swipe up
-      Animated.spring(this.position, {
-        toValue: { x: gestureState.dx, y: -SCREEN_HEIGHT - 100 },
-        useNativeDriver: true,
-      }).start(() => {
-        this.handleSwipeAction("added_to_cart")
-        this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
-          this.position.setValue({ x: 0, y: 0 });
-        });
-      });
-    } else {
-      // If the swipe is not significant, reset position
-      Animated.spring(this.position, {
-        toValue: { x: 0, y: 0 },
-        friction: 4,
-        useNativeDriver: true,
-      }).start();
-    }
-  };
-
-  shouldComponentUpdate(nextProps : any , nextState : any) {
-    return this.state.currentIndex !== nextState.currentIndex ||
-      this.state.cards !== nextState.cards;
-  }
-
-  renderProducts = () => {
-    return this.state.cards.map((item, i) => {
-      if (i < this.state.currentIndex) {
-        return null;
-      } else if (i === this.state.currentIndex) {
-        return (
-          <Animated.View
-            {...this.PanResponder.panHandlers}
-            key={item.product_id}
-            style={[
-              this.rotateAndTranslate,
-              {
-                height: SCREEN_HEIGHT - 120,
-                width: SCREEN_WIDTH,
-                padding: 10,
-                position: 'absolute',
-              },
-            ]}
-          >
-            <Animated.View
-              style={{
-                opacity: this.likeOpacity,
-                position: 'absolute',
-                top: 50,
-                left: 40,
-                zIndex: 1000,
-              }}
-            >
-              <Image
-                source={{ uri: 'https://via.placeholder.com/100.png?text=Like'
-              }}
-                style={{ width: 100, height: 100 }}
-              />
-            </Animated.View>
-
-            <Animated.View
-              style={{
-                opacity: this.dislikeOpacity,
-                position: 'absolute',
-                top: 50,
-                right: 40,
-                zIndex: 1000,
-              }}
-            >
-              <Image
-                source={{ uri: 'https://via.placeholder.com/100.png?text=Dislike' }}
-                style={{ width: 100, height: 100 }}
-              />
-            </Animated.View>
-
-            <Animated.View
-              style={{
-                opacity: this.superLikeOpacity,
-                position: 'absolute',
-                bottom: 50,
-                left: SCREEN_WIDTH / 2 - 50,
-                zIndex: 1000,
-              }}
-            >
-              <Image
-                source={{ uri: 'https://via.placeholder.com/100.png?text=SuperLike' }}
-                style={{ width: 100, height: 100 }}
-              />
-            </Animated.View>
-
-            <Image
-              style={{
-                flex: 1,
-                height: null,
-                width: null,
-                resizeMode: 'cover',
-                borderRadius: 20,
-              }}
-              source={{ uri: ensureURLScheme(item.image_url) }}
-            />
-
-            <View style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginHorizontal: 10,
-              marginTop: 10,
-            }}>
-              <Text style={{
-                fontSize: 22, fontFamily: "Montserrat",
-              }}>{item.vendor}</Text>
-              <Text style={{
-                fontSize: 17, marginVertical: 5,
-              }}>Rs. {(() => {
-                  let l = item.price.length;
-                  let pos = (l) - 3;
-                  if (pos > 0) {
-                    const firstPart = item.price.slice(0, pos);
-                    const secondPart = item.price.slice(pos);
-
-                    // Concatenate the first part, substring, and second part
-                    const newString = firstPart + "," + secondPart;
-                    return newString;
-                  } else {
-                    return item.price
-                  }
-                })()}</Text>
-            </View>
-
-            <View style={{ marginBottom: 60 }}>
-              <Text></Text>
-            </View>
-          </Animated.View>
-        );
-      } else {
-        return (
-          <Animated.View
-            key={item.product_id}
-            style={[
-              {
-                opacity: this.nextCardOpacity,
-                transform: [{ scale: this.nextCardScale }],
-                height: SCREEN_HEIGHT - 120,
-                width: SCREEN_WIDTH,
-                padding: 10,
-                position: 'absolute',
-              },
-            ]}
-          >
-            <Image
-              style={{
-                flex: 1,
-                height: null,
-                width: null,
-                resizeMode: 'cover',
-                borderRadius: 20,
-              }}
-              source={{ uri: ensureURLScheme(item.image_url) }}
-            />
-          </Animated.View>
-        );
-      }
-    }).reverse();
-  };
-
-  render() {
+  render(){
     return (
-      <View style={{ flex: 1 }}>
-        <View style={{ height: 60 }}></View>
-        <View style={{ flex: 1 }}>{this.renderProducts()}</View>
-        <Button
-          style={{
-            marginVertical: 8,
-            marginHorizontal: 20,
-          }}
-          title="View Details"
-          onPress={() => {
-            router.navigate({
-              pathname: "/details",
-              params: this.state.cards[this.state.currentIndex]
-            })
-          }}
-          filled={true}
+      <ScrollView>
+        <View style={{margin : size.moderateScale(40) , display : "flex" , flexDirection : "row"}}>
+          <Image source={{uri : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9spkCid8NhfhtV_Y-0xMs5N1V5xB_NQHe9w&s"}} 
+          style={{height : size.scale(70), width : size.scale(70), borderRadius : size.scale(50)}}/>
+          <Image source={{uri : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9spkCid8NhfhtV_Y-0xMs5N1V5xB_NQHe9w&s"}} 
+          style={{height : size.scale(70), width : size.scale(70), borderRadius : size.scale(50)}}/>
+          <Image source={{uri : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9spkCid8NhfhtV_Y-0xMs5N1V5xB_NQHe9w&s"}} 
+          style={{height : size.scale(70), width : size.scale(70), borderRadius : size.scale(50)}}/>
+        </View>
+        <Category 
+          title="DISCOVER" 
+          image={require("../assets/rocket.png")}
+          colors={["#FF8200" , "#BF0A0A"]}
+          route="/feed"
         />
-      </View>
-    );
+        <Text style={{
+          marginHorizontal : size.moderateScale(23) , 
+          fontSize : size.moderateScale(30),
+          fontWeight : "500"
+        }}
+        > Categories</Text>
+        <Category 
+          title="CLOTHES" 
+          image={require("../assets/clothes.png")}
+          colors={["#5DE0E6" , "#004AAD"]}
+          route="/feed"
+        />
+        <Category 
+          title="ACCESSORIES" 
+          image={require("../assets/accessories.png")}
+          colors={["#CB6CE6" , "#FF3BBC"]}
+          route="/feed"
+        />
+        <Category 
+          title="ACCESSORIES" 
+          image={require("../assets/accessories.png")}
+          colors={["#CB6CE6" , "#FF3BBC"]}
+          route="/feed"
+        />
+      </ScrollView>
+    )
   }
 }

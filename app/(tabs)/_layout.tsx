@@ -11,9 +11,9 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: "red",
         headerShown: false,
-        tabBarStyle : {paddingBottom : 10, height : 60},
+        tabBarStyle : {height : 60 , padding : 10},
       }}>
       <Tabs.Screen
         name="index"
@@ -36,7 +36,7 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="Liked"
+        name="liked"
         options={{
           title: '',
           tabBarIcon: ({ color, focused }) => (
