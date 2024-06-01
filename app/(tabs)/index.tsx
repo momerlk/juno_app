@@ -1,11 +1,15 @@
 import { LinearGradient } from "expo-linear-gradient";
-import React from "react"
+import React , {useRef, useState, useEffect} from "react"
 import {
   ScrollView , View , Text, StyleSheet, Image, ImageBackground,
-  Pressable
+  Pressable,
+  Animated,
+  Easing,
 } from "react-native";
 import * as size from "react-native-size-matters";
 import { BlurView } from 'expo-blur';
+import InstagramStories from '@birdwingo/react-native-instagram-stories';
+
 
 import {router} from "expo-router";
 
@@ -19,7 +23,6 @@ const styles = StyleSheet.create({
   },
    imageBackground: {
     flex: 1,
-    height : size.verticalScale(400),
     justifyContent: 'flex-end',  // Aligns children to the bottom
   },
   container: {
@@ -35,6 +38,19 @@ const styles = StyleSheet.create({
     backgroundColor: 'lightgray',
     overflow: 'hidden',
   },
+  gradientRing: {
+    height: size.scale(80),
+    width: size.scale(80),
+    borderRadius: size.scale(40),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  image: {
+    height: size.scale(70),
+    width: size.scale(70),
+    borderRadius: size.scale(35),
+  },
+
   text: {
     fontSize: size.verticalScale(15),
     textAlign: 'center',
@@ -54,6 +70,68 @@ function Category(props : any){
   )
 }
 
+
+function Story(props : any){
+ const spinValue = useRef(new Animated.Value(0)).current;
+
+
+  const startAnimation = () => {
+    Animated.loop(
+      Animated.timing(spinValue, {
+        toValue: 1,
+        duration: 3000,
+        easing: Easing.linear,
+        useNativeDriver: true,
+      })
+    ).start();
+  };
+
+  const spin = spinValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg'],
+  });
+
+
+  return (
+    <Pressable onPress={startAnimation}>
+      <Animated.View style={[styles.gradientRing, { transform: [{ rotate : spin }] }]}>
+        <LinearGradient
+          colors={['#f09433', '#e6683c', '#dc2743', '#cc2366', '#bc1888']}
+          style={styles.gradientRing}
+        >
+          <Image
+            source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9spkCid8NhfhtV_Y-0xMs5N1V5xB_NQHe9w&s" }}
+            style={styles.image}
+          />
+        </LinearGradient>
+      </Animated.View>
+      <Text style={{textAlign : "center"}}>{props.user}</Text>
+    </Pressable>
+  )
+}
+
+// TODO : Add backend data gettting logic
+// TODO : Add save progress logic
+const stories = [{
+    id: 'user1',
+    name: '   ralphlauren    ',
+    imgUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9spkCid8NhfhtV_Y-0xMs5N1V5xB_NQHe9w&s',
+    stories: [
+      { id: 'story1', source: { uri: 'https://w0.peakpx.com/wallpaper/410/733/HD-wallpaper-godfather-michael-corleone-vito-corleone.jpg' } },
+      { id: 'story2', source: { uri: 'https://mfiles.alphacoders.com/985/985719.jpg' }},
+    ]},
+
+    {
+    id: 'user2',
+    name: '   hugoboss    ',
+    imgUrl: 'https://brandpulse.ch/wp-content/uploads/2021/08/Work_Case_HB_Header2-2000x800.jpg',
+    stories: [
+      { id: 'story3', source: { uri: 'https://w0.peakpx.com/wallpaper/410/733/HD-wallpaper-godfather-michael-corleone-vito-corleone.jpg' } },
+      { id: 'story4', source: { uri: 'https://mfiles.alphacoders.com/985/985719.jpg' }},
+    ]},
+    
+  ];
+
 export default class Home extends React.Component {
   constructor(props : any){
     super(props);
@@ -64,17 +142,19 @@ export default class Home extends React.Component {
       <ScrollView>
 
         {/* Brand Stories Section */}
-        <ScrollView 
-        style={{margin : size.moderateScale(40) , display : "flex" , flexDirection : "row"}}
-        horizontal={true} 
-        >
-          <Image source={{uri : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9spkCid8NhfhtV_Y-0xMs5N1V5xB_NQHe9w&s"}} 
-          style={{height : size.scale(70), width : size.scale(70), borderRadius : size.scale(50)}}/>
-          <Image source={{uri : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9spkCid8NhfhtV_Y-0xMs5N1V5xB_NQHe9w&s"}} 
-          style={{height : size.scale(70), width : size.scale(70), borderRadius : size.scale(50)}}/>
-          <Image source={{uri : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9spkCid8NhfhtV_Y-0xMs5N1V5xB_NQHe9w&s"}} 
-          style={{height : size.scale(70), width : size.scale(70), borderRadius : size.scale(50)}}/>
-        </ScrollView>
+        <View style={{margin : size.moderateScale(23) , marginTop : size.verticalScale(30)}}>
+        <InstagramStories
+          stories={stories}
+          showName={true}
+          avatarSize={size.verticalScale(50)}
+          storyAvatarSize={size.verticalScale(27)}
+          headerStyle={{}}
+          avatarListContainerStyle={{marginTop : 15}}
+          containerStyle={{}}
+          nameTextStyle={{marginTop : 5, fontWeight : "400"}}
+          textStyle={{color : "white", fontWeight : "bold" , fontSize : 13}}
+        />
+        </View>
         {/* Stories end */}
 
         <Category 
@@ -92,24 +172,23 @@ export default class Home extends React.Component {
           fontSize : size.moderateScale(30),
           fontWeight : "500"
         }}
-        >Top Picks</Text>
+        >Spotlight</Text>
 
 
         <Pressable style={{
-          height: size.verticalScale(400),
+          height: size.verticalScale(450),
           marginHorizontal : size.scale(30),
+          marginVertical : size.verticalScale(15),
         }}
         onPress={() => alert("top picks clicked!")} 
         >
 
-          <View style={{marginVertical : size.verticalScale(10)}}></View> {/* Spacing /*}
-
           {/* TODO : Make this a component */}
           <ImageBackground
             source={{
-              uri : "https://cdn.shopify.com/s/files/1/0620/8788/9062/files/MBFS23303Offwhite.jpg?v=1716290767"
+              uri : "https://cdn.shopify.com/s/files/1/0620/8788/9062/files/DWEA2426GreenFront.jpg?v=1715939755"
             }} 
-            imageStyle={{borderRadius : size.scale(20)}}
+            imageStyle={{borderRadius : size.scale(20), height : size.verticalScale(450)}}
             style={styles.imageBackground}
           >
             <View style={styles.container}>
@@ -121,7 +200,7 @@ export default class Home extends React.Component {
         </Pressable>
         {/* Picks for you end */}
 
-        <View style={{marginVertical : size.verticalScale(20)}}></View>
+        <View style={{marginVertical : size.verticalScale(10)}}></View>
 
         <Text style={{
           marginHorizontal : size.moderateScale(23) , 
