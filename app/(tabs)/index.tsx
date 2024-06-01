@@ -180,7 +180,7 @@ export default class Home extends React.Component {
           marginHorizontal : size.scale(30),
           marginVertical : size.verticalScale(15),
         }}
-        onPress={() => alert("top picks clicked!")} 
+        onPress={() => router.navigate("/feed")} 
         >
 
           {/* TODO : Make this a component */}
