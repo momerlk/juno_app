@@ -146,7 +146,7 @@ export default class Home extends React.Component {
         <InstagramStories
           stories={stories}
           showName={true}
-          avatarSize={size.verticalScale(50)}
+          avatarSize={size.verticalScale(60)}
           storyAvatarSize={size.verticalScale(27)}
           headerStyle={{}}
           avatarListContainerStyle={{marginTop : 15}}
