@@ -62,19 +62,26 @@ export default class Home extends React.Component {
   render(){
     return (
       <ScrollView>
-        <View style={{margin : size.moderateScale(40) , display : "flex" , flexDirection : "row"}}>
+
+        {/* Brand Stories Section */}
+        <ScrollView 
+        style={{margin : size.moderateScale(40) , display : "flex" , flexDirection : "row"}}
+        horizontal={true} 
+        >
           <Image source={{uri : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9spkCid8NhfhtV_Y-0xMs5N1V5xB_NQHe9w&s"}} 
           style={{height : size.scale(70), width : size.scale(70), borderRadius : size.scale(50)}}/>
           <Image source={{uri : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9spkCid8NhfhtV_Y-0xMs5N1V5xB_NQHe9w&s"}} 
           style={{height : size.scale(70), width : size.scale(70), borderRadius : size.scale(50)}}/>
           <Image source={{uri : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9spkCid8NhfhtV_Y-0xMs5N1V5xB_NQHe9w&s"}} 
           style={{height : size.scale(70), width : size.scale(70), borderRadius : size.scale(50)}}/>
-        </View>
+        </ScrollView>
+        {/* Stories end */}
+
         <Category 
           title="DISCOVER" 
           image={require("../assets/rocket.png")}
           colors={["#FF8200" , "#BF0A0A"]}
-          route="/feed"
+          route="/discover"
           height={100}
           width={100}
         />
@@ -85,7 +92,7 @@ export default class Home extends React.Component {
           fontSize : size.moderateScale(30),
           fontWeight : "500"
         }}
-        > Picks For You</Text>
+        >Top Picks</Text>
 
 
         <Pressable style={{
@@ -95,22 +102,22 @@ export default class Home extends React.Component {
         onPress={() => alert("top picks clicked!")} 
         >
 
-          <View style={{marginVertical : size.verticalScale(10)}}></View>
+          <View style={{marginVertical : size.verticalScale(10)}}></View> {/* Spacing /*}
 
-        {/* TODO : Make this a component */}
-        <ImageBackground
-        source={{
-          uri : "https://cdn.shopify.com/s/files/1/0620/8788/9062/files/MBFS23303Offwhite.jpg?v=1716290767"
-        }} 
-        imageStyle={{borderRadius : size.scale(20)}}
-        style={styles.imageBackground}
-        >
-          <View style={styles.container}>
-          <BlurView intensity={100} style={styles.blurContainer}>
-            <Text style={styles.text}>Ethnic New Outfits</Text>
-          </BlurView>
-        </View>
-        </ImageBackground>
+          {/* TODO : Make this a component */}
+          <ImageBackground
+            source={{
+              uri : "https://cdn.shopify.com/s/files/1/0620/8788/9062/files/MBFS23303Offwhite.jpg?v=1716290767"
+            }} 
+            imageStyle={{borderRadius : size.scale(20)}}
+            style={styles.imageBackground}
+          >
+            <View style={styles.container}>
+              <BlurView intensity={100} style={styles.blurContainer}>
+                <Text style={styles.text}>Ethnic New Outfits</Text>
+              </BlurView>
+            </View>
+          </ImageBackground>
         </Pressable>
         {/* Picks for you end */}
 

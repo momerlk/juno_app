@@ -35,10 +35,17 @@ export default function RootLayout() {
           }}
         >
           <Stack.Screen
-            name="details"
+            name="feed"
             options={{
               // Hide the header for this route
-              headerShown: false,
+              headerShown: true,
+            }}
+          />
+          <Stack.Screen
+            name="discover"
+            options={{
+              // Hide the header for this route
+              headerShown: true,
             }}
           />
         </Stack>

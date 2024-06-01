@@ -8,7 +8,7 @@
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./app/assets/splash.png",
+      "image": "./app/assets/splashnew.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
