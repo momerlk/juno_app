@@ -42,7 +42,7 @@ export default function TabTwoScreen() {
       };
 
       try {
-        const response = await fetch("http://localhost:3000/user/liked", requestOptions);const result = await response.json();
+        const response = await fetch("http://192.168.18.16:3000/user/liked", requestOptions);const result = await response.json();
         if(response.status !== 200){
           alert(`failed to get liked products. error : ${result.message}`)
           return;
@@ -68,7 +68,7 @@ export default function TabTwoScreen() {
           title={product.title}
           price={`Rs. ${product.price}`}
           vendor={product.vendor}
-          url={product.image_url}
+          image={product.image_url}
           onPress={() => {
             router.navigate({
                   pathname : "/details",
@@ -123,8 +123,8 @@ const styles = StyleSheet.create({
 });
 
 function LikedCard(props : any){
-  return <div style={styles.likedContainer}>
-    <Image source={{uri: props.url}} style={styles.likedImage}/>
+  return <View style={styles.likedContainer}>
+    <Image source={{uri: props.image}} style={styles.likedImage}/>
     <Text style={styles.likedImageBrand}> {props.title} by {props.vendor} </Text>
     <Text style={styles.likedImagePrice} > {props.price} </Text>
     <Button 
@@ -137,7 +137,7 @@ function LikedCard(props : any){
       }}
       filled={true}
     ></Button>
-  </div>
+  </View>
 }
 
 

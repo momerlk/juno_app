@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "swift",
-    "slug": "swift",
+    "name": "Juno",
+    "slug": "juno",
     "version": "0.0.1",
     "orientation": "portrait",
-    "icon": "./app/assets/icon.png",
+    "icon": "./app/assets/logo.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./app/assets/splash2.png",
+      "image": "./app/assets/juno_splash2.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,10 +17,10 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./app/assets/icon.png",
+        "foregroundImage": "./app/assets/logo.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.learnables.swift"
+      "package": "com.learnables.juno"
     },
     "web": {
       "bundler": "metro",

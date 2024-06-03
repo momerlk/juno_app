@@ -132,6 +132,7 @@ const stories = [{
     
   ];
 
+// TODO : Dark Mode
 export default class Home extends React.Component {
   constructor(props : any){
     super(props);
@@ -208,6 +209,14 @@ export default class Home extends React.Component {
           fontWeight : "500"
         }}
         >️‍🔥 Categories</Text>
+        <Category 
+          title="GROCERIES" 
+          image={require("../assets/groceries.webp")}
+          colors={["#73C615" , "#006D2C"]}
+          route="/feed"
+          height={90}
+          width={70}
+        />
         <Category 
           title="CLOTHES" 
           image={require("../assets/clothes.png")}
