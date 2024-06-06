@@ -62,7 +62,7 @@ export default function TabTwoScreen() {
   return (
     <ScrollView>
       {data.map((product: any, index: number) => (
-        <LikedCard
+        <addedToCart
           key={index}
           title={product.title}
           price={`Rs. ${product.price}`}
@@ -121,24 +121,25 @@ const styles = StyleSheet.create({
 
 });
 
-function LikedCard(props : any){
-  return <div style={styles.likedContainer}>
-    <Image source={{uri: props.url}} style={styles.likedImage}/>
-    <Text style={styles.likedImageBrand}> {props.title} by {props.vendor} </Text>
-    <Text style={styles.likedImagePrice} > {props.price} </Text>
-    <Button 
-      onPress={props.onPress} 
-      title="View Details"
-      style={{
-        width : scale(140) , 
-        height : verticalScale(42) , 
-        marginVertical : moderateScale(20)
-      }}
-      filled={true}
-    ></Button>
-  </div>
-}
+const addedToCart = () => {
+  <div style={{display: 'flex', 
+    flexDirection: 'column',
+    borderWidth: 1,
+    borderColor: 'gray',
+    marginHorizontal: 1500,
+    padding: 15,
+    borderStyle: 'solid',
+    shadowColor: "#000",
+    shadowOffset:{
+	    width: 0,
+	    height: 12,
+}}}>
+  <Text>Hello</Text>
 
+  </div>
+
+ 
+}
 
 const mockData = [{
   "product_id": "",
@@ -152,3 +153,4 @@ const mockData = [{
   "price": "",
   "currency": "PKR",
 }]
+
