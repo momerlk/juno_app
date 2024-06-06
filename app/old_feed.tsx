@@ -1,15 +1,21 @@
 import React from 'react';
-import { StyleSheet, Text, View, Animated, PanResponder, Dimensions, Image, ImageBackground, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Animated, PanResponder, Dimensions, Image, ImageBackground,
+  Pressable
+} from 'react-native';
 import Button from "./components/Button";
 import * as Font from 'expo-font';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
-import { Appearance, ColorSchemeName } from 'react-native';
-import { useState, useEffect } from "react"
+import {Appearance, ColorSchemeName} from 'react-native';
+import {useState, useEffect} from "react"
 import * as size from "react-native-size-matters"
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import Entypo from '@expo/vector-icons/Entypo';
 import Ionicons from '@expo/vector-icons/Ionicons';
+
+  
+
+
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -34,7 +40,7 @@ const Users = [{
   "category": "",
   "product_type": "",
   "image_url": "https://cdn.shopify.com/s/files/1/0052/2030/2897/products/5.jpg?v=1668433218",
-  "description": "Net Embellished + Embroidered Front + Back Body (0.66 M)Net Embellished + Embroidered Front & Back Panels (14 PCS)Net Embroidered Sleeves (0.66 Meters)Net EMBROIDERED SLEEVES BORDER (1 Meters)Raw Silk Embroidered Sleeves Border (1 Meters)Raw Silk Embroidered Front + Back Border (4.57 Meters)Net Embroidered Dupatta 4 Side Border (7.91 Meters)Net Embroidered Dupatta (2.63 Meters)",
+  "description": "Net Embellished + Embroidered Front + Back Body (0.66 M)Net Embellished + Embroidered Front & Back Panels (14 PCS)Net Embroidered Sleeves (0.66 Meters)Net EMBROIDERED SLEEVES BORDER (1 Meters)Raw Silk Embroidered Sleeves Border (1 Meters)Raw Silk Embroidered Front + Back Border (4.57 Meters)Net Embroidered Dupatta 4 Side Border (7.91 Meters)Net Embroidered Dupatta (2.63 Meters)",
   "price": "29900",
   "currency": "PKR",
   "options": [
@@ -161,6 +167,7 @@ export default class App extends React.Component<{}, AppState> {
       // connecting to feed websocket
       const socket = new WebSocket("ws://192.168.18.16:9001/feed");
 
+
       socket.onmessage = (ev: MessageEvent<any>) => {
         const parsed = JSON.parse(ev.data);
         // no products
@@ -170,19 +177,19 @@ export default class App extends React.Component<{}, AppState> {
           return;
         }
 
-        if (parsed === null || parsed === undefined) {
-          return;
+        if (parsed === null || parsed === undefined){
+            return;
         }
-        if (parsed["products"] === null || parsed["products"] == undefined) {
-          return;
+        if(parsed["products"] === null || parsed["products"] == undefined){
+            return;
         }
 
         let products = parsed["products"];
-
-        if (products === undefined) {
-          this.setState({ currentIndex: 0 })
-        } else {
-          this.setState({ currentIndex: 0, cards: products });
+       
+        if (products === undefined){
+          this.setState({currentIndex : 0})
+        } else { 
+          this.setState({ currentIndex: 0, cards: products }); 
         }
       };
 
@@ -190,25 +197,25 @@ export default class App extends React.Component<{}, AppState> {
     }, 500);
 
     let token = null; // token null before loading
-    try {
-      token = await AsyncStorage.getItem("token");
-      // no token so returns user to sign in again
-      if (token == null) {
+      try {
+        token = await AsyncStorage.getItem("token");
+        // no token so returns user to sign in again
+        if (token == null){
+          alert(`failed to get authentication token, sign in again!`)
+          router.replace("/sign-in");
+          return;
+        }
+      } catch(e){
         alert(`failed to get authentication token, sign in again!`)
         router.replace("/sign-in");
         return;
       }
-    } catch (e) {
-      alert(`failed to get authentication token, sign in again!`)
-      router.replace("/sign-in");
-      return;
-    }
 
     setTimeout( // initial authentication to socket
       () => this.state.socket.send(JSON.stringify({
-        token: token,
-        action_type: "open" // handshake/webscoket open action
-      })), 1000)
+        token : token,
+        action_type : "open" // handshake/webscoket open action
+      })) , 1000)
   }
 
   UNSAFE_componentWillMount() {
@@ -223,35 +230,32 @@ export default class App extends React.Component<{}, AppState> {
     });
   }
 
-  async handleSwipeAction(action: string) {
+  async handleSwipeAction(action : string){
     let token = null;
     try {
       token = await AsyncStorage.getItem("token")
-    } catch (e) {
+    } catch(e){
       alert(`failed to update feed, reload or login again , error = ${e}`)
     }
     this.state.socket.send(JSON.stringify({
-      token: token,
-      action_type: action,
-      action_timestamp: new Date().toJSON(),
-      product_id: this.state.cards[this.state.currentIndex]["product_id"],
+      token : token,
+      action_type : action,
+      action_timestamp : new Date().toJSON(),
+      product_id : this.state.cards[this.state.currentIndex]["product_id"], 
     }))
   }
 
-  handleSwipe = (gestureState: any) => {
+  handleSwipe = (gestureState : any) => {
     if (gestureState.dx > 120) {
       // Swipe right
       Animated.spring(this.position, {
         toValue: { x: SCREEN_WIDTH + 100, y: gestureState.dy },
         useNativeDriver: true,
       }).start(() => {
-        this.setState(
-          { currentIndex: this.state.currentIndex + 1 },
-          async () => {
-            this.position.setValue({ x: 0, y: 0 });
-            await this.handleSwipeAction("like");
-          }
-        );
+        this.handleSwipeAction("liked")
+        this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
+          this.position.setValue({ x: 0, y: 0 });
+        });
       });
     } else if (gestureState.dx < -120) {
       // Swipe left
@@ -259,13 +263,10 @@ export default class App extends React.Component<{}, AppState> {
         toValue: { x: -SCREEN_WIDTH - 100, y: gestureState.dy },
         useNativeDriver: true,
       }).start(() => {
-        this.setState(
-          { currentIndex: this.state.currentIndex + 1 },
-          async () => {
-            this.position.setValue({ x: 0, y: 0 });
-            await this.handleSwipeAction("dislike");
-          }
-        );
+        this.handleSwipeAction("disliked")
+        this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
+          this.position.setValue({ x: 0, y: 0 });
+        });
       });
     } else if (gestureState.dy < -120) {
       // Swipe up
@@ -273,21 +274,24 @@ export default class App extends React.Component<{}, AppState> {
         toValue: { x: gestureState.dx, y: -SCREEN_HEIGHT - 100 },
         useNativeDriver: true,
       }).start(() => {
-        this.setState(
-          { currentIndex: this.state.currentIndex + 1 },
-          async () => {
-            this.position.setValue({ x: 0, y: 0 });
-            await this.handleSwipeAction("super_like");
-          }
-        );
+        this.handleSwipeAction("added_to_cart")
+        this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
+          this.position.setValue({ x: 0, y: 0 });
+        });
       });
     } else {
-      // Reset position if no significant swipe
+      // If the swipe is not significant, reset position
       Animated.spring(this.position, {
         toValue: { x: 0, y: 0 },
+        friction: 4,
         useNativeDriver: true,
       }).start();
     }
+  };
+
+  shouldComponentUpdate(nextProps : any , nextState : any) {
+    return this.state.currentIndex !== nextState.currentIndex ||
+      this.state.cards !== nextState.cards;
   }
 
   renderProducts = () => {
@@ -312,76 +316,47 @@ export default class App extends React.Component<{}, AppState> {
             <Animated.View
               style={{
                 opacity: this.likeOpacity,
-                transform: [{ rotate: '-30deg' }],
                 position: 'absolute',
                 top: 50,
                 left: 40,
                 zIndex: 1000,
               }}
             >
-              <Text
-                style={{
-                  borderWidth: 1,
-                  borderColor: 'green',
-                  color: 'green',
-                  fontSize: 32,
-                  fontWeight: '800',
-                  padding: 10,
-                }}
-              >
-                LIKE
-              </Text>
+              <Image
+                source={{ uri: 'https://via.placeholder.com/100.png?text=Like'
+              }}
+                style={{ width: 100, height: 100 }}
+              />
             </Animated.View>
 
             <Animated.View
               style={{
                 opacity: this.dislikeOpacity,
-                transform: [{ rotate: '30deg' }],
                 position: 'absolute',
                 top: 50,
                 right: 40,
                 zIndex: 1000,
               }}
             >
-              <Text
-                style={{
-                  borderWidth: 1,
-                  borderColor: 'red',
-                  color: 'red',
-                  fontSize: 32,
-                  fontWeight: '800',
-                  padding: 10,
-                }}
-              >
-                NOPE
-              </Text>
+              <Image
+              style={styles.backgroundImage} source={{ uri: 'https://via.placeholder.com/100.png?text=Dislike' }}
+              />
             </Animated.View>
 
             <Animated.View
               style={{
                 opacity: this.superLikeOpacity,
-                transform: [{ rotate: '30deg' }],
                 position: 'absolute',
-                top: 50,
-                left: SCREEN_WIDTH / 3,
+                bottom: 50,
+                left: SCREEN_WIDTH / 2 - 50,
                 zIndex: 1000,
               }}
             >
-              <Text
-                style={{
-                  borderWidth: 1,
-                  borderColor: 'blue',
-                  color: 'blue',
-                  fontSize: 32,
-                  fontWeight: '800',
-                  padding: 10,
-                }}
-              >
-                SUPER LIKE
-              </Text>
+              <Image
+                source={{ uri: 'https://via.placeholder.com/100.png?text=SuperLike' }}
+                style={{ width: 100, height: 100 }}
+              />
             </Animated.View>
-
-            
 
             <ImageBackground
               style={{
@@ -431,6 +406,12 @@ export default class App extends React.Component<{}, AppState> {
                 </View>
               </View>
             </ImageBackground>
+            
+            
+
+            <View style={{ marginBottom: 30 }}>
+              <Text></Text>
+            </View>
           </Animated.View>
         );
       } else {
@@ -448,54 +429,16 @@ export default class App extends React.Component<{}, AppState> {
               },
             ]}
           >
-            <ImageBackground
+            <Image
               style={{
-                height : size.verticalScale(530), 
-              }}
-              imageStyle={{
-                borderRadius : 20,
+                flex: 1,
+                height: null,
+                width: null,
+                resizeMode: 'cover',
+                borderRadius: 20,
               }}
               source={{ uri: ensureURLScheme(item.image_url) }}
-            >
-              <View style={{
-                marginTop : size.verticalScale(470) , 
-                height : size.verticalScale(60),
-                backgroundColor : "rgba(52, 52, 52, 0.8)",
-                borderBottomLeftRadius : 20,
-                borderBottomRightRadius : 20,
-              }}
-                >
-                <View style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  marginHorizontal: 10,
-                  marginTop : size.verticalScale(15),
-                }}>
-                  <Text style={{
-                    fontSize: 22, fontFamily: "Montserrat",
-                    color : "white"
-                  }}>{item.vendor}</Text>
-                  <Text style={{
-                    fontSize: 17, marginVertical: 5,
-                    color : "white"
-                  }}>Rs. {(() => {
-                      let l = item.price.length;
-                      let pos = (l) - 3;
-                      if (pos > 0) {
-                        const firstPart = item.price.slice(0, pos);
-                        const secondPart = item.price.slice(pos);
-
-                        // Concatenate the first part, substring, and second part
-                        const newString = firstPart + "," + secondPart;
-                        return newString;
-                      } else {
-                        return item.price
-                      }
-                    })()}</Text>
-                </View>
-              </View>
-            </ImageBackground>
+            />
           </Animated.View>
         );
       }
@@ -562,3 +505,9 @@ export default class App extends React.Component<{}, AppState> {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  backgroundImage:{
+    
+  }
+})
