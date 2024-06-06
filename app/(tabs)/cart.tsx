@@ -23,44 +23,45 @@ export default function TabTwoScreen() {
   fetchFonts();
 
   useEffect(() => {
-    const fetchData = async () => {
-      const myHeaders = new Headers();
-      // TODO : Replace with actual token
-      let token = null
-      try {
-        token = await AsyncStorage.getItem("token")
-      } catch (e){
-        alert(`failed to get authentication token! Sign in again`)
-        router.replace("/sign-in")
-      }
-      myHeaders.append("Authorization", `Bearer ${token}`);
+    // const fetchData = async () => {
+    //   const myHeaders = new Headers();
+    //   // TODO : Replace with actual token
+    //   let token = null
+    //   try {
+    //     token = await AsyncStorage.getItem("token")
+    //   } catch (e){
+    //     alert(`failed to get authentication token! Sign in again`)
+    //     router.replace("/sign-in")
+    //   }
+    //   myHeaders.append("Authorization", `Bearer ${token}`);
 
-      const requestOptions = {
-        method: "GET",
-        headers: myHeaders,
-      };
+    //   const requestOptions = {
+    //     method: "GET",
+    //     headers: myHeaders,
+    //   };
 
-      try {
-        const response = await fetch("http://192.168.18.16:3000/user/liked", requestOptions);const result = await response.json();
-        if(response.status !== 200){
-          alert(`failed to get liked products. error : ${result.message}`)
-          return;
-        }
-        setData(result);
-      } catch (error) {
-        console.log(`Error fetching data: ${error}`);
-        setData(mockData)
-        setReq(1);
-      }
-    };
+    //   try {
+    //     const response = await fetch("http://192.168.18.16:3000/user/liked", requestOptions);const result = await response.json();
+    //     if(response.status !== 200){
+    //       alert(`failed to get liked products. error : ${result.message}`)
+    //       return;
+    //     }
+    //     setData(result);
+    //   } catch (error) {
+    //     console.log(`Error fetching data: ${error}`);
+    //     setData(mockData)
+    //     setReq(1);
+    //   }
+    // };
 
-    if(req == 0){
-      fetchData();
-    }
+    // if(req == 0){
+    //   fetchData();
+    // }
   }, []); // Empty dependency array to run only once when the component mounts
 
   return (
     <ScrollView>
+<<<<<<< HEAD
       {data.map((product: any, index: number) => (
         <addedToCart
           key={index}
@@ -76,51 +77,18 @@ export default function TabTwoScreen() {
           }
         />
       ))}
+=======
+     <Checkout />
+>>>>>>> 6df86b4fc9b1d6a3f0740031e83f81ce8321e427
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  likedContainer: {
-    display: 'flex', 
-    flexDirection: 'column',
-    borderWidth: 1,
-    borderColor: 'gray',
-    marginHorizontal: 1500,
-    padding: 15,
-    borderStyle: 'solid',
-    shadowColor: "#000",
-    shadowOffset:{
-	    width: 0,
-	    height: 12,
-    },
-    shadowOpacity: 0.58,
-    shadowRadius: 16.00,
-    elevation: 24,
-  },
-  likedImageBrand:{
-    fontFamily: "Montserrat",
-    fontSize: 25,
-    marginRight: 10,
-    },
-  likedImagePrice:{
-    fontFamily: "Montserrat",
-    fontSize: 20,
-    color: 'gray',   
-    marginRight: 150,
- 
-  },
-  likedImage:{
-    width: 360,
-    height: 205,  
-    borderRadius: 20,
-    marginVertical: 50,
-    justifyContent: 'center',
-    resizeMode : "cover"
-  }
 
-});
+})
 
+<<<<<<< HEAD
 const addedToCart = () => {
   <div style={{display: 'flex', 
     flexDirection: 'column',
@@ -154,3 +122,26 @@ const mockData = [{
   "currency": "PKR",
 }]
 
+=======
+function Checkout(){
+  return (
+    <View>
+
+    </View>
+  )
+}
+
+const mockData = [{
+  "brand_title": "Afrozeh",
+  "brand_picture" : "exampleimage.com/pic.jpg",
+  "brand_id": "Test",
+  "total" : "PKR 27,000",
+  "products" : [
+    {
+      "title" : "test",
+      "handle" : "test",
+      "image_url" : ""
+    }
+  ],
+}]
+>>>>>>> 6df86b4fc9b1d6a3f0740031e83f81ce8321e427

@@ -10,7 +10,6 @@ import * as size from "react-native-size-matters"
 import { TouchableHighlight } from 'react-native-gesture-handler';
 
 
-
   
 
 
@@ -199,12 +198,12 @@ export default class App extends React.Component<{}, AppState> {
         token = await AsyncStorage.getItem("token");
         // no token so returns user to sign in again
         if (token == null){
-          alert(`failed to get authentication token, sign in again!`)
+          //alert(`failed to get authentication token, sign in again!`)
           //router.replace("/sign-in");
           return;
         }
       } catch(e){
-        alert(`failed to get authentication token, sign in again!`)
+        //alert(`failed to get authentication token, sign in again!`)
         //router.replace("/sign-in");
         return;
       }
@@ -365,12 +364,9 @@ export default class App extends React.Component<{}, AppState> {
                 borderRadius: 20,
               }}
               source={{ uri: ensureURLScheme(item.image_url) }}
-            />
-            <>
-            <Button>
-              
-            </Button>
-            </>
+            >
+            </Image>
+            
             <View style={{
               display: "flex",
               flexDirection: "row",
@@ -380,9 +376,11 @@ export default class App extends React.Component<{}, AppState> {
             }}>
               <Text style={{
                 fontSize: 22, fontFamily: "Montserrat",
+                color : "white"
               }}>{item.vendor}</Text>
               <Text style={{
                 fontSize: 17, marginVertical: 5,
+                color : "white"
               }}>Rs. {(() => {
                   let l = item.price.length;
                   let pos = (l) - 3;
@@ -437,23 +435,60 @@ export default class App extends React.Component<{}, AppState> {
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
-        <View style={{ height: 60 }}></View>
+      <View style={{ flex: 1,backgroundColor: "black"}}>
         <View style={{ flex: 1 }}>{this.renderProducts()}</View>
-        <Button
-          style={{
-            marginVertical: 8,
-            marginHorizontal: 20,
-          }}
-          title="View Details"
-          onPress={() => {
-            router.navigate({
-              pathname: "/details",
-              params: this.state.cards[this.state.currentIndex]
-            })
-          }}
-          filled={true}
-        />
+        <View style={{
+          display : "flex", flexDirection : "row", 
+          bottom : size.verticalScale(20),
+          alignSelf : "center",
+
+          }}>
+          <Button
+            style={{
+              marginHorizontal: 20,
+              width : size.scale(50),
+              height : size.scale(50),
+              borderRadius : size.scale(50)
+            }}
+            title="l"
+            onPress={() => {
+              alert("liked the product")
+            }}
+            filled={true}
+          />
+          <Button
+            style={{
+              marginHorizontal: 20,
+              width : size.scale(50),
+              height : size.scale(50),
+              borderRadius : size.scale(50)
+            }}
+            title="D"
+            onPress={() => {
+              router.navigate({
+                pathname: "/details",
+                params: this.state.cards[this.state.currentIndex]
+              })
+            }}
+            filled={true}
+          />
+          <Button
+            style={{
+              marginHorizontal: 20,
+              width : size.scale(50),
+              height : size.scale(50),
+              borderRadius : size.scale(50)
+            }}
+            title="S"
+            onPress={() => {
+              router.navigate({
+                pathname: "/details",
+                params: this.state.cards[this.state.currentIndex]
+              })
+            }}
+            filled={true}
+          />
+        </View>
       </View>
     );
   }
