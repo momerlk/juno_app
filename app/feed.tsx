@@ -10,6 +10,8 @@ import * as size from "react-native-size-matters"
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import Entypo from '@expo/vector-icons/Entypo';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { LinearGradient } from 'expo-linear-gradient';
+
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -290,6 +292,16 @@ export default class App extends React.Component<{}, AppState> {
     }
   }
 
+  toTitle(str : string) : string {
+    str = str.replaceAll("_" , " ");
+    const words = str.split(" ");
+    for (let i = 0; i < words.length; i++) {
+        words[i] = words[i][0].toUpperCase() + words[i].substr(1);
+    }
+
+    return words.join(" "); 
+  }
+
   renderProducts = () => {
     return this.state.cards.map((item, i) => {
       if (i < this.state.currentIndex) {
@@ -379,23 +391,22 @@ export default class App extends React.Component<{}, AppState> {
               >
                 SUPER LIKE
               </Text>
-            </Animated.View>
-
-            
+            </Animated.View>      
 
             <ImageBackground
               style={{
-                height : size.verticalScale(530), 
+                height : size.verticalScale(600), 
               }}
               imageStyle={{
                 borderRadius : 20,
               }}
               source={{ uri: ensureURLScheme(item.image_url) }}
             >
-              <View style={{
-                marginTop : size.verticalScale(470) , 
-                height : size.verticalScale(60),
-                backgroundColor : "rgba(52, 52, 52, 0.8)",
+                {/* Implement background color detection and make that the background of the feed screen */}
+              <LinearGradient colors={["transparent" , "rgba(0,0,0,0.3)"]} style={{
+                marginTop : size.verticalScale(395) , 
+                height : size.verticalScale(205),
+                // backgroundColor : "rgba(52, 52, 52, 0.3)",
                 borderBottomLeftRadius : 20,
                 borderBottomRightRadius : 20,
               }}
@@ -405,12 +416,12 @@ export default class App extends React.Component<{}, AppState> {
                   flexDirection: "row",
                   justifyContent: "space-between",
                   marginHorizontal: 10,
-                  marginTop : size.verticalScale(15),
+                  marginTop : size.verticalScale(115),
                 }}>
                   <Text style={{
-                    fontSize: 22, fontFamily: "Montserrat",
+                    fontSize: 22, fontFamily: "Poppins",
                     color : "white"
-                  }}>{item.vendor}</Text>
+                  }}>{this.toTitle(item.vendor)}</Text>
                   <Text style={{
                     fontSize: 17, marginVertical: 5,
                     color : "white"
@@ -429,7 +440,7 @@ export default class App extends React.Component<{}, AppState> {
                       }
                     })()}</Text>
                 </View>
-              </View>
+              </LinearGradient>
             </ImageBackground>
           </Animated.View>
         );
@@ -448,19 +459,20 @@ export default class App extends React.Component<{}, AppState> {
               },
             ]}
           >
-            <ImageBackground
+             <ImageBackground
               style={{
-                height : size.verticalScale(530), 
+                height : size.verticalScale(600), 
               }}
               imageStyle={{
                 borderRadius : 20,
               }}
               source={{ uri: ensureURLScheme(item.image_url) }}
             >
-              <View style={{
-                marginTop : size.verticalScale(470) , 
-                height : size.verticalScale(60),
-                backgroundColor : "rgba(52, 52, 52, 0.8)",
+                {/* Implement background color detection and make that the background of the feed screen */}
+              <LinearGradient colors={["transparent" , "rgba(0,0,0,0.3)"]} style={{
+                marginTop : size.verticalScale(395) , 
+                height : size.verticalScale(205),
+                // backgroundColor : "rgba(52, 52, 52, 0.3)",
                 borderBottomLeftRadius : 20,
                 borderBottomRightRadius : 20,
               }}
@@ -470,12 +482,12 @@ export default class App extends React.Component<{}, AppState> {
                   flexDirection: "row",
                   justifyContent: "space-between",
                   marginHorizontal: 10,
-                  marginTop : size.verticalScale(15),
+                  marginTop : size.verticalScale(115),
                 }}>
                   <Text style={{
-                    fontSize: 22, fontFamily: "Montserrat",
+                    fontSize: 22, fontFamily: "Poppins",
                     color : "white"
-                  }}>{item.vendor}</Text>
+                  }}>{this.toTitle(item.vendor)}</Text>
                   <Text style={{
                     fontSize: 17, marginVertical: 5,
                     color : "white"
@@ -494,7 +506,7 @@ export default class App extends React.Component<{}, AppState> {
                       }
                     })()}</Text>
                 </View>
-              </View>
+              </LinearGradient>
             </ImageBackground>
           </Animated.View>
         );
@@ -504,35 +516,75 @@ export default class App extends React.Component<{}, AppState> {
 
   render() {
     return (
-      <View style={{ flex: 1,backgroundColor: "black", paddingTop : 12}}>
-        <Pressable style={{paddingHorizontal : 8}}
-          onPress={() => router.back()} 
-        >
-        <Ionicons name="arrow-back-circle" size={50} color="white" />
-        </Pressable>
-        <View style={{ flex: 1 }}>{this.renderProducts()}</View>
-        <View style={{
-          display : "flex", flexDirection : "row", 
-          bottom : size.verticalScale(25),
-          alignSelf : "center",
-
-          }}>
-          <Pressable style={{
-              marginHorizontal: 20,
-              width: size.scale(50),
-              height: size.scale(50),
+      <View style={{ flex: 1,backgroundColor: "black", paddingTop : SCREEN_HEIGHT * 0.042}}>
+        <View style={{display : "flex" , flexDirection : "row"}}>
+        <Pressable style={{
+              marginHorizontal: 15,
+              width: size.scale(40),
+              height: size.scale(40),
               borderRadius: size.scale(25), // Half of the width/height to make it a circle
               backgroundColor: "white",
               justifyContent: "center", // Center vertically
               alignItems: "center", // Center horizontally
-            }}>
-              <Entypo name="paper-plane" size={size.scale(30)} color="black" />
+            }}
+            onPress={() => router.back()} 
+            >
+                <Ionicons name="arrow-back" size={size.scale(30)} color="black" />
+        </Pressable>
+            <Text
+            style={{
+                    fontSize: 22, fontFamily: "Poppins",
+                    color : "white",
+                    marginTop : 5,
+                  }}
+            >Feed</Text>
+        </View>
+        <View style={{ flex: 1 }}>{this.renderProducts()}</View>
+        <View style={{
+          display : "flex", flexDirection : "row", 
+          bottom : size.verticalScale(10),
+          alignSelf : "center",
+
+          }}>
+          <Pressable style={{
+              marginHorizontal: 15,
+              width: size.scale(40),
+              height: size.scale(42),
+              borderRadius: size.scale(25), // Half of the width/height to make it a circle
+              backgroundColor: "white",
+              justifyContent: "center", // Center vertically
+              alignItems: "center", // Center horizontally
+            }}
+            onPress={() => {
+                // TODO : Add undo swipe/action functionality limit of 2 undos
+                alert(`undid to the previous product`)
+            }} 
+            >
+                <Ionicons name="refresh" size={size.scale(26)} color="black" />
+            </Pressable>
+
+
+            <Pressable style={{
+              marginHorizontal: 20,
+              width: size.scale(60),
+              height: size.scale(60),
+              borderRadius: size.scale(30), // Half of the width/height to make it a circle
+              backgroundColor: "white",
+              justifyContent: "center", // Center vertically
+              alignItems: "center", // Center horizontally
+            }}
+            onPress={() => {
+                // TODO : Add filter functionality
+                alert(`bring up filter modal`)
+            }} 
+            >
+                <Ionicons name="filter-sharp" size={size.scale(30)} color="black" />
             </Pressable>
           <Pressable style={{
               marginHorizontal: 20,
-              width: size.scale(50),
-              height: size.scale(50),
-              borderRadius: size.scale(25), // Half of the width/height to make it a circle
+              width: size.scale(60),
+              height: size.scale(60),
+              borderRadius: size.scale(30), // Half of the width/height to make it a circle
               backgroundColor: "white",
               justifyContent: "center", // Center vertically
               alignItems: "center", // Center horizontally
@@ -544,18 +596,23 @@ export default class App extends React.Component<{}, AppState> {
               })
             }} 
             >
-              <Entypo name="magnifying-glass" size={size.scale(30)} color="black" />
+              <Entypo name="magnifying-glass" size={size.scale(40)} color="black" />
             </Pressable>
           <Pressable style={{
-              marginHorizontal: 20,
-              width: size.scale(50),
-              height: size.scale(50),
+              marginHorizontal: 15,
+              width: size.scale(40),
+              height: size.scale(40),
               borderRadius: size.scale(25), // Half of the width/height to make it a circle
               backgroundColor: "white",
               justifyContent: "center", // Center vertically
               alignItems: "center", // Center horizontally
-            }}>
-              <Entypo name="heart" size={size.scale(30)} color="black" />
+            }}
+            onPress={() => {
+                // TODO : add share functionality 
+                alert(`shared product`)
+            }} 
+            >
+              <Entypo name="paper-plane" size={size.scale(26)} color="black" />
             </Pressable>
         </View>
       </View>

@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "icon": "./app/assets/juno.png",
     "scheme": "myapp",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "dark",
     "splash": {
       "image": "./app/assets/juno_splash2.png",
       "resizeMode": "contain",
