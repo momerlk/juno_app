@@ -144,7 +144,7 @@ export default class App extends React.Component<{}, AppState> {
     this.state = {
       currentIndex: 0,
       cards: Users,
-      socket: new WebSocket("http://192.168.18.16:9001/feed"),
+      socket: new WebSocket("http://localhost:9001/feed"),
     };
 
     fetchFonts();
@@ -162,7 +162,7 @@ export default class App extends React.Component<{}, AppState> {
 
     setTimeout(async () => {
       // connecting to feed websocket
-      const socket = new WebSocket("ws://192.168.18.16:9001/feed");
+      const socket = new WebSocket("ws://localhost:9001/feed");
 
       socket.onmessage = (ev: MessageEvent<any>) => {
         const parsed = JSON.parse(ev.data);
@@ -439,8 +439,9 @@ export default class App extends React.Component<{}, AppState> {
                     color : "white"
                   }}>{this.toTitle(item.vendor)}</Text>
                   <Text style={{
-                    fontSize: 17, marginVertical: 5,
-                    color : "white"
+                    fontSize: 22, marginVertical: 5,
+                    color : "white",
+                    fontFamily : "Poppins",
                   }}>Rs. {(() => {
                       let l = item.price.length;
                       let pos = (l) - 3;
@@ -505,8 +506,9 @@ export default class App extends React.Component<{}, AppState> {
                     color : "white"
                   }}>{this.toTitle(item.vendor)}</Text>
                   <Text style={{
-                    fontSize: 17, marginVertical: 5,
-                    color : "white"
+                     fontSize: 22, marginVertical: 5,
+                    color : "white",
+                    fontFamily : "Poppins",
                   }}>Rs. {(() => {
                       let l = item.price.length;
                       let pos = (l) - 3;
@@ -560,7 +562,7 @@ export default class App extends React.Component<{}, AppState> {
                 position: 'absolute',
                 left: '50%',
                 top: '50%',
-                transform: 'translate(-50%, -50%)',
+                transform: [{ translateX: -50 }, { translateY: -50 }],
             }} size={60} color="white"/>
         </View>
     } else {
