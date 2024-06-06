@@ -61,25 +61,7 @@ export default function TabTwoScreen() {
 
   return (
     <ScrollView>
-<<<<<<< HEAD
-      {data.map((product: any, index: number) => (
-        <addedToCart
-          key={index}
-          title={product.title}
-          price={`Rs. ${product.price}`}
-          vendor={product.vendor}
-          url={product.image_url}
-          onPress={() => {
-            router.navigate({
-                  pathname : "/details",
-                  params : product,
-                })}
-          }
-        />
-      ))}
-=======
      <Checkout />
->>>>>>> 6df86b4fc9b1d6a3f0740031e83f81ce8321e427
     </ScrollView>
   );
 }
@@ -88,41 +70,13 @@ const styles = StyleSheet.create({
 
 })
 
-<<<<<<< HEAD
 const addedToCart = () => {
-  <div style={{display: 'flex', 
-    flexDirection: 'column',
-    borderWidth: 1,
-    borderColor: 'gray',
-    marginHorizontal: 1500,
-    padding: 15,
-    borderStyle: 'solid',
-    shadowColor: "#000",
-    shadowOffset:{
-	    width: 0,
-	    height: 12,
-}}}>
+  <View>
   <Text>Hello</Text>
 
-  </div>
-
- 
+  </View>
 }
 
-const mockData = [{
-  "product_id": "",
-  "product_url": "",
-  "handle": "",
-  "title": "Nothing here !",
-  "vendor": "",
-  "category": "",
-  "image_url": "",
-  "description": "",
-  "price": "",
-  "currency": "PKR",
-}]
-
-=======
 function Checkout(){
   return (
     <View>
@@ -144,4 +98,3 @@ const mockData = [{
     }
   ],
 }]
->>>>>>> 6df86b4fc9b1d6a3f0740031e83f81ce8321e427
