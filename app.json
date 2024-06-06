@@ -17,7 +17,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./app/assets/logo.png",
+        "foregroundImage": "./app/assets/juno.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.learnables.juno"

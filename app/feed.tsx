@@ -4,7 +4,7 @@ import Button from "./components/Button";
 import * as Font from 'expo-font';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
-import { Appearance, ColorSchemeName } from 'react-native';
+import { Appearance, ColorSchemeName, ActivityIndicator } from 'react-native';
 import { useState, useEffect } from "react"
 import * as size from "react-native-size-matters"
 import { TouchableHighlight } from 'react-native-gesture-handler';
@@ -89,6 +89,7 @@ export default class App extends React.Component<{}, AppState> {
   nextCardOpacity: Animated.AnimatedInterpolation<number>;
   nextCardScale: Animated.AnimatedInterpolation<number>;
   PanResponder: any;
+  loading : boolean = true;
 
   constructor(props: any) {
     super(props);
@@ -168,8 +169,14 @@ export default class App extends React.Component<{}, AppState> {
         // no products
         // TODO : Create an error logger system which logs errors users face
         if (parsed["products"] === undefined && parsed["status"] !== 200) {
-          alert(`failed to get new recommendations, message = ${parsed["message"]}`);
-          return;
+          if (parsed["message"] === "Invalid token"){
+            router.replace("/sign-in")
+            return;
+          }
+          else {
+            alert(`failed to get new recommendations, message = ${parsed["message"]}`);
+            return;
+          }
         }
 
         if (parsed === null || parsed === undefined) {
@@ -186,6 +193,8 @@ export default class App extends React.Component<{}, AppState> {
         } else {
           this.setState({ currentIndex: 0, cards: products });
         }
+
+        this.loading = false;
       };
 
       this.setState({ socket: socket });
@@ -207,10 +216,17 @@ export default class App extends React.Component<{}, AppState> {
     }
 
     setTimeout( // initial authentication to socket
-      () => this.state.socket.send(JSON.stringify({
-        token: token,
-        action_type: "open" // handshake/webscoket open action
-      })), 1000)
+      () => {
+        try {
+        this.state.socket.send(JSON.stringify({
+            token: token,
+            action_type: "open" // handshake/webscoket open action
+        }))
+        } catch (e){
+            alert(`failed to connect, error = ${e}`)
+        }
+    
+    }, 1000)
   }
 
   UNSAFE_componentWillMount() {
@@ -515,13 +531,47 @@ export default class App extends React.Component<{}, AppState> {
   };
 
   render() {
+    if(this.loading){
+        return <View style={{flex : 1,backgroundColor : "black", paddingTop : 30, paddingLeft : 10}}>
+            <View style={{display : "flex" , flexDirection : "row"}}>
+                <Pressable style={{
+                    marginHorizontal: 15,
+                    marginTop : size.scale(5),
+                    width: size.scale(33),
+                    height: size.scale(33),
+                    borderRadius: size.scale(25), // Half of the width/height to make it a circle
+                    backgroundColor: "white",
+                    justifyContent: "center", // Center vertically
+                    alignItems: "center", // Center horizontally
+                    }}
+                    onPress={() => router.back()} 
+                    >
+                        <Ionicons name="arrow-back" size={size.scale(25)} color="black" />
+                </Pressable>
+                    <Text
+                    style={{
+                            fontSize: 22, fontFamily: "Poppins",
+                            color : "white",
+                            marginTop : 5,
+                        }}
+                    >Feed</Text>
+            </View>
+            <ActivityIndicator style={{
+                position: 'absolute',
+                left: '50%',
+                top: '50%',
+                transform: 'translate(-50%, -50%)',
+            }} size={60} color="white"/>
+        </View>
+    } else {
     return (
       <View style={{ flex: 1,backgroundColor: "black", paddingTop : SCREEN_HEIGHT * 0.042}}>
         <View style={{display : "flex" , flexDirection : "row"}}>
         <Pressable style={{
               marginHorizontal: 15,
-              width: size.scale(40),
-              height: size.scale(40),
+              marginTop : size.scale(5),
+              width: size.scale(33),
+              height: size.scale(33),
               borderRadius: size.scale(25), // Half of the width/height to make it a circle
               backgroundColor: "white",
               justifyContent: "center", // Center vertically
@@ -529,7 +579,7 @@ export default class App extends React.Component<{}, AppState> {
             }}
             onPress={() => router.back()} 
             >
-                <Ionicons name="arrow-back" size={size.scale(30)} color="black" />
+                <Ionicons name="arrow-back" size={size.scale(25)} color="black" />
         </Pressable>
             <Text
             style={{
@@ -617,5 +667,6 @@ export default class App extends React.Component<{}, AppState> {
         </View>
       </View>
     );
+    }
   }
 }
