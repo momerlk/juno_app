@@ -4,7 +4,7 @@
     "slug": "juno",
     "version": "0.0.1",
     "orientation": "portrait",
-    "icon": "./app/assets/logo.png",
+    "icon": "./app/assets/juno.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
@@ -38,7 +38,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "6618548c-a6f9-4f27-8bc8-f228991b8f73"
+        "projectId": "518b2430-8bcc-4b6b-b3dc-d943a082d654"
       }
     },
     "owner": "learnables"
