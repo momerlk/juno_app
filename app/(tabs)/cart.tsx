@@ -10,54 +10,6 @@ import { TouchableHighlight } from 'react-native-gesture-handler';
 
 // TODO : Add header
 // TODO : Add proper token
-
-const fetchFonts = () => {
-  return Font.loadAsync({
-    'Poppins': require('./Poppins-Medium.ttf'),
-    "Montserrat" : require("./Montserrat.ttf"),
-  });
-};
-
-
-const QuantatityChanger = () => {
-  const [count, setCount] = useState(0);
-  const onPress = () => setCount(count + 1);
-
-
-function Cart () {
-  return(
-  <View style={{display: 'flex', 
-    flexDirection: 'column',
-    borderWidth: 1,
-    height: 200,
-    borderColor: '#D3D3D3',
-    borderStyle: 'solid',
-    shadowColor: '#D3D3D3',
-    shadowOffset:{
-      width: 0,
-      height: 12,
-    },
-    shadowOpacity: 0.28,
-    shadowRadius: 16.00,
-    elevation: 24,
-    borderRadius: 20,
-    paddingTop: 10,
-    }}>
-  <>
-  <Text style={{fontSize: 25, fontFamily: "Montserrat", marginLeft: 100, fontWeight: "heavy"}}>Sana Safinaz Unstitched Dress in Purple</Text>
-  </>
-  <Text style={{fontFamily: "Montserrat", left: 100, top: 20
-  }}>Quantity: 1</Text>
-  <>
-  <Text style={{fontFamily: "Montserrat", left: 100, top: 25
-  }}>Size:</Text>
-  </>
-    <TouchableHighlight onPress={onPress}>
-          <Text>+</Text>
-    </TouchableHighlight>
-  </View>)
-}
-
 export default function TabTwoScreen() {
   const [data, setData] = useState<any>([]);
   const [req , setReq] = useState(0);
@@ -106,6 +58,52 @@ export default function TabTwoScreen() {
     </ScrollView>
   );
 }
+const fetchFonts = () => {
+  return Font.loadAsync({
+    'Poppins': require('./Poppins-Medium.ttf'),
+    "Montserrat" : require("./Montserrat.ttf"),
+  });
+};
+
+
+
+export function Cart () { 
+  const [count, setCount] = useState(0);
+  const onPress = () => setCount(count + 1);
+  return(
+  <View style={{display: 'flex', 
+    flexDirection: 'column',
+    borderWidth: 1,
+    height: 200,
+    borderColor: '#D3D3D3',
+    borderStyle: 'solid',
+    shadowColor: '#D3D3D3',
+    shadowOffset:{
+      width: 0,
+      height: 12,
+    },
+    shadowOpacity: 0.28,
+    shadowRadius: 16.00,
+    elevation: 24,
+    borderRadius: 20,
+    paddingTop: 10,
+    }}>
+  <>
+  <Text style={{fontSize: 25, fontFamily: "Montserrat", marginLeft: 100, fontWeight: "heavy"}}>Sana Safinaz Unstitched Dress in Purple</Text>
+  </>
+  <Text style={{fontFamily: "Montserrat", left: 100, top: 20
+  }}>Quantity: 1</Text>
+  <>
+  <Text style={{fontFamily: "Montserrat", left: 100, top: 25
+  }}>Size:</Text>
+  </>
+    <TouchableHighlight onPress={onPress}>
+          <Text>+</Text>
+    </TouchableHighlight>
+  </View>)
+}
+
+
 
 
 
@@ -124,4 +122,4 @@ const mockData = [{
   ],
 }]
 
-}
+
