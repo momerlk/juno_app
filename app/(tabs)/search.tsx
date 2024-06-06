@@ -5,6 +5,9 @@ import {router} from "expo-router";
 import Button from '../components/Button';
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { TextInput } from 'react-native';
+import * as size from "react-native-size-matters"
+
 
 // TODO : Add header
 // TODO : Add proper token
@@ -49,7 +52,6 @@ export default function TabTwoScreen() {
         setData(result);
       } catch (error) {
         console.log(`Error fetching data: ${error}`);
-        setData(mockData)
         setReq(1);
       }
     };
@@ -60,95 +62,29 @@ export default function TabTwoScreen() {
   }, []); // Empty dependency array to run only once when the component mounts
 
   return (
-    <ScrollView>
-      {data.map((product: any, index: number) => (
-        <LikedCard
-          key={index}
-          title={product.title}
-          price={`Rs. ${product.price}`}
-          vendor={product.vendor}
-          url={product.image_url}
-          onPress={() => {
-            router.navigate({
-                  pathname : "/details",
-                  params : product,
-                })}
-          }
-        />
-      ))}
-    </ScrollView>
+    <View>
+      <Search></Search>
+    </View>
   );
 }
 
-const styles = StyleSheet.create({
-  likedContainer: {
-    display: 'flex', 
-    flexDirection: 'column',
-    borderWidth: 1,
-    borderColor: 'gray',
-    marginHorizontal: 1500,
-    padding: 15,
-    borderStyle: 'solid',
-    shadowColor: "#000",
-    shadowOffset:{
-	    width: 0,
-	    height: 12,
-    },
-    shadowOpacity: 0.58,
-    shadowRadius: 16.00,
-    elevation: 24,
-  },
-  likedImageBrand:{
-    fontFamily: "Montserrat",
-    fontSize: 25,
-    marginRight: 10,
-    },
-  likedImagePrice:{
-    fontFamily: "Montserrat",
-    fontSize: 20,
-    color: 'gray',   
-    marginRight: 150,
- 
-  },
-  likedImage:{
-    width: 360,
-    height: 205,  
-    borderRadius: 20,
-    marginVertical: 50,
-    justifyContent: 'center',
-    resizeMode : "cover"
-  }
 
-});
 
-function LikedCard(props : any){
-  return <div style={styles.likedContainer}>
-    <Image source={{uri: props.url}} style={styles.likedImage}/>
-    <Text style={styles.likedImageBrand}> {props.title} by {props.vendor} </Text>
-    <Text style={styles.likedImagePrice} > {props.price} </Text>
-    <Button 
-      onPress={props.onPress} 
-      title="View Details"
-      style={{
-        width : scale(140) , 
-        height : verticalScale(42) , 
-        marginVertical : moderateScale(20)
-      }}
-      filled={true}
-    ></Button>
-  </div>
+const Search = () => {
+  return(
+    <View>
+      <TextInput style={styles.enterText} placeholder="What do you want to buy?"/>
+    </View>
+  )
 }
 
+const styles = StyleSheet.create({
+  enterText: {
+    width: size.scale(150), // width
+    height: size.verticalScale(40), // height
+    margin: size.moderateScale(46), // margin or padding
+    borderRadius: 20
 
-const mockData = [{
-  "product_id": "",
-  "product_url": "",
-  "handle": "",
-  "title": "Nothing here !",
-  "vendor": "",
-  "category": "",
-  "image_url": "",
-  "description": "",
-  "price": "",
-  "currency": "PKR",
-}]
+  },
+
+})

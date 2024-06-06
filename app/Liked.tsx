@@ -7,8 +7,8 @@ import * as Font from "expo-font";
 
 const fetchFonts = () => {
   return Font.loadAsync({
-    'Poppins': require('./Poppins-Medium.ttf'),
-    "Montserrat" : require("./Montserrat.ttf"),
+    'Poppins': require('./(tabs)/Poppins-Medium.ttf'),
+    "Montserrat" : require("./(tabs)/Montserrat.ttf"),
   });
 };
 
