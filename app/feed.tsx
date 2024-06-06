@@ -16,16 +16,45 @@ const fetchFonts = () => {
 };
 
 const Users = [{
-  "product_id": "",
-  "product_url": "",
-  "handle": "",
-  "title": "Nothing here !",
-  "vendor": "",
+  "product_id": "027bb7aa-d705-4544-8ff4-8f4ce91c2bec",
+  "product_url": "https://www.afrozeh.com/products/mahjabeen-1",
+  "shopify_id": {
+    "$numberLong": "8002372829418"
+  },
+  "handle": "mahjabeen-1",
+  "title": "Mahjabeen 22",
+  "vendor": "afrozeh",
+  "vendor_title": "Afrozeh",
   "category": "",
-  "image_url": "",
-  "description": "",
-  "price": "",
+  "product_type": "",
+  "image_url": "https://cdn.shopify.com/s/files/1/0052/2030/2897/products/5.jpg?v=1668433218",
+  "description": "Net Embellished + Embroidered Front + Back Body (0.66 M)Net Embellished + Embroidered Front & Back Panels (14 PCS)Net Embroidered Sleeves (0.66 Meters)Net EMBROIDERED SLEEVES BORDER (1 Meters)Raw Silk Embroidered Sleeves Border (1 Meters)Raw Silk Embroidered Front + Back Border (4.57 Meters)Net Embroidered Dupatta 4 Side Border (7.91 Meters)Net Embroidered Dupatta (2.63 Meters)",
+  "price": "29900",
   "currency": "PKR",
+  "options": [
+    {
+      "name": "Type",
+      "position": 1,
+      "values": [
+        "Unstitched",
+        "Stitched"
+      ]
+    }
+  ],
+  "tags": [
+    "14-07-2023",
+    "22-07-2023",
+    "22-8-23'",
+    "24-7-2023-SALE",
+    "Afrozeh Brides’22",
+    "Mahjabeen",
+    "New In",
+    "Peshwas & Lehngas",
+    "products_from_sheet",
+    "saleafrozehjan",
+    "xs_xl"
+  ],
+  "available": true
 }]
 
 interface AppState {
