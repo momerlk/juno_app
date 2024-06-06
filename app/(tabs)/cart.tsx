@@ -5,6 +5,8 @@ import {router} from "expo-router";
 import Button from '../components/Button';
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import List from '@birdwingo/react-native-instagram-stories/src/components/List';
+import { TouchableHighlight } from 'react-native-gesture-handler';
 
 // TODO : Add header
 // TODO : Add proper token
@@ -16,6 +18,45 @@ const fetchFonts = () => {
   });
 };
 
+
+const QuantatityChanger = () => {
+  const [count, setCount] = useState(0);
+  const onPress = () => setCount(count + 1);
+
+
+function Cart () {
+  return(
+  <View style={{display: 'flex', 
+    flexDirection: 'column',
+    borderWidth: 1,
+    height: 200,
+    borderColor: '#D3D3D3',
+    borderStyle: 'solid',
+    shadowColor: '#D3D3D3',
+    shadowOffset:{
+      width: 0,
+      height: 12,
+    },
+    shadowOpacity: 0.28,
+    shadowRadius: 16.00,
+    elevation: 24,
+    borderRadius: 20,
+    paddingTop: 10,
+    }}>
+  <>
+  <Text style={{fontSize: 25, fontFamily: "Montserrat", marginLeft: 100, fontWeight: "heavy"}}>Sana Safinaz Unstitched Dress in Purple</Text>
+  </>
+  <Text style={{fontFamily: "Montserrat", left: 100, top: 20
+  }}>Quantity: 1</Text>
+  <>
+  <Text style={{fontFamily: "Montserrat", left: 100, top: 25
+  }}>Size:</Text>
+  </>
+    <TouchableHighlight onPress={onPress}>
+          <Text>+</Text>
+    </TouchableHighlight>
+  </View>)
+}
 
 export default function TabTwoScreen() {
   const [data, setData] = useState<any>([]);
@@ -61,29 +102,13 @@ export default function TabTwoScreen() {
 
   return (
     <ScrollView>
-     <Checkout />
+     <Cart />
     </ScrollView>
   );
 }
 
-const styles = StyleSheet.create({
 
-})
 
-const addedToCart = () => {
-  <View>
-  <Text>Hello</Text>
-
-  </View>
-}
-
-function Checkout(){
-  return (
-    <View>
-
-    </View>
-  )
-}
 
 const mockData = [{
   "brand_title": "Afrozeh",
@@ -98,3 +123,5 @@ const mockData = [{
     }
   ],
 }]
+
+}
