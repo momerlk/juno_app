@@ -4,6 +4,16 @@ import Button from "./components/Button";
 import * as Font from 'expo-font';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
+import {Appearance, ColorSchemeName} from 'react-native';
+import {useState, useEffect} from "react"
+import * as size from "react-native-size-matters"
+import { TouchableHighlight } from 'react-native-gesture-handler';
+
+
+
+  
+
+
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -145,7 +155,7 @@ export default class App extends React.Component<{}, AppState> {
     try {
       const value = await AsyncStorage.getItem("authenticated");
       if (value === null || value === "false") {
-        router.navigate("/welcome");
+        //router.navigate("/welcome");
       }
     } catch (e) {
       alert(`error = ${e}`);
@@ -190,12 +200,12 @@ export default class App extends React.Component<{}, AppState> {
         // no token so returns user to sign in again
         if (token == null){
           alert(`failed to get authentication token, sign in again!`)
-          router.replace("/sign-in");
+          //router.replace("/sign-in");
           return;
         }
       } catch(e){
         alert(`failed to get authentication token, sign in again!`)
-        router.replace("/sign-in");
+        //router.replace("/sign-in");
         return;
       }
 
@@ -327,8 +337,7 @@ export default class App extends React.Component<{}, AppState> {
               }}
             >
               <Image
-                source={{ uri: 'https://via.placeholder.com/100.png?text=Dislike' }}
-                style={{ width: 100, height: 100 }}
+              style={styles.backgroundImage} source={{ uri: 'https://via.placeholder.com/100.png?text=Dislike' }}
               />
             </Animated.View>
 
@@ -357,7 +366,11 @@ export default class App extends React.Component<{}, AppState> {
               }}
               source={{ uri: ensureURLScheme(item.image_url) }}
             />
-
+            <>
+            <Button>
+              
+            </Button>
+            </>
             <View style={{
               display: "flex",
               flexDirection: "row",
@@ -445,3 +458,9 @@ export default class App extends React.Component<{}, AppState> {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  backgroundImage:{
+    
+  }
+})
