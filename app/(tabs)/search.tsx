@@ -7,6 +7,8 @@ import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TextInput } from 'react-native';
 import * as size from "react-native-size-matters"
+import AntDesign from '@expo/vector-icons/AntDesign';
+import { Entypo } from '@expo/vector-icons';
 
 
 // TODO : Add header
@@ -72,18 +74,28 @@ export default function TabTwoScreen() {
 
 const Search = () => {
   return(
-    <View>
-      <TextInput style={styles.enterText} placeholder="What do you want to buy?"/>
+    <>
+    <View style={{alignItems: 'center'}}>
+      <TextInput style={styles.enterText} placeholder="             What do you want to buy?"/>
     </View>
+    <>
+          <AntDesign style={{left: 65, bottom: 83}} name="search1" size={20} color="black" />
+    </>
+    <>
+    <Entypo style={{bottom: 107, left: 310, }} name="cross" size={25} color="black" />
+    </>
+    </>
   )
 }
 
 const styles = StyleSheet.create({
   enterText: {
-    width: size.scale(150), // width
+    width: size.scale(270), // width
     height: size.verticalScale(40), // height
     margin: size.moderateScale(46), // margin or padding
-    borderRadius: 20
+    borderRadius: 20,
+    borderColor: 'black',
+    borderWidth: 2,
 
   },
 
