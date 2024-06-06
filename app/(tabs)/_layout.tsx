@@ -36,16 +36,6 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="liked"
-        options={{
-          title: '',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'heart' : 'heart-outline'} color={color} />
-          ),
-        }}
-      />
-
-      <Tabs.Screen
         name="cart"
         options={{
           title: '',
