@@ -3,7 +3,7 @@ import { StyleSheet, Image, View, Text, ScrollView, Pressable} from 'react-nativ
 import * as Font from "expo-font";
 import {router} from "expo-router";
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
-
+import {WebView} from "react-native-webview";
 // TODO : Add header
 // TODO : Add proper token
 export default function TabTwoScreen() {
@@ -48,10 +48,11 @@ export default function TabTwoScreen() {
     // }
   }, []); // Empty dependency array to run only once when the component mounts
 
+  const uri = "https://bonanzasatrangi.com/46417313955/checkouts/531f95efefddbac87d62de1968606d6c?note=This+was+order+was+placed+with+the+help+of+juno.&ref=JUNO";
   return (
-    <ScrollView>
-     <Cart />
-    </ScrollView>
+    <View style={{flex : 1}}>
+     <WebView source={{ uri: uri }} onError={e => alert(e)}/>
+    </View>
   );
 }
 const fetchFonts = () => {
