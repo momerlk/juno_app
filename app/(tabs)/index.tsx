@@ -140,10 +140,9 @@ export default class Home extends React.Component {
 
   render(){
     return (
-      <ScrollView>
+      <ScrollView style={{backgroundColor : "#121212"}}>
 
-        {/* Brand Stories Section */}
-        <View style={{margin : size.moderateScale(23) , marginTop : size.verticalScale(30)}}>
+        {/* <View style={{margin : size.moderateScale(23) , marginTop : size.verticalScale(30)}}>
         <InstagramStories
           stories={stories}
           showName={true}
@@ -156,7 +155,6 @@ export default class Home extends React.Component {
           textStyle={{color : "white", fontWeight : "bold" , fontSize : 13}}
         />
         </View>
-        {/* Stories end */}
 
         <Category 
           title="DISCOVER" 
@@ -167,7 +165,6 @@ export default class Home extends React.Component {
           width={100}
         />
 
-        {/* Picks for you section */}
         <Text style={{
           marginHorizontal : size.moderateScale(23) , 
           fontSize : size.moderateScale(30),
@@ -184,7 +181,6 @@ export default class Home extends React.Component {
         onPress={() => router.navigate("/feed")} 
         >
 
-          {/* TODO : Make this a component */}
           <ImageBackground
             source={{
               uri : "https://cdn.shopify.com/s/files/1/0620/8788/9062/files/DWEA2426GreenFront.jpg?v=1715939755"
@@ -198,25 +194,25 @@ export default class Home extends React.Component {
               </BlurView>
             </View>
           </ImageBackground>
-        </Pressable>
-        {/* Picks for you end */}
-
+        </Pressable> */}
+        
         <View style={{marginVertical : size.verticalScale(10)}}></View>
 
         <Text style={{
           marginHorizontal : size.moderateScale(23) , 
           fontSize : size.moderateScale(30),
-          fontWeight : "500"
+          fontWeight : "500",
+          color : "white",
         }}
-        >️‍🔥 Categories</Text>
-        <Category 
+        > Categories</Text>
+        {/* <Category 
           title="GROCERIES" 
           image={require("../assets/groceries.webp")}
           colors={["#73C615" , "#006D2C"]}
           route="/feed"
           height={90}
           width={70}
-        />
+        /> */}
         <Category 
           title="CLOTHES" 
           image={require("../assets/clothes.png")}

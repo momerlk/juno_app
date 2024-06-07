@@ -36,7 +36,7 @@ const ProductDetail: React.FC<any> = () => {
 
   const _renderBottom = () => {
     return (
-      <View style={{...styles.bottomButtons, backgroundColor : "black"}}>
+      <View style={{...styles.bottomButtons, backgroundColor : "#121212"}}>
         <Pressable
           onPress={() => {
             router.navigate(product_url as string);
@@ -54,7 +54,7 @@ const ProductDetail: React.FC<any> = () => {
 
   return (
     <>
-      <ScrollView style={{...styles.container , backgroundColor : "black"}}>
+      <ScrollView style={{...styles.container , backgroundColor : "#121212"}}>
         <ImageBackground
           style={styles.imageBackground}
           source={{ uri: image_url as string }}>
@@ -83,7 +83,7 @@ const ProductDetail: React.FC<any> = () => {
           </View>
         </ImageBackground>
 
-        <View style={{...styles.detailsContainer , backgroundColor : "black"}}>
+        <View style={{...styles.detailsContainer , backgroundColor : "#121212"}}>
           <Text style={styles.title}>{title}</Text>
           <Text style={{fontSize : 28, marginBottom : 20,color : "white"}}>
             By {toTitle(vendor as string)}</Text>

@@ -2,11 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Image, View, Text, ScrollView, Pressable} from 'react-native';
 import * as Font from "expo-font";
 import {router} from "expo-router";
-import Button from '../components/Button';
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import List from '@birdwingo/react-native-instagram-stories/src/components/List';
-import { TouchableHighlight } from 'react-native-gesture-handler';
 
 // TODO : Add header
 // TODO : Add proper token
@@ -97,9 +93,9 @@ export function Cart () {
   <Text style={{fontFamily: "Montserrat", left: 100, top: 25
   }}>Size:</Text>
   </>
-    <TouchableHighlight onPress={onPress}>
+    <Pressable onPress={onPress}>
           <Text>+</Text>
-    </TouchableHighlight>
+    </Pressable>
   </View>)
 }
 

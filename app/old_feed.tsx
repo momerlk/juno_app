@@ -447,7 +447,7 @@ export default class App extends React.Component<{}, AppState> {
 
   render() {
     return (
-      <View style={{ flex: 1,backgroundColor: "black", paddingTop : 12}}>
+      <View style={{ flex: 1,backgroundColor: "#121212", paddingTop : 12}}>
         <Pressable style={{paddingHorizontal : 8}}
           onPress={() => router.back()} 
         >
@@ -469,7 +469,7 @@ export default class App extends React.Component<{}, AppState> {
               justifyContent: "center", // Center vertically
               alignItems: "center", // Center horizontally
             }}>
-              <Entypo name="paper-plane" size={size.scale(30)} color="black" />
+              <Entypo name="paper-plane" size={size.scale(30)} color="#121212" />
             </Pressable>
           <Pressable style={{
               marginHorizontal: 20,
@@ -487,7 +487,7 @@ export default class App extends React.Component<{}, AppState> {
               })
             }} 
             >
-              <Entypo name="magnifying-glass" size={size.scale(30)} color="black" />
+              <Entypo name="magnifying-glass" size={size.scale(30)} color="#121212" />
             </Pressable>
           <Pressable style={{
               marginHorizontal: 20,
@@ -498,7 +498,7 @@ export default class App extends React.Component<{}, AppState> {
               justifyContent: "center", // Center vertically
               alignItems: "center", // Center horizontally
             }}>
-              <Entypo name="heart" size={size.scale(30)} color="black" />
+              <Entypo name="heart" size={size.scale(30)} color="#121212" />
             </Pressable>
         </View>
       </View>
