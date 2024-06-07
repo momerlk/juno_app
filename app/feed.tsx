@@ -69,6 +69,7 @@ interface AppState {
   currentIndex: number;
   cards: any[];
   socket: WebSocket;
+  loading : boolean;
 }
 
 // Function to ensure URLs have the correct scheme
@@ -89,7 +90,6 @@ export default class App extends React.Component<{}, AppState> {
   nextCardOpacity: Animated.AnimatedInterpolation<number>;
   nextCardScale: Animated.AnimatedInterpolation<number>;
   PanResponder: any;
-  loading : boolean = true;
 
   constructor(props: any) {
     super(props);
@@ -144,7 +144,8 @@ export default class App extends React.Component<{}, AppState> {
     this.state = {
       currentIndex: 0,
       cards: Users,
-      socket: new WebSocket("http://localhost:9001/feed"),
+      socket: new WebSocket("http://192.168.18.16:9001/feed"),
+      loading : true,
     };
 
     fetchFonts();
@@ -162,7 +163,7 @@ export default class App extends React.Component<{}, AppState> {
 
     setTimeout(async () => {
       // connecting to feed websocket
-      const socket = new WebSocket("ws://localhost:9001/feed");
+      const socket = new WebSocket("ws://192.168.18.16:9001/feed");
 
       socket.onmessage = (ev: MessageEvent<any>) => {
         const parsed = JSON.parse(ev.data);
@@ -194,7 +195,7 @@ export default class App extends React.Component<{}, AppState> {
           this.setState({ currentIndex: 0, cards: products });
         }
 
-        this.loading = false;
+        this.setState({loading : false})
       };
 
       this.setState({ socket: socket });
@@ -533,7 +534,7 @@ export default class App extends React.Component<{}, AppState> {
   };
 
   render() {
-    if(this.loading){
+    if(this.state.loading){
         return <View style={{flex : 1,backgroundColor : "black", paddingTop : 30, paddingLeft : 10}}>
             <View style={{display : "flex" , flexDirection : "row"}}>
                 <Pressable style={{

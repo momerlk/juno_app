@@ -147,7 +147,7 @@ export default class App extends React.Component<{}, AppState> {
     this.state = {
       currentIndex: 0,
       cards: Users,
-      socket: new WebSocket("http://localhost:9001/feed"),
+      socket: new WebSocket("http://192.168.18.16:9001/feed"),
     };
 
     fetchFonts();
@@ -165,7 +165,7 @@ export default class App extends React.Component<{}, AppState> {
 
     setTimeout(async () => {
       // connecting to feed websocket
-      const socket = new WebSocket("ws://localhost:9001/feed");
+      const socket = new WebSocket("ws://192.168.18.16:9001/feed");
 
 
       socket.onmessage = (ev: MessageEvent<any>) => {

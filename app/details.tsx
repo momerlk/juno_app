@@ -7,10 +7,22 @@ import { useWindowDimensions } from 'react-native';
 import {router, useLocalSearchParams} from "expo-router";
 
 import { ImageBackground, Pressable } from 'react-native';
-import { scale } from 'react-native-size-matters';
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import Feather from 'react-native-vector-icons/Feather';
 
 
+function toTitle(str : string) : string {
+  if(str === undefined){
+    return "";
+  }
+  str = str.replaceAll("_" , " ");
+  const words = str.split(" ");
+  for (let i = 0; i < words.length; i++) {
+      words[i] = words[i][0].toUpperCase() + words[i].substr(1);
+  }
+
+  return words.join(" "); 
+}
 
 // TODO : take params from router navigation
 
@@ -21,21 +33,18 @@ const ProductDetail: React.FC<any> = () => {
     title, vendor, description, body_html , price, image_url , product_url
   } = params;
 
-  const {width} = useWindowDimensions();
-  const htmlContent = `
-    <h1>Hello World</h1>
-    <p>This is a <strong>simple</strong> HTML example.</p>
-    <img src="https://reactnative.dev/img/tiny_logo.png" alt="React Native Logo" />
-  `;
 
   const _renderBottom = () => {
     return (
-      <View style={styles.bottomButtons}>
+      <View style={{...styles.bottomButtons, backgroundColor : "black"}}>
         <Pressable
           onPress={() => {
             router.navigate(product_url as string);
           }}
-          style={styles.addButton}>
+          style={{
+            ...styles.addButton,
+            backgroundColor : "white",
+          }}>
           <Text style={styles.buttonLabel}>Check Website</Text>
         </Pressable>
         <Text style={styles.price}>{`Rs. ${price}`}</Text>
@@ -45,10 +54,9 @@ const ProductDetail: React.FC<any> = () => {
 
   return (
     <>
-      <ScrollView style={styles.container}>
+      <ScrollView style={{...styles.container , backgroundColor : "black"}}>
         <ImageBackground
           style={styles.imageBackground}
-          resizeMode="cover"
           source={{ uri: image_url as string }}>
           <View style={styles.topBar}>
             <Pressable
@@ -75,9 +83,10 @@ const ProductDetail: React.FC<any> = () => {
           </View>
         </ImageBackground>
 
-        <View style={styles.detailsContainer}>
+        <View style={{...styles.detailsContainer , backgroundColor : "black"}}>
           <Text style={styles.title}>{title}</Text>
-          <Text style={{fontSize : 28, marginBottom : 20}}>By {vendor}</Text>
+          <Text style={{fontSize : 28, marginBottom : 20,color : "white"}}>
+            By {toTitle(vendor as string)}</Text>
 
           {/* <View style={styles.sizeAndColorContainer}>
             <View style={styles.sizeContainer}>
@@ -91,7 +100,7 @@ const ProductDetail: React.FC<any> = () => {
             </View>
           </View> */}
 
-          <View style={styles.section}>
+          <View style={{...styles.section}}>
             <Text style={styles.sectionTitle}>Details</Text>
             <Text style={styles.description}>{description}</Text>
           </View>
@@ -119,7 +128,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: scale(0),
   },
   imageBackground: {
-    height: scale(400),
+    height: verticalScale(500),
     width: '100%',
   },
   topBar: {
@@ -142,6 +151,7 @@ const styles = StyleSheet.create({
     marginBottom: scale(100),
   },
   title: {
+    color : "white",
     fontWeight: '700',
     fontSize: scale(30),
     paddingVertical: scale(20),
@@ -182,9 +192,11 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: scale(20),
+    color : "white",
     fontWeight: '700',
   },
   description: {
+    color : "white",
     fontSize: scale(14),
     lineHeight: scale(25),
     paddingVertical: scale(20),
@@ -199,21 +211,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: scale(20),
-    borderTopWidth: scale(1),
-    borderColor: 'gray',
   },
   addButton: {
-    backgroundColor: '#C80321', // Replacing appColors.primary with '#FF6347'
     paddingVertical: scale(10),
     paddingHorizontal: scale(20),
     borderRadius: scale(5),
   },
   buttonLabel: {
-    color: 'white',
     fontSize: scale(18),
   },
   price: {
-    fontSize: scale(18),
-    fontWeight: '700',
+    color : "white",
+    fontSize: scale(22),
   },
 });
