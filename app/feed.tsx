@@ -420,21 +420,29 @@ export default class App extends React.Component<{}, AppState> {
               source={{ uri: ensureURLScheme(item.image_url) }}
             >
                 {/* Implement background color detection and make that the background of the feed screen */}
-              <LinearGradient colors={["transparent" , "rgba(0,0,0,0.3)"]} style={{
-                marginTop : size.verticalScale(395) , 
-                height : size.verticalScale(205),
+              <LinearGradient colors={["transparent" , "rgba(0,0,0,0.4)"]} style={{
+                marginTop : size.verticalScale(385) , 
+                height : size.verticalScale(215),
                 // backgroundColor : "rgba(52, 52, 52, 0.3)",
                 borderBottomLeftRadius : 20,
                 borderBottomRightRadius : 20,
+                
               }}
                 >
+                  <View style={{marginTop : size.verticalScale(85),}}>
+                 <Text style={{
+                  color : "white",
+                  marginHorizontal : 10,
+                  fontSize : 17,
+                  fontFamily : "Poppins"
+                  }}>{item.title}</Text> 
                 <View style={{
                   display: "flex",
                   flexDirection: "row",
                   justifyContent: "space-between",
                   marginHorizontal: 10,
-                  marginTop : size.verticalScale(115),
                 }}>
+                  
                   <Text style={{
                     fontSize: 22, fontFamily: "Poppins",
                     color : "white"
@@ -458,6 +466,7 @@ export default class App extends React.Component<{}, AppState> {
                       }
                     })()}</Text>
                 </View>
+                </View>
               </LinearGradient>
             </ImageBackground>
           </Animated.View>
@@ -477,7 +486,7 @@ export default class App extends React.Component<{}, AppState> {
               },
             ]}
           >
-             <ImageBackground
+  <ImageBackground
               style={{
                 height : size.verticalScale(600), 
               }}
@@ -487,27 +496,35 @@ export default class App extends React.Component<{}, AppState> {
               source={{ uri: ensureURLScheme(item.image_url) }}
             >
                 {/* Implement background color detection and make that the background of the feed screen */}
-              <LinearGradient colors={["transparent" , "rgba(0,0,0,0.3)"]} style={{
-                marginTop : size.verticalScale(395) , 
-                height : size.verticalScale(205),
+              <LinearGradient colors={["transparent" , "rgba(0,0,0,0.4)"]} style={{
+                marginTop : size.verticalScale(385) , 
+                height : size.verticalScale(215),
                 // backgroundColor : "rgba(52, 52, 52, 0.3)",
                 borderBottomLeftRadius : 20,
                 borderBottomRightRadius : 20,
+                
               }}
                 >
+                  <View style={{marginTop : size.verticalScale(85),}}>
+                 <Text style={{
+                  color : "white",
+                  marginHorizontal : 10,
+                  fontSize : 17,
+                  fontFamily : "Poppins"
+                  }}>{item.title}</Text> 
                 <View style={{
                   display: "flex",
                   flexDirection: "row",
                   justifyContent: "space-between",
                   marginHorizontal: 10,
-                  marginTop : size.verticalScale(115),
                 }}>
+                  
                   <Text style={{
                     fontSize: 22, fontFamily: "Poppins",
                     color : "white"
                   }}>{this.toTitle(item.vendor)}</Text>
                   <Text style={{
-                     fontSize: 22, marginVertical: 5,
+                    fontSize: 22, marginVertical: 5,
                     color : "white",
                     fontFamily : "Poppins",
                   }}>Rs. {(() => {
@@ -524,6 +541,7 @@ export default class App extends React.Component<{}, AppState> {
                         return item.price
                       }
                     })()}</Text>
+                </View>
                 </View>
               </LinearGradient>
             </ImageBackground>
