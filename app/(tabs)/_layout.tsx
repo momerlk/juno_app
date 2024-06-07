@@ -47,6 +47,20 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
+        name="feed"
+        options={{
+          title: '',
+          tabBarIcon: ({ color, focused }) => {
+            if (!focused){
+              return <Ionicons name="compass-outline" size={24} color="white" />
+            } else {
+              return <Ionicons name="compass" size={24} color="white" />
+            }
+          },
+        }}
+      />
+
+      <Tabs.Screen
         name="search"
         options={{
           title: '',

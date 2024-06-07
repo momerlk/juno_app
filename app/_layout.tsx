@@ -4,6 +4,7 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
+import React from "react";
 
 import {router} from "expo-router"
 
@@ -34,13 +35,6 @@ export default function RootLayout() {
             headerShown: false,
           }}
         >
-          <Stack.Screen
-            name="feed"
-            options={{
-              // Hide the header for this route
-              headerShown: false,
-            }}
-          />
           <Stack.Screen
             name="discover"
             options={{

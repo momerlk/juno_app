@@ -178,7 +178,7 @@ export default class Home extends React.Component {
           marginHorizontal : size.scale(30),
           marginVertical : size.verticalScale(15),
         }}
-        onPress={() => router.navigate("/feed")} 
+        onPress={() => router.navigate("/(tabs)/feed")} 
         >
 
           <ImageBackground
@@ -209,7 +209,7 @@ export default class Home extends React.Component {
           title="GROCERIES" 
           image={require("../assets/groceries.webp")}
           colors={["#73C615" , "#006D2C"]}
-          route="/feed"
+          route="/(tabs)/feed"
           height={90}
           width={70}
         /> */}
@@ -217,7 +217,7 @@ export default class Home extends React.Component {
           title="CLOTHES" 
           image={require("../assets/clothes.png")}
           colors={["#5DE0E6" , "#004AAD"]}
-          route="/feed"
+          route="/(tabs)/feed"
           height={90}
           width={70}
         />
@@ -225,7 +225,7 @@ export default class Home extends React.Component {
           title="ACCESSORIES" 
           image={require("../assets/accessories.png")}
           colors={["#CB6CE6" , "#FF3BBC"]}
-          route="/feed"
+          route="/(tabs)/feed"
           height={100}
           width={100}
         />
@@ -233,7 +233,7 @@ export default class Home extends React.Component {
           title="SHOES" 
           image={require("../assets/shoes.webp")}
           colors={["#FF7A00" , "#FFD65B"]}
-          route="/feed"
+          route="/(tabs)/feed"
           height={100}
           width={100}
         />

@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Animated, PanResponder, Dimensions, Image, ImageBackground, Pressable } from 'react-native';
-import Button from "./components/Button";
+import Button from "../components/Button";
 import * as Font from 'expo-font';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
@@ -18,8 +18,8 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const fetchFonts = () => {
   return Font.loadAsync({
-    'Poppins': require('./(tabs)/Poppins-Medium.ttf'),
-    'Montserrat': require('./(tabs)/Montserrat.ttf'),
+    'Poppins': require('./Poppins-Medium.ttf'),
+    'Montserrat': require('./Montserrat.ttf'),
   });
 };
 
@@ -148,10 +148,10 @@ export default class App extends React.Component<{}, AppState> {
       loading : true,
     };
 
-    fetchFonts();
   }
 
   async componentDidMount() {
+    await fetchFonts();
     try {
       const value = await AsyncStorage.getItem("authenticated");
       if (value === null || value === "false") {
@@ -310,13 +310,44 @@ export default class App extends React.Component<{}, AppState> {
   }
 
   toTitle(str : string) : string {
+    if (str === undefined){
+      return ""
+    }
     str = str.replaceAll("_" , " ");
     const words = str.split(" ");
     for (let i = 0; i < words.length; i++) {
+      try {
         words[i] = words[i][0].toUpperCase() + words[i].substr(1);
+      } catch(e){
+        return ""
+      }
     }
 
     return words.join(" "); 
+  }
+
+  shortTitle(str : string) : string {
+    if (str === undefined){
+      return ""
+    }
+    
+    const strTitle = this.toTitle(str);
+    str = (strTitle == "") ? str : strTitle;
+
+    const words = str.split(" ");
+    if(words.length < 3){
+      return str;
+    }
+
+    let three_words = [];
+
+    for(let i = 0;i < 3;i++){
+      if (words[i][0] === "("){
+        continue;
+      }
+      three_words.push(words[i])
+    }
+    return three_words.join(" ") + " ..." 
   }
 
   renderProducts = () => {
@@ -435,7 +466,7 @@ export default class App extends React.Component<{}, AppState> {
                   marginHorizontal : 10,
                   fontSize : 17,
                   fontFamily : "Poppins"
-                  }}>{item.title}</Text> 
+                  }}>{this.shortTitle(item.title as string)}</Text> 
                 <View style={{
                   display: "flex",
                   flexDirection: "row",
@@ -446,7 +477,7 @@ export default class App extends React.Component<{}, AppState> {
                   <Text style={{
                     fontSize: 22, fontFamily: "Poppins",
                     color : "white"
-                  }}>{this.toTitle(item.vendor)}</Text>
+                  }}>{this.toTitle(item.vendor as string)}</Text>
                   <Text style={{
                     fontSize: 22, marginVertical: 5,
                     color : "white",
@@ -511,7 +542,7 @@ export default class App extends React.Component<{}, AppState> {
                   marginHorizontal : 10,
                   fontSize : 17,
                   fontFamily : "Poppins"
-                  }}>{item.title}</Text> 
+                  }}>{this.shortTitle(item.title as string)}</Text> 
                 <View style={{
                   display: "flex",
                   flexDirection: "row",
@@ -522,7 +553,7 @@ export default class App extends React.Component<{}, AppState> {
                   <Text style={{
                     fontSize: 22, fontFamily: "Poppins",
                     color : "white"
-                  }}>{this.toTitle(item.vendor)}</Text>
+                  }}>{this.toTitle(item.vendor as string)}</Text>
                   <Text style={{
                     fontSize: 22, marginVertical: 5,
                     color : "white",
@@ -554,29 +585,7 @@ export default class App extends React.Component<{}, AppState> {
   render() {
     if(this.state.loading){
         return <View style={{flex : 1,backgroundColor : "black", paddingTop : 30, paddingLeft : 10}}>
-            <View style={{display : "flex" , flexDirection : "row"}}>
-                <Pressable style={{
-                    marginHorizontal: 15,
-                    marginTop : size.scale(5),
-                    width: size.scale(33),
-                    height: size.scale(33),
-                    borderRadius: size.scale(25), // Half of the width/height to make it a circle
-                    backgroundColor: "white",
-                    justifyContent: "center", // Center vertically
-                    alignItems: "center", // Center horizontally
-                    }}
-                    onPress={() => router.back()} 
-                    >
-                        <Ionicons name="arrow-back" size={size.scale(25)} color="black" />
-                </Pressable>
-                    <Text
-                    style={{
-                            fontSize: 22, fontFamily: "Poppins",
-                            color : "white",
-                            marginTop : 5,
-                        }}
-                    >Feed</Text>
-            </View>
+            
             <ActivityIndicator style={{
                 position: 'absolute',
                 left: '50%',
@@ -587,7 +596,7 @@ export default class App extends React.Component<{}, AppState> {
     } else {
     return (
       <View style={{ flex: 1,backgroundColor: "black", paddingTop : SCREEN_HEIGHT * 0.042}}>
-        <View style={{display : "flex" , flexDirection : "row"}}>
+        {/* <View style={{display : "flex" , flexDirection : "row"}}>
         <Pressable style={{
               marginHorizontal: 15,
               marginTop : size.scale(5),
@@ -609,7 +618,7 @@ export default class App extends React.Component<{}, AppState> {
                     marginTop : 5,
                   }}
             >Feed</Text>
-        </View>
+        </View> */}
         <View style={{ flex: 1 }}>{this.renderProducts()}</View>
         <View style={{
           display : "flex", flexDirection : "row", 
