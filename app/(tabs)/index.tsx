@@ -20,6 +20,7 @@ const fetchFonts = () => {
 };
 
 import {router} from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const styles = StyleSheet.create({
   category : {
@@ -51,41 +52,10 @@ const styles = StyleSheet.create({
   },
 })
 
-function Category(props : any){
-  return (
-    <Pressable onPress={() => router.navigate(props.route)}>
-    <LinearGradient style={styles.category} colors={props.colors}>
-      <Text style={{color : "white" , fontSize : size.moderateScale(30) , fontWeight : "bold"}}>
-        {props.title}
-      </Text>
-      <Image source={props.image} style={{resizeMode : "cover", height : size.verticalScale(props.height), width : size.verticalScale(props.width), alignSelf : "flex-end" ,}}/>
-    </LinearGradient>
-    </Pressable>
-  )
-}
 
 
 // TODO : Add backend data gettting logic
 // TODO : Add save progress logic
-const stories = [{
-    id: 'user1',
-    name: '   ralphlauren    ',
-    imgUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9spkCid8NhfhtV_Y-0xMs5N1V5xB_NQHe9w&s',
-    stories: [
-      { id: 'story1', source: { uri: 'https://w0.peakpx.com/wallpaper/410/733/HD-wallpaper-godfather-michael-corleone-vito-corleone.jpg' } },
-      { id: 'story2', source: { uri: 'https://mfiles.alphacoders.com/985/985719.jpg' }},
-    ]},
-
-    {
-    id: 'user2',
-    name: '   hugoboss    ',
-    imgUrl: 'https://brandpulse.ch/wp-content/uploads/2021/08/Work_Case_HB_Header2-2000x800.jpg',
-    stories: [
-      { id: 'story3', source: { uri: 'https://w0.peakpx.com/wallpaper/410/733/HD-wallpaper-godfather-michael-corleone-vito-corleone.jpg' } },
-      { id: 'story4', source: { uri: 'https://mfiles.alphacoders.com/985/985719.jpg' }},
-    ]},
-    
-  ];
 
 const item = {
   "product_id": "ef380375-0766-4476-9636-3312908c7b7a",
@@ -181,69 +151,15 @@ function toTitle(str : string) : string {
     }
     return three_words.join(" ") + " ..." 
   }
-
-
-        {/* <View style={{margin : size.moderateScale(23) , marginTop : size.verticalScale(30)}}>
-        <InstagramStories
-          stories={stories}
-          showName={true}
-          avatarSize={size.verticalScale(60)}
-          storyAvatarSize={size.verticalScale(27)}
-          headerStyle={{}}
-          avatarListContainerStyle={{marginTop : 15}}
-          containerStyle={{}}
-          nameTextStyle={{marginTop : 5, fontWeight : "400"}}
-          textStyle={{color : "white", fontWeight : "bold" , fontSize : 13}}
-        />
-        </View>
-
-        <Category 
-          title="DISCOVER" 
-          image={require("../assets/rocket.png")}
-          colors={["#FF8200" , "#BF0A0A"]}
-          route="/discover"
-          height={100}
-          width={100}
-        />
-
-        <Text style={{
-          marginHorizontal : size.moderateScale(23) , 
-          fontSize : size.moderateScale(30),
-          fontWeight : "500"
-        }}
-        >Spotlight</Text>
-
-
-        <Pressable style={{
-          height: size.verticalScale(450),
-          marginHorizontal : size.scale(30),
-          marginVertical : size.verticalScale(15),
-        }}
-        onPress={() => router.navigate("/(tabs)/feed")} 
-        >
-
-          <ImageBackground
-            source={{
-              uri : "https://cdn.shopify.com/s/files/1/0620/8788/9062/files/DWEA2426GreenFront.jpg?v=1715939755"
-            }} 
-            imageStyle={{borderRadius : size.scale(20), height : size.verticalScale(450)}}
-            style={styles.imageBackground}
-          >
-            <View style={styles.container}>
-              <BlurView intensity={100} style={styles.blurContainer}>
-                <Text style={styles.text}>Ethnic New Outfits</Text>
-              </BlurView>
-            </View>
-          </ImageBackground>
-        </Pressable> */}
     
 // TODO : Dark Mode
 function Card(props : any){
   return (
-    <Pressable>
+    <Pressable onPress={() => router.navigate("/(tabs)/feed")}>
       <ImageBackground
               style={{
                 height : size.verticalScale(250), 
+                minWidth : size.verticalScale(150),
                 marginHorizontal : size.moderateScale(3),
                 marginVertical : size.verticalScale(5),
               }}
@@ -252,7 +168,6 @@ function Card(props : any){
               }}
               source={{ uri: props.item.image_url }}
             >
-                {/* Implement background color detection and make that the background of the feed screen */}
               <LinearGradient colors={["transparent" , "rgba(0,0,0,0.7)"]} style={{
                 marginTop : size.verticalScale(170) , 
                 height : size.verticalScale(80),
@@ -280,24 +195,6 @@ function Card(props : any){
                     fontSize: 15, fontFamily: "Poppins",
                     color : "white"
                   }}>{toTitle(props.item.vendor as string)}</Text>
-                  {/* <Text style={{
-                    fontSize: 13, marginVertical: 5,
-                    color : "white",
-                    fontFamily : "Poppins",
-                  }}>Rs. {(() => {
-                      let l = props.item.price.length;
-                      let pos = (l) - 3;
-                      if (pos > 0) {
-                        const firstPart = props.item.price.slice(0, pos);
-                        const secondPart = props.item.price.slice(pos);
-
-                        // Concatenate the first part, substring, and second part
-                        const newString = firstPart + "," + secondPart;
-                        return newString;
-                      } else {
-                        return props.item.price
-                      }
-                    })()}</Text> */}
                 </View>
                 </View>
               </LinearGradient>
@@ -306,16 +203,11 @@ function Card(props : any){
   )
 }
 
-const listData = [
-  {id : "1"},
-  {id : "2"},
-  {id : "3"},
-  {id : "4"},
-]
 
 async function getProducts(n : number){
   const myHeaders = new Headers();
-  myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiOTZlOTNjOWItODI1Mi00NjM5LWJkMGUtOWQ2ZjE2NmRjYzg0IiwiaWF0IjoxNzE3ODM0NTkxLCJleHAiOjE3MTc4NDUzOTF9.9EW7pbKqFPyO6q2aYv8ATr8HvmOUd1QGVtHcZXFRj7Y");
+  const token = await AsyncStorage.getItem("token");
+  myHeaders.append("Authorization", `Bearer ${token}`);
 
 
   const requestOptions = {
@@ -358,7 +250,7 @@ export default class Home extends React.Component<{},HomeState> {
       return;
     }
     else {
-      this.setState({spotlight : products[0] , products : products , loading : false})
+      this.setState({spotlight : products[3] , products : products , loading : false})
     }
   }
 
@@ -379,10 +271,11 @@ export default class Home extends React.Component<{},HomeState> {
       <ScrollView style={{backgroundColor : "#121212"}}>
 
         <Image source={require("./juno_icon.png")} 
-        style={{height : 100, width : 100, resizeMode : "cover", alignSelf : "center"}} />
+        style={{height : 100, width : 100, resizeMode : "cover", alignSelf : "center", marginTop : 10}} />
 
-        
+        <Text style={{color : "white", fontFamily : "Poppins", fontSize : 24, alignSelf  :"center"}}>Feed</Text>
 
+        <Pressable onPress={() => router.navigate("/(tabs)/feed")}>
         <ImageBackground
               style={{
                 height : size.verticalScale(350), 
@@ -449,9 +342,13 @@ export default class Home extends React.Component<{},HomeState> {
                 </View>
               </LinearGradient>
             </ImageBackground>
+          </Pressable>
         
+          
+
+
         <View style={{marginVertical : size.verticalScale(10)}}></View>
-        
+
         <Text style={{color : "white", fontFamily : "Poppins", fontSize : 18 , marginLeft : 20}}>For You</Text>
 
         <ScrollView
@@ -471,6 +368,11 @@ export default class Home extends React.Component<{},HomeState> {
           renderItem={({ item }) => <Card item={item}/>} 
         />
         </ScrollView>
+
+        <Text style={{color : "white", fontFamily : "Poppins", fontSize : 18 , marginLeft : 20, marginVertical : size.verticalScale(25)}}>Top Categories</Text>
+
+        <Text style={{color : "white", fontFamily : "Poppins", fontSize : 18 , marginLeft : 20, marginVertical : size.verticalScale(25)}}>Top Brands</Text>
+
       </ScrollView>
     )
   }
