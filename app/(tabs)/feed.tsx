@@ -296,7 +296,7 @@ export default class App extends React.Component<{}, AppState> {
           { currentIndex: this.state.currentIndex + 1 },
           async () => {
             this.position.setValue({ x: 0, y: 0 });
-            await this.handleSwipeAction("super_like");
+            await this.handleSwipeAction("added_to_cart");
           }
         );
       });
@@ -372,73 +372,43 @@ export default class App extends React.Component<{}, AppState> {
             <Animated.View
               style={{
                 opacity: this.likeOpacity,
-                transform: [{ rotate: '-30deg' }],
+                transform: [{ rotate: '-15deg' }],
                 position: 'absolute',
                 top: 50,
                 left: 40,
                 zIndex: 1000,
               }}
             >
-              <Text
-                style={{
-                  borderWidth: 1,
-                  borderColor: 'green',
-                  color: 'green',
-                  fontSize: 32,
-                  fontWeight: '800',
-                  padding: 10,
-                }}
-              >
-                LIKE
-              </Text>
+              <Image style={{height : 160, width : 160}} 
+              source={require("../assets/heart.png")}/>
             </Animated.View>
 
             <Animated.View
               style={{
                 opacity: this.dislikeOpacity,
-                transform: [{ rotate: '30deg' }],
+                transform: [{ rotate: '20deg' }],
                 position: 'absolute',
                 top: 50,
                 right: 40,
                 zIndex: 1000,
               }}
             >
-              <Text
-                style={{
-                  borderWidth: 1,
-                  borderColor: 'red',
-                  color: 'red',
-                  fontSize: 32,
-                  fontWeight: '800',
-                  padding: 10,
-                }}
-              >
-                NOPE
-              </Text>
+              <Image style={{height : 160, width : 160}} 
+              source={require("../assets/cross.png")}/>
             </Animated.View>
 
             <Animated.View
               style={{
                 opacity: this.superLikeOpacity,
-                transform: [{ rotate: '30deg' }],
+                transform: [{ rotate: '0deg' }],
                 position: 'absolute',
-                top: 50,
-                left: SCREEN_WIDTH / 3,
+                bottom: 150,
+                left: SCREEN_WIDTH * 0.24,
                 zIndex: 1000,
               }}
             >
-              <Text
-                style={{
-                  borderWidth: 1,
-                  borderColor: 'blue',
-                  color: 'blue',
-                  fontSize: 32,
-                  fontWeight: '800',
-                  padding: 10,
-                }}
-              >
-                SUPER LIKE
-              </Text>
+              <Image style={{height : 200, width : 200}} 
+              source={require("../assets/basket.png")}/>
             </Animated.View>      
 
             <ImageBackground

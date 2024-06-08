@@ -152,8 +152,8 @@ function toTitle(str : string) : string {
     return three_words.join(" ") + " ..." 
   }
     
-// TODO : Dark Mode
 function Card(props : any){
+  // TODO : Load this specific item in feed
   return (
     <Pressable onPress={() => router.navigate("/(tabs)/feed")}>
       <ImageBackground
@@ -217,7 +217,13 @@ async function getProducts(n : number){
 
   try {
     const resp = await fetch(`http://192.168.18.16:3000/user/products?n=${n}`, requestOptions);
+    if (resp.status !== 200){
+      router.replace("/sign-in");
+      return null;
+    }
     const data = await resp.json();
+
+  
 
     return data;
   } catch(e){

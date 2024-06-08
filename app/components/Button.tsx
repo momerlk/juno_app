@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity, StyleSheet, StyleProp, ViewStyle, TextStyle } from 'react-native';
+import { Text, Pressable, StyleSheet, StyleProp, ViewStyle, TextStyle } from 'react-native';
 import React from 'react';
 import COLORS from '../constants/colors';
 
@@ -17,7 +17,7 @@ const Button: React.FC<ButtonProps> = (props) => {
   const textColor = props.filled ? COLORS.white : COLORS.primary;
 
   return (
-    <TouchableOpacity
+    <Pressable
       style={[
         styles.button,
         { backgroundColor: bgColor },
@@ -26,7 +26,7 @@ const Button: React.FC<ButtonProps> = (props) => {
       onPress={props.onPress}
     >
       <Text style={{ fontSize: 18, color: textColor }}>{props.title}</Text>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 
