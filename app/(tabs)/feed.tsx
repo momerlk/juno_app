@@ -517,7 +517,7 @@ export default class App extends React.Component<{}, AppState> {
               },
             ]}
           >
-  <ImageBackground
+            <ImageBackground
               style={{
                 height : size.verticalScale(600), 
               }}
@@ -537,7 +537,7 @@ export default class App extends React.Component<{}, AppState> {
               }}
                 >
                   <View style={{marginTop : size.verticalScale(85),}}>
-                 <Text style={{
+                <Text style={{
                   color : "white",
                   marginHorizontal : 10,
                   fontSize : 17,

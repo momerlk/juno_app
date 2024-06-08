@@ -9,7 +9,50 @@ import { TextInput } from 'react-native';
 import * as size from "react-native-size-matters"
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Entypo } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
+const styles2 = StyleSheet.create({
+  category : {
+    height : size.verticalScale(120),
+    margin : size.moderateScale(20),
+    borderRadius : size.scale(23),
+    paddingVertical : size.moderateScale(10),
+    paddingHorizontal : size.moderateScale(33),
+  },
+   imageBackground: {
+    flex: 1,
+    justifyContent: 'flex-end',  // Aligns children to the bottom
+  },
+  container: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  image: {
+    height: size.scale(70),
+    width: size.scale(70),
+    borderRadius: size.scale(35),
+  },
+
+  text: {
+    fontSize: size.verticalScale(15),
+    textAlign: 'center',
+  },
+})
+
+function Category(props : any){
+  return (
+    <Pressable onPress={() => router.navigate(props.route)}>
+    <LinearGradient style={styles2.category} colors={props.colors}>
+      <Text style={{color : "white" , fontSize : size.moderateScale(30) , fontWeight : "bold"}}>
+        {props.title}
+      </Text>
+      <Image source={props.image} style={{resizeMode : "cover", height : size.verticalScale(props.height), width : size.verticalScale(props.width), alignSelf : "flex-end" ,}}/>
+    </LinearGradient>
+    </Pressable>
+  )
+}
 
 // TODO : Add header
 // TODO : Add proper token
@@ -64,9 +107,33 @@ export default function TabTwoScreen() {
   }, []); // Empty dependency array to run only once when the component mounts
 
   return (
-    <View>
+    <ScrollView>
       <Search></Search>
-    </View>
+      <Category 
+          title="CLOTHES" 
+          image={require("../assets/clothes.png")}
+          colors={["#5DE0E6" , "#004AAD"]}
+          route="/(tabs)/feed"
+          height={90}
+          width={70}
+        />
+        <Category 
+          title="ACCESSORIES" 
+          image={require("../assets/accessories.png")}
+          colors={["#CB6CE6" , "#FF3BBC"]}
+          route="/(tabs)/feed"
+          height={100}
+          width={100}
+        />
+        <Category 
+          title="SHOES" 
+          image={require("../assets/shoes.webp")}
+          colors={["#FF7A00" , "#FFD65B"]}
+          route="/(tabs)/feed"
+          height={100}
+          width={100}
+        />
+    </ScrollView>
   );
 }
 
