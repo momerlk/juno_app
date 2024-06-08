@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Image, View, Text, ScrollView, Pressable} from 'react-native';
+import { StyleSheet, Image, View, Text, ScrollView, Pressable, ImageBackground} from 'react-native';
 import * as Font from "expo-font";
 import {router} from "expo-router";
 import Button from '../components/Button';
@@ -7,8 +7,7 @@ import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TextInput } from 'react-native';
 import * as size from "react-native-size-matters"
-import AntDesign from '@expo/vector-icons/AntDesign';
-import { Entypo } from '@expo/vector-icons';
+import { Ionicons , Entypo} from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const styles2 = StyleSheet.create({
@@ -43,13 +42,26 @@ const styles2 = StyleSheet.create({
 
 function Category(props : any){
   return (
-    <Pressable onPress={() => router.navigate(props.route)}>
-    <LinearGradient style={styles2.category} colors={props.colors}>
-      <Text style={{color : "white" , fontSize : size.moderateScale(30) , fontWeight : "bold"}}>
+    <Pressable onPress={() => router.navigate(props.route)}
+      style={{
+        marginHorizontal : size.scale(15),
+        marginVertical : size.verticalScale(15),
+      }} 
+    >
+      <ImageBackground source={props.image}
+        style={{borderRadius : 8,}}
+        imageStyle={{borderRadius : 8}} 
+      >
+    <LinearGradient style={{
+      height : 200,
+      padding : 20,
+      borderRadius : 8,
+    }} colors={["rgba(0,0,0,0.6)", "transparent" , ]}>
+      <Text style={{color : "white" , fontSize : size.moderateScale(30) , fontFamily : "Poppins"}}>
         {props.title}
       </Text>
-      <Image source={props.image} style={{resizeMode : "cover", height : size.verticalScale(props.height), width : size.verticalScale(props.width), alignSelf : "flex-end" ,}}/>
     </LinearGradient>
+    </ImageBackground>
     </Pressable>
   )
 }
@@ -71,47 +83,15 @@ export default function TabTwoScreen() {
   fetchFonts();
 
   useEffect(() => {
-    const fetchData = async () => {
-      const myHeaders = new Headers();
-      // TODO : Replace with actual token
-      let token = null
-      try {
-        token = await AsyncStorage.getItem("token")
-      } catch (e){
-        alert(`failed to get authentication token! Sign in again`)
-        router.replace("/sign-in")
-      }
-      myHeaders.append("Authorization", `Bearer ${token}`);
-
-      const requestOptions = {
-        method: "GET",
-        headers: myHeaders,
-      };
-
-      try {
-        const response = await fetch("http://192.168.18.16:3000/user/liked", requestOptions);const result = await response.json();
-        if(response.status !== 200){
-          alert(`failed to get liked products. error : ${result.message}`)
-          return;
-        }
-        setData(result);
-      } catch (error) {
-        console.log(`Error fetching data: ${error}`);
-        setReq(1);
-      }
-    };
-
-    if(req == 0){
-      fetchData();
-    }
+    
   }, []); // Empty dependency array to run only once when the component mounts
 
   return (
-    <ScrollView>
+    <ScrollView style={{backgroundColor : "#121212"}}>
       <Search></Search>
       <Category 
           title="CLOTHES" 
-          image={require("../assets/clothes.png")}
+          image={{uri : "https://enews.hamariweb.com/tpl_assets/2023/05/19390895_1380758115349376_6758442144746647951_o-22w6h5b.jpg"}}
           colors={["#5DE0E6" , "#004AAD"]}
           route="/(tabs)/feed"
           height={90}
@@ -119,19 +99,13 @@ export default function TabTwoScreen() {
         />
         <Category 
           title="ACCESSORIES" 
-          image={require("../assets/accessories.png")}
-          colors={["#CB6CE6" , "#FF3BBC"]}
+          image={{uri : "https://karltayloreducation.com/wp-content/uploads/2020/09/Fashion-accessories-unretouched.jpg"}}
           route="/(tabs)/feed"
-          height={100}
-          width={100}
         />
         <Category 
           title="SHOES" 
-          image={require("../assets/shoes.webp")}
-          colors={["#FF7A00" , "#FFD65B"]}
+          image={{uri : "https://www.visittruro.org.uk/wp-content/uploads/elementor/thumbs/iStock-1397720527-q1kjbg4vhc7yvdfise5d47gkkajd3c052frz7xaiww.jpg"}}
           route="/(tabs)/feed"
-          height={100}
-          width={100}
         />
     </ScrollView>
   );
@@ -140,30 +114,45 @@ export default function TabTwoScreen() {
 
 
 const Search = () => {
+  const [val, setVal] = useState("")
+  const [cross , setCross] = useState(true)
+
+  useEffect(() => {
+    if (val === ""){
+      setCross(false)
+    }
+  } , [val])
+
   return(
-    <>
-    <View style={{alignItems: 'center'}}>
-      <TextInput style={styles.enterText} placeholder="             What do you want to buy?"/>
+    <View style={{alignItems: 'center', display : "flex" , flexDirection : "row", 
+    width: size.scale(350),}}>
+      <TextInput style={styles.enterText} onChangeText={t => {
+        setVal(t)
+        setCross(true)
+      }} placeholder="What do you want to buy?" value={val}/>
+        <Ionicons size={25} name="search" color="black" style={{position : "absolute", marginLeft : 60,}}/>
+
+        {cross ? <Entypo size={25} name="cross" color="black" style={{
+          position : "absolute", right : 60,
+        }}/> : <></>}
+        
     </View>
-    <>
-          <AntDesign style={{left: 65, bottom: 83}} name="search1" size={20} color="black" />
-    </>
-    <>
-    <Entypo style={{bottom: 107, left: 310, }} name="cross" size={25} color="black" />
-    </>
-    </>
+ 
   )
 }
 
 const styles = StyleSheet.create({
   enterText: {
-    width: size.scale(270), // width
+    flex : 1,
     height: size.verticalScale(40), // height
     margin: size.moderateScale(46), // margin or padding
+    paddingLeft : 50,
+    fontFamily : "Poppins",
     borderRadius: 20,
-    borderColor: 'black',
+    borderColor: 'white',
     borderWidth: 2,
-
+    backgroundColor : "#d3d3d3",
+    color : "black",
   },
 
 })
