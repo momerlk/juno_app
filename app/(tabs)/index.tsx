@@ -284,7 +284,7 @@ export default class Home extends React.Component<{},HomeState> {
         <Pressable onPress={() => router.navigate("/(tabs)/feed")}>
         <ImageBackground
               style={{
-                height : size.verticalScale(350), 
+                height : size.verticalScale(370), 
                 marginHorizontal : size.moderateScale(30),
                 marginVertical : size.verticalScale(10),
               }}
@@ -296,7 +296,7 @@ export default class Home extends React.Component<{},HomeState> {
                 {/* Implement background color detection and make that the background of the feed screen */}
               <LinearGradient colors={["transparent" , "rgba(0,0,0,0.7)"]} style={{
                 marginTop : size.verticalScale(270) , 
-                height : size.verticalScale(80),
+                height : size.verticalScale(100),
                 // backgroundColor : "rgba(52, 52, 52, 0.3)",
                 borderBottomLeftRadius : 20,
                 borderBottomRightRadius : 20,
@@ -318,11 +318,11 @@ export default class Home extends React.Component<{},HomeState> {
                 }}>
                   
                   <Text style={{
-                    fontSize: 22, fontFamily: "Poppins",
+                    fontSize: 20, fontFamily: "Poppins",
                     color : "white"
                   }}>{toTitle(this.state.spotlight.vendor as string)}</Text>
                   <Text style={{
-                    fontSize: 22, marginVertical: 5,
+                    fontSize: 18, marginVertical: 5,
                     color : "white",
                     fontFamily : "Poppins",
                   }}>Rs. {(() => {

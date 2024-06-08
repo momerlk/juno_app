@@ -5,12 +5,16 @@ import {
   View,
   ScrollView,
   Text,
-  TouchableOpacity,
+  Pressable,
   Switch,
   Image,
 } from 'react-native';
 import {router} from "expo-router"
-import FeatherIcon from 'react-native-vector-icons/Feather';
+import { 
+  FontAwesome, FontAwesome6, MaterialIcons, Feather,
+  Ionicons,
+} from '@expo/vector-icons';
+
 
 export default function Example() {
   const [form, setForm] = useState({
@@ -20,252 +24,82 @@ export default function Example() {
   });
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
-      <View style={styles.container}>
-        <View style={styles.profile}>
+    <ScrollView style={{ flex: 1, backgroundColor: '#121212' }}>
+      <Image source={require("../juno_icon.png")} 
+        style={{height : 100, width : 100, resizeMode : "cover", alignSelf : "center", marginTop : 10}} />
 
-          <View>
-            <Text style={styles.profileName}>Settings</Text>
+      <Text style={{fontSize : 25, color : "white", alignSelf : "center", fontFamily : "Poppins"}}>
+        {"Omer Malik"}
+      </Text> 
+      <Text style={{fontSize : 18, color : "gray", alignSelf : "center", marginTop : 20, fontFamily : "Poppins"}}>
+        {"omeralimalik96@gmail.com"}
+      </Text>
+      <Text style={{fontSize : 18, color : "gray", alignSelf : "center", marginBottom : 20, fontFamily : "Poppins"}}>
+        {"+92 300 0856955"}
+      </Text>
 
-            <Text style={styles.profileAddress}>
-            Customise your experience            
-            </Text>
-          </View>
-        </View>
-
-        <ScrollView>
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>User Account</Text>
-
-            <TouchableOpacity
-              onPress={() => {
-                alert("pressed")
-              router.navigate("/settings/test")
-              }}
-              style={styles.row}>
-              <View style={[styles.rowIcon, { backgroundColor: '#fe9400' }]}>
-                <FeatherIcon color="#fff" name="user" size={20} />
-              </View>
-
-              <Text style={styles.rowLabel}>Login Details</Text>
-
-              <View style={styles.rowSpacer} />
-
-              <FeatherIcon
-                color="#C6C6C6"
-                name="chevron-right"
-                size={20} />
-            </TouchableOpacity>
-
-            <View style={styles.row}>
-              <View style={[styles.rowIcon, { backgroundColor: '#007afe' }]}>
-                <FeatherIcon color="#fff" name="database" size={20} />
-              </View>
-
-              <Text style={styles.rowLabel}>Profile</Text>
-
-              <View style={styles.rowSpacer} />
-
-            </View>
-
-            <TouchableOpacity
-              onPress={() => {
-                // handle onPress
-              }}
-              style={styles.row}>
-              <View style={[styles.rowIcon, { backgroundColor: '#ff0000' }]}>
-                <FeatherIcon
-                  color="#fff"
-                  name="alert-circle"
-                  size={20} />
-              </View>
-
-              <Text style={styles.rowLabel}>Security & Privacy</Text>
-
-              <View style={styles.rowSpacer} />
-
-              <FeatherIcon
-                color="#C6C6C6"
-                name="chevron-right"
-                size={20} />
-            </TouchableOpacity>
-
-            <View style={styles.row}>
-              <View style={[styles.rowIcon, { backgroundColor: '#38C959' }]}>
-                <FeatherIcon
-                  color="#fff"
-                  name="at-sign"
-                  size={20} />
-              </View>
-
-              <Text style={styles.rowLabel}> Notifications</Text>
-
-              <View style={styles.rowSpacer} />
-
-              <Switch
-                onValueChange={emailNotifications =>
-                  setForm({ ...form, emailNotifications })
-                }
-                value={form.emailNotifications} />
-            </View>
-
-          
-          </View>
-
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Other actions</Text>
-
-            <TouchableOpacity
-              onPress={() => {
-                // handle onPress
-              }}
-              style={styles.row}>
-              <View style={[styles.rowIcon, { backgroundColor: '#8e8d91' }]}>
-                <FeatherIcon color="#fff" name="flag" size={20} />
-              </View>
-
-              <Text style={styles.rowLabel}>Report Bug</Text>
-
-              <View style={styles.rowSpacer} />
-
-              <FeatherIcon
-                color="#C6C6C6"
-                name="chevron-right"
-                size={20} />
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => {
-                // handle onPress
-              }}
-              style={styles.row}>
-              <View style={[styles.rowIcon, { backgroundColor: '#007afe' }]}>
-                <FeatherIcon color="#fff" name="mail" size={20} />
-              </View>
-
-              <Text style={styles.rowLabel}>Contact Us</Text>
-
-              <View style={styles.rowSpacer} />
-
-              <FeatherIcon
-                color="#C6C6C6"
-                name="chevron-right"
-                size={20} />
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => {
-                // handle onPress
-              }}
-              style={styles.row}>
-              <View style={[styles.rowIcon, { backgroundColor: '#ff0000' }]}>
-                <FeatherIcon color="#fff" name="arrow-left-circle" size={20} />
-              </View>
-
-              <Text style={styles.rowLabel}>Log Out</Text>
-
-              <View style={styles.rowSpacer} />
-
-              <FeatherIcon
-                color="#C6C6C6"
-                name="activity"
-                size={20} />
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-      </View>
-    </SafeAreaView>
+      <Action 
+        icon={(<FontAwesome name="user" size={23} color="white" style={{marginTop : 4}}/>)}
+        name="Profile Details"
+        route="/settings/test"
+      />
+      <Action 
+        icon={(<FontAwesome6 name="heart" size={23} color="#d3d3d3" style={{marginTop : 4}}/>)}
+        name="Liked"
+        route="/settings/test"
+      />
+      <Action 
+        icon={(<MaterialIcons name="bookmark-border" size={23} color="#d3d3d3" style={{marginTop : 4}}/>)}
+        name="Orders and Purchases"
+        route="/settings/test"
+      />
+      <Action 
+        icon={(<MaterialIcons name="help-center" size={26} color="#d3d3d3" style={{marginTop : 4}}/>)}
+        name="Help"
+        route="/settings/test"
+      />
+      <Action 
+        icon={(<Feather name="info" size={23} color="#d3d3d3" style={{marginTop : 4}}/>)}
+        name="About"
+        route="/settings/test"
+      />
+    </ScrollView>
   );
 }
 
+function Action(props : any){
+  return (
+    <Pressable style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  paddingHorizontal : 20,
+                  paddingVertical : 10,
+                  borderTopWidth : StyleSheet.hairlineWidth,
+                  borderBottomWidth : StyleSheet.hairlineWidth,
+                  borderColor : "#2D2D2D",
+                }}
+      onPress={() => router.navigate(props.route)}             
+    >
+
+        <View style={{display : "flex", flexDirection : "row",marginTop: 7,}}>
+        {props.icon}
+        <Text style={{
+          marginLeft : 15,
+          fontSize: 20, fontFamily: "Poppins",
+          color : "#d3d3d3"
+        }}>{props.name}</Text>
+        </View> 
+
+        <Text style={{
+          fontSize: 25, marginVertical: 5,
+          color : "gray",
+          fontFamily : "Poppins",
+        }}>{">"}</Text>
+      </Pressable> 
+  )
+}
+
 const styles = StyleSheet.create({
-  container: {
-    padding: 0,
-    flexGrow: 1,
-    flexShrink: 1,
-    flexBasis: 0,
-  },
-  /** Profile */
-  profile: {
-    padding: 24,
-    backgroundColor: '#fff',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  profileAvatarWrapper: {
-    position: 'relative',
-  },
-  profileAvatar: {
-    width: 72,
-    height: 72,
-    borderRadius: 9999,
-  },
-  profileAction: {
-    position: 'absolute',
-    right: -4,
-    bottom: -10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 28,
-    height: 28,
-    borderRadius: 9999,
-    backgroundColor: '#007bff',
-  },
-  profileName: {
-    marginTop: 20,
-    fontSize: 40,
-    fontWeight: '600',
-    color: '#414d63',
-    textAlign: 'center',
-  },
-  profileAddress: {
-    marginTop: 5,
-    fontSize: 16,
-    color: '#989898',
-    textAlign: 'center',
-  },
-  /** Section */
-  section: {
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    paddingVertical: 12,
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#9e9e9e',
-    textTransform: 'uppercase',
-    letterSpacing: 1.1,
-  },
-  /** Row */
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    height: 50,
-    backgroundColor: '#f2f2f2',
-    borderRadius: 8,
-    marginBottom: 12,
-    paddingLeft: 12,
-    paddingRight: 12,
-  },
-  rowIcon: {
-    width: 32,
-    height: 32,
-    borderRadius: 9999,
-    marginRight: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  rowLabel: {
-    fontSize: 17,
-    fontWeight: '400',
-    color: '#0c0c0c',
-  },
-  rowSpacer: {
-    flexGrow: 1,
-    flexShrink: 1,
-    flexBasis: 0,
-  },
+  
 });
