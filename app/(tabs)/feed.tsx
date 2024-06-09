@@ -4,7 +4,7 @@ import Button from "../components/Button";
 import * as Font from 'expo-font';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
-import { Appearance, ColorSchemeName, ActivityIndicator, Modal, PanResponderInstance, GestureResponderEvent, PanResponderGestureState} from 'react-native';
+import { Appearance, ColorSchemeName, ActivityIndicator, Modal, PanResponderInstance, GestureResponderEvent, PanResponderGestureState, TouchableWithoutFeedback} from 'react-native';
 import * as size from "react-native-size-matters"
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import Entypo from '@expo/vector-icons/Entypo';
@@ -70,6 +70,7 @@ interface AppState {
   socket: WebSocket;
   loading : boolean;
   modalVisible : boolean;
+  shareVisible : boolean;
 }
 
 // Function to ensure URLs have the correct scheme
@@ -152,6 +153,7 @@ export default class App extends React.Component<{}, AppState> {
       socket: new WebSocket("http://192.168.18.16:9001/feed"),
       loading : true,
       modalVisible : false,
+      shareVisible : false,
     };
 
     // Pan Responder for handling taps and swipes
@@ -613,33 +615,14 @@ export default class App extends React.Component<{}, AppState> {
     } else {
     return (
       <View style={{ flex: 1,backgroundColor: "black", paddingTop : SCREEN_HEIGHT * 0.042}}>
-        {/* <View style={{display : "flex" , flexDirection : "row"}}>
-        <Pressable style={{
-              marginHorizontal: 15,
-              marginTop : size.scale(5),
-              width: size.scale(33),
-              height: size.scale(33),
-              borderRadius: size.scale(25), // Half of the width/height to make it a circle
-              backgroundColor: "white",
-              justifyContent: "center", // Center vertically
-              alignItems: "center", // Center horizontally
-            }}
-            onPress={() => router.back()} 
-            >
-                <Ionicons name="arrow-back" size={size.scale(25)} color="black" />
-        </Pressable>
-            <Text
-            style={{
-                    fontSize: 22, fontFamily: "Poppins",
-                    color : "white",
-                    marginTop : 5,
-                  }}
-            >Feed</Text>
-        </View> */}
         <View style={{ flex: 1 }}>{this.renderProducts()}</View>
         <Filter 
           modalVisible={this.state.modalVisible} 
           setModalVisible={(v: boolean) => this.setState({modalVisible : v})}
+        />
+        <Sharing 
+          modalVisible={this.state.shareVisible} 
+          setModalVisible={(v: boolean) => this.setState({shareVisible : v})}
         />
         <View style={{
           display : "flex", flexDirection : "row", 
@@ -710,7 +693,7 @@ export default class App extends React.Component<{}, AppState> {
             }}
             onPress={() => {
                 // TODO : add share functionality 
-                alert(`shared product`)
+                this.setState({shareVisible : true})
             }} 
             >
               <Entypo name="paper-plane" size={size.scale(26)} color="black" />
@@ -722,12 +705,12 @@ export default class App extends React.Component<{}, AppState> {
   }
 }
 
-interface FilterProps {
+interface ModalProps {
   setModalVisible : Function;
   modalVisible : boolean;
 }
 
-function Filter(props : FilterProps){
+function Filter(props : ModalProps){
   return (
     
      <Modal
@@ -776,6 +759,73 @@ function Filter(props : FilterProps){
                 Confirm
               </Text>
             </Pressable>
+            </View>
+      </Modal>
+   
+  )
+}
+
+function Sharing(props : ModalProps){
+  // TODO : Implement swipe to bring down like instagram
+  return (
+    
+     <Modal
+        animationType="slide"
+        transparent={true}
+        visible={props.modalVisible}
+        onRequestClose={() => {
+          props.setModalVisible(false);
+        }}
+        onDismiss={() => {
+          props.setModalVisible(false);
+        }}
+        onAccessibilityEscape={() => {
+          props.setModalVisible(false);
+        }}
+
+
+           
+      >
+        <Pressable 
+            style={{position : "absolute" , bottom : SCREEN_HEIGHT * 0.4, height : SCREEN_HEIGHT, backgroundColor : "transparent", width : SCREEN_WIDTH}} 
+            onPress={() => props.setModalVisible(false)}
+          ></Pressable> 
+        <View 
+          style={{
+            backgroundColor : "#121212",
+            flex : 1,
+            marginTop : SCREEN_HEIGHT * 0.6,
+            borderTopLeftRadius : 30,
+            borderTopRightRadius : 30,
+          }}
+        >
+            <Text style={{color : "white", fontSize : 30, alignSelf : "center", fontFamily : "Poppins", marginTop: 20,}}>
+              SHARE
+            </Text>
+            {/* <Pressable
+              style={[
+                {
+                  paddingBottom: 16,
+                  paddingVertical: 10,
+                  paddingTop : 15,
+                  marginHorizontal : 14,
+                  marginTop : 20,
+                  borderRadius: 4,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  alignSelf : "center",
+                  width : size.scale(200),
+                  position : "absolute",
+                  bottom : 40,
+                },
+                { backgroundColor: "white" },
+              ]}
+              onPress={() => props.setModalVisible(false)}
+            >
+              <Text style={{ fontSize: 18, color: "black", fontFamily : "Poppins" }}>
+                Confirm
+              </Text>
+            </Pressable> */}
             </View>
       </Modal>
    
