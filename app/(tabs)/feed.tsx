@@ -1,11 +1,10 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, View, Animated, PanResponder, Dimensions, Image, ImageBackground, Pressable } from 'react-native';
 import Button from "../components/Button";
 import * as Font from 'expo-font';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
-import { Appearance, ColorSchemeName, ActivityIndicator } from 'react-native';
-import { useState, useEffect } from "react"
+import { Appearance, ColorSchemeName, ActivityIndicator, Modal, PanResponderInstance, GestureResponderEvent, PanResponderGestureState} from 'react-native';
 import * as size from "react-native-size-matters"
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import Entypo from '@expo/vector-icons/Entypo';
@@ -70,6 +69,7 @@ interface AppState {
   cards: any[];
   socket: WebSocket;
   loading : boolean;
+  modalVisible : boolean;
 }
 
 // Function to ensure URLs have the correct scheme
@@ -89,7 +89,12 @@ export default class App extends React.Component<{}, AppState> {
   superLikeOpacity: Animated.AnimatedInterpolation<number>;
   nextCardOpacity: Animated.AnimatedInterpolation<number>;
   nextCardScale: Animated.AnimatedInterpolation<number>;
-  PanResponder: any;
+  PanResponder: PanResponderInstance;
+  startTime : number;
+  endTime : number;
+  lastTap: number | null;
+  tapTimeout: NodeJS.Timeout | null;
+  
 
   constructor(props: any) {
     super(props);
@@ -146,7 +151,35 @@ export default class App extends React.Component<{}, AppState> {
       cards: Users,
       socket: new WebSocket("http://192.168.18.16:9001/feed"),
       loading : true,
+      modalVisible : false,
     };
+
+    // Pan Responder for handling taps and swipes
+    this.startTime = 0;
+    this.endTime = 0;
+    this.lastTap = null;
+    this.tapTimeout = null;
+
+    this.PanResponder = PanResponder.create({
+      onStartShouldSetPanResponder: (evt: GestureResponderEvent, gestureState: PanResponderGestureState) => true,
+      onPanResponderGrant: (evt: GestureResponderEvent, gestureState: PanResponderGestureState) => {
+        this.startTime = new Date().getTime();
+      },
+      onPanResponderMove: (evt: GestureResponderEvent, gestureState: PanResponderGestureState) => {
+        this.position.setValue({ x: gestureState.dx, y: gestureState.dy });
+      },
+      onPanResponderRelease: (evt: GestureResponderEvent, gestureState: PanResponderGestureState) => {
+        this.endTime = new Date().getTime();
+        const timeDiff = this.endTime - this.startTime;
+
+        // Detect tap if movement is minimal
+        if (Math.abs(gestureState.dx) < 5 && Math.abs(gestureState.dy) < 5 && timeDiff < 200) {
+          this.handleTap();
+        } else {
+          this.handleSwipe(gestureState);
+        }
+      },
+    });
 
   }
 
@@ -230,17 +263,7 @@ export default class App extends React.Component<{}, AppState> {
     }, 1000)
   }
 
-  UNSAFE_componentWillMount() {
-    this.PanResponder = PanResponder.create({
-      onStartShouldSetPanResponder: (evt, gestureState) => true,
-      onPanResponderMove: (evt, gestureState) => {
-        this.position.setValue({ x: gestureState.dx, y: gestureState.dy });
-      },
-      onPanResponderRelease: (evt, gestureState) => {
-        this.handleSwipe(gestureState);
-      },
-    });
-  }
+  
 
   async handleSwipeAction(action: string) {
     let token = null;
@@ -309,6 +332,29 @@ export default class App extends React.Component<{}, AppState> {
     }
   }
 
+  handleTap(){
+    const now = Date.now();
+    const DOUBLE_PRESS_DELAY = 500;
+
+    if (this.lastTap && (now - this.lastTap) < DOUBLE_PRESS_DELAY) {
+      // Double tap detected
+      if (this.tapTimeout) {
+        clearTimeout(this.tapTimeout);
+      }
+      console.log(`double tap detected`)
+      router.navigate({
+        pathname: "/details",
+        params: this.state.cards[this.state.currentIndex]
+      })
+    } else {
+      // Single tap detected, wait to confirm if it is a double tap
+      this.lastTap = now;
+      this.tapTimeout = setTimeout(() => {
+        console.log(`single tap detected`);
+      }, DOUBLE_PRESS_DELAY);
+    }
+  }
+
   toTitle(str : string) : string {
     if (str === undefined){
       return ""
@@ -358,6 +404,7 @@ export default class App extends React.Component<{}, AppState> {
         return (
           <Animated.View
             {...this.PanResponder.panHandlers}
+
             key={item.product_id}
             style={[
               this.rotateAndTranslate,
@@ -590,6 +637,10 @@ export default class App extends React.Component<{}, AppState> {
             >Feed</Text>
         </View> */}
         <View style={{ flex: 1 }}>{this.renderProducts()}</View>
+        <Filter 
+          modalVisible={this.state.modalVisible} 
+          setModalVisible={(v: boolean) => this.setState({modalVisible : v})}
+        />
         <View style={{
           display : "flex", flexDirection : "row", 
           bottom : size.verticalScale(10),
@@ -625,7 +676,7 @@ export default class App extends React.Component<{}, AppState> {
             }}
             onPress={() => {
                 // TODO : Add filter functionality
-                alert(`bring up filter modal`)
+                this.setState({modalVisible : true})
             }} 
             >
                 <Ionicons name="filter-sharp" size={size.scale(30)} color="black" />
@@ -669,4 +720,64 @@ export default class App extends React.Component<{}, AppState> {
     );
     }
   }
+}
+
+interface FilterProps {
+  setModalVisible : Function;
+  modalVisible : boolean;
+}
+
+function Filter(props : FilterProps){
+  return (
+    
+     <Modal
+        animationType="slide"
+        transparent={true}
+        visible={props.modalVisible}
+        onRequestClose={() => {
+          props.setModalVisible(!props.modalVisible);
+        }}
+           
+      >
+        <View 
+          style={{
+            backgroundColor : "#121212",
+            flex : 1,
+            marginBottom: size.verticalScale(140),
+            marginTop : size.verticalScale(70),
+            marginHorizontal : 20,
+            borderRadius : 8,
+          }}
+        >
+            <Text style={{color : "white", fontSize : 30, alignSelf : "center", fontFamily : "Poppins", marginTop: 20,}}>
+              FILTER
+            </Text>
+            <Pressable
+              style={[
+                {
+                  paddingBottom: 16,
+                  paddingVertical: 10,
+                  paddingTop : 15,
+                  marginHorizontal : 14,
+                  marginTop : 20,
+                  borderRadius: 4,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  alignSelf : "center",
+                  width : size.scale(200),
+                  position : "absolute",
+                  bottom : 40,
+                },
+                { backgroundColor: "white" },
+              ]}
+              onPress={() => props.setModalVisible(false)}
+            >
+              <Text style={{ fontSize: 18, color: "black", fontFamily : "Poppins" }}>
+                Confirm
+              </Text>
+            </Pressable>
+            </View>
+      </Modal>
+   
+  )
 }

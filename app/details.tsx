@@ -34,6 +34,8 @@ const ProductDetail: React.FC<any> = () => {
   } = params;
 
 
+  // swipe left to go back.
+
   const _renderBottom = () => {
     return (
       <View style={{...styles.bottomButtons, backgroundColor : "#121212"}}>
