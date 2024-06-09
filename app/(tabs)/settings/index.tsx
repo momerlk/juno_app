@@ -17,12 +17,7 @@ import {
 
 
 export default function Example() {
-  const [form, setForm] = useState({
-    darkMode: false,
-    emailNotifications: true,
-    pushNotifications: false,
-  });
-
+  // TODO : Get User details from backend
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#121212' }}>
       <Image source={require("../juno_icon.png")} 
@@ -61,7 +56,7 @@ export default function Example() {
       <Action 
         icon={(<Feather name="info" size={23} color="#d3d3d3" style={{marginTop : 4}}/>)}
         name="About"
-        route="/settings/test"
+        route="/settings/about"
       />
     </ScrollView>
   );

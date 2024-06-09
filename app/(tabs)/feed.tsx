@@ -334,6 +334,7 @@ export default class App extends React.Component<{}, AppState> {
     }
   }
 
+  // TODO : tap to scroll between between image and video of the product Eureka :)
   handleTap(){
     const now = Date.now();
     const DOUBLE_PRESS_DELAY = 500;
