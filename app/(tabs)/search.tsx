@@ -113,7 +113,7 @@ export default function TabTwoScreen() {
 
 
 
-const Search = () => {
+export const Search = () => {
   const [val, setVal] = useState("")
   const [cross , setCross] = useState(true)
 
@@ -132,9 +132,12 @@ const Search = () => {
       }} placeholder="What do you want to buy?" value={val}/>
         <Ionicons size={25} name="search" color="black" style={{position : "absolute", marginLeft : 60,}}/>
 
-        {cross ? <Entypo size={25} name="cross" color="black" style={{
+        {cross ? 
+        
+        <Pressable onPress={() => setVal("")} style={{
           position : "absolute", right : 60,
-        }}/> : <></>}
+          padding : 10,
+        }}><Entypo size={25} name="cross" color="black" /></Pressable> : <></>}
         
     </View>
  
@@ -145,7 +148,8 @@ const styles = StyleSheet.create({
   enterText: {
     flex : 1,
     height: size.verticalScale(40), // height
-    margin: size.moderateScale(46), // margin or padding
+    marginHorizontal: size.moderateScale(46), // margin or padding
+    marginVertical : size.verticalScale(15),
     paddingLeft : 50,
     fontFamily : "Poppins",
     borderRadius: 20,

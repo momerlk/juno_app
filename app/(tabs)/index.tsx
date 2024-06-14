@@ -9,9 +9,12 @@ import {
   Easing,
 } from "react-native";
 import * as size from "react-native-size-matters";
-import { BlurView } from 'expo-blur';
-import InstagramStories from '@birdwingo/react-native-instagram-stories';
 import * as Font from "expo-font";
+
+import {Feather, Ionicons} from "@expo/vector-icons"
+
+import {Search} from "./search"
+
 const fetchFonts = () => {
   return Font.loadAsync({
     'Poppins': require('../assets/fonts/Poppins-Medium.ttf'),
@@ -276,10 +279,36 @@ export default class Home extends React.Component<{},HomeState> {
     return (
       <ScrollView style={{backgroundColor : "#121212"}}>
 
-        <Image source={require("../assets/juno_icon.png")} 
-        style={{height : 100, width : 100, resizeMode : "cover", alignSelf : "center", marginTop : 10}} />
+        <Text style={{
+          color : "white",
+          position : "absolute",
+          marginTop : size.verticalScale(30), 
+          marginHorizontal : 30,
+          fontSize : 25,
+          fontFamily : "Poppins"
+          }}>JUNO</Text>
 
-        <Text style={{color : "white", fontFamily : "Poppins", fontSize : 24, alignSelf  :"center"}}>Feed</Text>
+        <View style={{
+          display : "flex", 
+          flex : 1, 
+          flexDirection : "row-reverse", 
+          marginTop : size.verticalScale(30), 
+          marginHorizontal : 30,
+          }}>
+          
+          <Pressable onPress={() => router.navigate("/(tabs)/cart")} style={{margin: 10,}}>
+            <Ionicons name="cart-outline" size={28} color="white" />
+          </Pressable>
+
+          <Pressable onPress={() => router.navigate("/liked")} style={{margin : 10}}>
+            <Feather name="heart" size={25} color="white" /> 
+          </Pressable>
+          
+        </View>
+
+        <Search />
+
+        {/* <Text style={{color : "white", fontFamily : "Poppins", fontSize : 24, alignSelf  :"center"}}>Feed</Text> */}
 
         <Pressable onPress={() => router.navigate("/(tabs)/feed")}>
         <ImageBackground
