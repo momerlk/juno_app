@@ -71,8 +71,8 @@ function Category(props : any){
 
 const fetchFonts = () => {
   return Font.loadAsync({
-    'Poppins': require('./Poppins-Medium.ttf'),
-    "Montserrat" : require("./Montserrat.ttf"),
+    'Poppins': require('../assets/fonts/Poppins-Medium.ttf'),
+    "Montserrat" : require("../assets/fonts/Montserrat.ttf"),
   });
 };
 

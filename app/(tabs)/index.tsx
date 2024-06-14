@@ -14,8 +14,8 @@ import InstagramStories from '@birdwingo/react-native-instagram-stories';
 import * as Font from "expo-font";
 const fetchFonts = () => {
   return Font.loadAsync({
-    'Poppins': require('./Poppins-Medium.ttf'),
-    'Montserrat': require('./Montserrat.ttf'),
+    'Poppins': require('../assets/fonts/Poppins-Medium.ttf'),
+    'Montserrat': require('../assets/fonts/Montserrat.ttf'),
   });
 };
 
@@ -276,7 +276,7 @@ export default class Home extends React.Component<{},HomeState> {
     return (
       <ScrollView style={{backgroundColor : "#121212"}}>
 
-        <Image source={require("./juno_icon.png")} 
+        <Image source={require("../assets/juno_icon.png")} 
         style={{height : 100, width : 100, resizeMode : "cover", alignSelf : "center", marginTop : 10}} />
 
         <Text style={{color : "white", fontFamily : "Poppins", fontSize : 24, alignSelf  :"center"}}>Feed</Text>

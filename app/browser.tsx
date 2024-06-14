@@ -35,7 +35,7 @@ export default function Browser(){
                     }}>
                     <Ionicons name="arrow-back" size={35} color="white"/>
                 </Pressable>
-                <Image source={require("./(tabs)/juno_icon.png")} 
+                <Image source={require("./assets/juno_icon.png")} 
                     style={{
                         height : 100, 
                         width : 100,

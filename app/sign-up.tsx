@@ -1,5 +1,5 @@
 import { View, Text, Image, Pressable, TextInput, TouchableOpacity, StyleProp, ViewStyle, TextInputProps, NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from "react-native-safe-area-context";
 import COLORS from './constants/colors';
 import { Ionicons } from "@expo/vector-icons";
@@ -7,6 +7,15 @@ import Checkbox from "expo-checkbox";
 import Button from './components/Button';
 
 import {router} from "expo-router"
+
+import * as Font from "expo-font";
+
+const fetchFonts = () => {
+  return Font.loadAsync({
+    'Poppins': require('./assets/fonts/Poppins-Medium.ttf'),
+    'Montserrat': require('./assets/fonts/Montserrat.ttf'),
+  });
+};
 
 // TODO : Add Form Validation. Validate each of the fields.
 // TODO : Error handling when the message = ""
@@ -19,6 +28,10 @@ const Signup = () => {
   const [email , setEmail] = useState("");
   const [number , setNumber] = useState("")
   const [message , setMessage] = useState("")
+
+  useEffect(() => {
+    fetchFonts();
+  }, [])
 
   const handleSignup = async () => {
         // e.preventDefault();
@@ -46,21 +59,21 @@ const Signup = () => {
     };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#121212"}}>
       <View style={{ flex: 1, marginHorizontal: 22 }}>
         <View style={{ marginVertical: 22 }}>
           <Text style={{
             fontSize: 22,
             fontWeight: 'bold',
             marginVertical: 12,
-            color: COLORS.black
+            color: "white"
           }}>
             Create Account
           </Text>
 
           <Text style={{
             fontSize: 16,
-            color: COLORS.black
+            color: "white"
           }}>Shopping at your fingertips!</Text>
         </View>
 
@@ -69,13 +82,14 @@ const Signup = () => {
           <Text style={{
             fontSize: 16,
             fontWeight: '400',
-            marginVertical: 8
+            marginVertical: 8,
+            color : "white"
           }}>Email address</Text>
 
           <View style={{
             width: "100%",
             height: 48,
-            borderColor: COLORS.black,
+            borderColor: "white",
             borderWidth: 1,
             borderRadius: 8,
             alignItems: "center",
@@ -85,10 +99,11 @@ const Signup = () => {
             <TextInput
               placeholder='Enter your email address'
               onChangeText={(text : string) => setEmail(text)}
-              placeholderTextColor={COLORS.black}
+              placeholderTextColor={"white"}
               keyboardType='email-address'
               style={{
-                width: "100%"
+                width: "100%",
+                color : "white",
               }}
             />
           </View>
@@ -98,13 +113,14 @@ const Signup = () => {
           <Text style={{
             fontSize: 16,
             fontWeight: '400',
-            marginVertical: 8
+            marginVertical: 8,
+            color : "white",
           }}>Mobile Number</Text>
 
           <View style={{
             width: "100%",
             height: 48,
-            borderColor: COLORS.black,
+            borderColor: "white",
             borderWidth: 1,
             borderRadius: 8,
             alignItems: "center",
@@ -115,23 +131,25 @@ const Signup = () => {
             <TextInput
               value='+92'
               editable={false}
-              placeholderTextColor={COLORS.black}
+              placeholderTextColor={"white"}
               keyboardType='numeric'
               style={{
                 width: "12%",
                 borderRightWidth: 1,
                 borderRightColor: COLORS.grey,
-                height: "100%"
+                height: "100%",
+                color : "white",
               }}
             />
 
             <TextInput
               placeholder='Enter your phone number'
-              placeholderTextColor={COLORS.black}
+              placeholderTextColor={"white"}
               onChangeText={(text : string) => setNumber(`+92 ${text}`)}
               keyboardType='numeric'
               style={{
-                width: "80%"
+                width: "80%",
+                color : "white",
               }}
             />
           </View>
@@ -141,13 +159,14 @@ const Signup = () => {
           <Text style={{
             fontSize: 16,
             fontWeight: '400',
-            marginVertical: 8
+            marginVertical: 8,
+            color : "white",
           }}>Password</Text>
 
           <View style={{
             width: "100%",
             height: 48,
-            borderColor: COLORS.black,
+            borderColor: "white",
             borderWidth: 1,
             borderRadius: 8,
             alignItems: "center",
@@ -157,10 +176,11 @@ const Signup = () => {
             <TextInput
               placeholder='Enter your password'
               onChangeText={(text : string) => setPassword(text)}
-              placeholderTextColor={COLORS.black}
+              placeholderTextColor={"white"}
               secureTextEntry={!isPasswordShown}
               style={{
-                width: "100%"
+                width: "100%",
+                color : "white",
               }}
             />
 
@@ -172,9 +192,9 @@ const Signup = () => {
               }}
             >
               {isPasswordShown ? (
-                <Ionicons name="eye-off" size={24} color={COLORS.black} />
+                <Ionicons name="eye-off" size={24} color={"white"} />
               ) : (
-                <Ionicons name="eye" size={24} color={COLORS.black} />
+                <Ionicons name="eye" size={24} color={"white"} />
               )}
             </TouchableOpacity>
           </View>
@@ -191,26 +211,41 @@ const Signup = () => {
             color={isChecked ? COLORS.primary : undefined}
           />
 
-          <Text>I agree to the terms and conditions</Text>
+          <Text style={{color : "white"}}>I agree to the terms and conditions</Text>
         </View>
 
-        <Button
-          title="Sign Up"
-          filled
-          style={{
-            marginTop: 18,
-            marginBottom: 4
-          }}
-          onPress={async () => {
-            await handleSignup()
-            if (message === "") {
-                alert("created account!")
-            } else {
-                alert(message)
-            }
-            router.navigate("/sign-in")
-          }}
-        />
+       
+
+        <Pressable
+        style={[
+          {
+            paddingBottom: 16,
+            paddingVertical: 10,
+            marginHorizontal : 14,
+            marginTop : 20,
+            borderRadius: 4,
+            alignItems: 'center',
+            justifyContent: 'center'
+          },
+          { backgroundColor: "white" },
+        ]}
+        onPress={async () => {
+            try {
+              await handleSignup()
+              if (message === "") {
+                  alert("created account!")
+              } else {
+                  alert(message)
+              }
+              router.navigate("/sign-in")
+          } catch (e){
+              alert(`couldn't log in. error = ${e}`)
+          }
+          
+        }}
+      >
+        <Text style={{ fontSize: 18, color: "black", fontFamily : "Poppins" }}>Sign in</Text>
+      </Pressable>
 
         {/* <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 20 }}>
           <View
@@ -296,7 +331,7 @@ const Signup = () => {
           justifyContent: "center",
           marginVertical: 22
         }}>
-          <Text style={{ fontSize: 16, color: COLORS.black }}>Already have an account</Text>
+          <Text style={{ fontSize: 16, color: "white" }}>Already have an account</Text>
           <Pressable
             onPress={() => router.navigate("/sign-in")}
           >

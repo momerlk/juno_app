@@ -1,5 +1,5 @@
 import { View, Text, Image, Pressable, TextInput, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import { SafeAreaView } from "react-native-safe-area-context";
 import COLORS from './constants/colors';
 import { Ionicons } from "@expo/vector-icons";
@@ -7,17 +7,28 @@ import Checkbox from "expo-checkbox";
 import Button from './components/Button';
 import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Font from "expo-font";
+
+const fetchFonts = () => {
+  return Font.loadAsync({
+    'Poppins': require('./assets/fonts/Poppins-Medium.ttf'),
+    'Montserrat': require('./assets/fonts/Montserrat.ttf'),
+  });
+};
 
 // TODO : Error handling when message = ""
 
 const Login = () => {
   const [isPasswordShown, setIsPasswordShown] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
 
   const [email , setEmail] = useState("")
   const [password , setPassword] = useState("")
   const [token, setToken] = useState("")
   const [message , setMessage] = useState("")
+
+  useEffect(() => {
+    fetchFonts();
+  } , [])
 
   const handleLogin = async () => {
         // e.preventDefault();
@@ -47,21 +58,21 @@ const Login = () => {
     };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#121212" }}>
       <View style={{ flex: 1, marginHorizontal: 22 }}>
         <View style={{ marginVertical: 22 }}>
           <Text style={{
             fontSize: 22,
             fontWeight: 'bold',
             marginVertical: 12,
-            color: COLORS.black
+            color: "white"
           }}>
             Welcome Back ! 👋
           </Text>
 
           <Text style={{
             fontSize: 16,
-            color: COLORS.black
+            color: "white"
           }}>You have been missed!</Text>
         </View>
 
@@ -69,13 +80,14 @@ const Login = () => {
           <Text style={{
             fontSize: 16,
             fontWeight: '400',
-            marginVertical: 8
+            marginVertical: 8,
+            color : "white",
           }}>Email address</Text>
 
           <View style={{
             width: "100%",
             height: 48,
-            borderColor: COLORS.black,
+            borderColor: "white",
             borderWidth: 1,
             borderRadius: 8,
             alignItems: "center",
@@ -85,10 +97,11 @@ const Login = () => {
             <TextInput
               placeholder='Enter your email address'
               onChangeText={(text : string) => setEmail(text)}
-              placeholderTextColor={COLORS.black}
+              placeholderTextColor={"white"}
               keyboardType='email-address'
               style={{
-                width: "100%"
+                width: "100%",
+                color : "white",
               }}
             />
           </View>
@@ -98,13 +111,14 @@ const Login = () => {
           <Text style={{
             fontSize: 16,
             fontWeight: '400',
-            marginVertical: 8
+            marginVertical: 8,
+            color : "white",
           }}>Password</Text>
 
           <View style={{
             width: "100%",
             height: 48,
-            borderColor: COLORS.black,
+            borderColor: "white",
             borderWidth: 1,
             borderRadius: 8,
             alignItems: "center",
@@ -115,10 +129,11 @@ const Login = () => {
               placeholder='Enter your password'
             //   value={password}
               onChangeText={(text:string) => setPassword(text)}
-              placeholderTextColor={COLORS.black}
+              placeholderTextColor={"white"}
               secureTextEntry={!isPasswordShown}
               style={{
                 width: "100%",
+                color: "white",
               }}
             />
 
@@ -131,56 +146,50 @@ const Login = () => {
             >
               {
                 isPasswordShown ? (
-                  <Ionicons name="eye-off" size={24} color={COLORS.black} />
+                  <Ionicons name="eye-off" size={24} color={"white"} />
                 ) : (
-                  <Ionicons name="eye" size={24} color={COLORS.black} />
+                  <Ionicons name="eye" size={24} color={"white"} />
                 )
               }
             </TouchableOpacity>
           </View>
         </View>
 
-        <View style={{
-          flexDirection: 'row',
-          marginVertical: 6
-        }}>
-          <Checkbox
-            style={{ marginRight: 8 }}
-            value={isChecked}
-            onValueChange={setIsChecked}
-            color={isChecked ? COLORS.primary : undefined}
-          />
-
-          <Text>Remember Me</Text>
-        </View>
-
-        <Button
-          title="Login"
-          filled
-          style={{
-            marginTop: 18,
-            marginBottom: 4,
-          }}
-          onPress={async () => {
+        <Pressable
+        style={[
+          {
+            paddingBottom: 16,
+            paddingVertical: 10,
+            marginHorizontal : 14,
+            marginTop : 20,
+            borderRadius: 4,
+            alignItems: 'center',
+            justifyContent: 'center'
+          },
+          { backgroundColor: "white" },
+        ]}
+        onPress={async () => {
             try {
-                await handleLogin()
-                if(message == ""){
-                    alert(`try hitting the sign in button again!`)
-                    return
-                }
-                alert(message)
-                if (token === ""){
-                    return
-                }
-                await AsyncStorage.setItem("authenticated" , "true")
-                await AsyncStorage.setItem("token" ,  token)
-                router.navigate("/")
-            } catch (e){
-                alert(`couldn't log in. error = ${e}`)
-            }
-            
-          }}
-        />
+              await handleLogin()
+              if(message == ""){
+                  alert(`try hitting the sign in button again!`)
+                  return
+              }
+              alert(message)
+              if (token === ""){
+                  return
+              }
+              await AsyncStorage.setItem("authenticated" , "true")
+              await AsyncStorage.setItem("token" ,  token)
+              router.navigate("/")
+          } catch (e){
+              alert(`couldn't log in. error = ${e}`)
+          }
+          
+        }}
+      >
+        <Text style={{ fontSize: 18, color: "black", fontFamily : "Poppins" }}>Sign in</Text>
+      </Pressable>
 
         {/* <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 20 }}>
           <View
@@ -266,7 +275,7 @@ const Login = () => {
           justifyContent: "center",
           marginVertical: 22
         }}>
-          <Text style={{ fontSize: 16, color: COLORS.black }}>Don't have an account ? </Text>
+          <Text style={{ fontSize: 16, color: "white" }}>Don't have an account ? </Text>
           <Pressable
             onPress={() => router.navigate("/sign-up")}
           >

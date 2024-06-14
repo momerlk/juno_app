@@ -62,7 +62,7 @@ export default function TabTwoScreen() {
 
   return (
     <View style={{flex : 1, backgroundColor : "#121212", paddingBottom : 40}}>
-      <Image source={require("./juno_icon.png")} 
+      <Image source={require("../assets/juno_icon.png")} 
         style={{height : 100, width : 100, resizeMode : "cover", alignSelf : "center", marginTop : 10}} />
      <FlatList
           contentContainerStyle={{}}
@@ -78,8 +78,8 @@ export default function TabTwoScreen() {
 }
 const fetchFonts = () => {
   return Font.loadAsync({
-    'Poppins': require('./Poppins-Medium.ttf'),
-    "Montserrat" : require("./Montserrat.ttf"),
+    'Poppins': require('../assets/fonts/Poppins-Medium.ttf'),
+    "Montserrat" : require("../assets/fonts/Montserrat.ttf"),
   });
 };
 

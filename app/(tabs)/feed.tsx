@@ -17,52 +17,12 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const fetchFonts = () => {
   return Font.loadAsync({
-    'Poppins': require('./Poppins-Medium.ttf'),
-    'Montserrat': require('./Montserrat.ttf'),
+    'Poppins': require('../assets/fonts/Poppins-Medium.ttf'),
+    'Montserrat': require('../assets/fonts/Montserrat.ttf'),
   });
 };
 
-const Users = [{
-  "product_id": "027bb7aa-d705-4544-8ff4-8f4ce91c2bec",
-  "product_url": "https://www.afrozeh.com/products/mahjabeen-1",
-  "shopify_id": {
-    "$numberLong": "8002372829418"
-  },
-  "handle": "mahjabeen-1",
-  "title": "Mahjabeen 22",
-  "vendor": "afrozeh",
-  "vendor_title": "Afrozeh",
-  "category": "",
-  "product_type": "",
-  "image_url": "https://cdn.shopify.com/s/files/1/0052/2030/2897/products/5.jpg?v=1668433218",
-  "description": "Net Embellished + Embroidered Front + Back Body (0.66 M)Net Embellished + Embroidered Front & Back Panels (14 PCS)Net Embroidered Sleeves (0.66 Meters)Net EMBROIDERED SLEEVES BORDER (1 Meters)Raw Silk Embroidered Sleeves Border (1 Meters)Raw Silk Embroidered Front + Back Border (4.57 Meters)Net Embroidered Dupatta 4 Side Border (7.91 Meters)Net Embroidered Dupatta (2.63 Meters)",
-  "price": "29900",
-  "currency": "PKR",
-  "options": [
-    {
-      "name": "Type",
-      "position": 1,
-      "values": [
-        "Unstitched",
-        "Stitched"
-      ]
-    }
-  ],
-  "tags": [
-    "14-07-2023",
-    "22-07-2023",
-    "22-8-23'",
-    "24-7-2023-SALE",
-    "Afrozeh Brides’22",
-    "Mahjabeen",
-    "New In",
-    "Peshwas & Lehngas",
-    "products_from_sheet",
-    "saleafrozehjan",
-    "xs_xl"
-  ],
-  "available": true
-}]
+const Users = [{}]
 
 interface AppState {
   currentIndex: number;
@@ -358,45 +318,68 @@ export default class App extends React.Component<{}, AppState> {
     }
   }
 
-  toTitle(str : string) : string {
-    if (str === undefined){
-      return ""
-    }
-    str = str.replaceAll("_" , " ");
-    const words = str.split(" ");
-    for (let i = 0; i < words.length; i++) {
-      try {
-        words[i] = words[i][0].toUpperCase() + words[i].substr(1);
-      } catch(e){
-        return ""
-      }
-    }
+  ItemCard(props: any){
+    const item = props.item;
+    return (
+      <ImageBackground
+              style={{
+                height : size.verticalScale(620), 
+              }}
+              imageStyle={{
+                borderTopLeftRadius : 20,
+                borderTopRightRadius : 20,
+              }}
+              source={{ uri: ensureURLScheme(item.image_url) }}
+            >
+                {/* Implement background color detection and make that the background of the feed screen */}
+              <LinearGradient colors={["transparent" , "rgba(0,0,0,0.4)"]} style={{
+                marginTop : size.verticalScale(390) , 
+                height : size.verticalScale(230),
+                // backgroundColor : "rgba(52, 52, 52, 0.3)",
+                
+              }}
+                >
+                  <View style={{marginTop : size.verticalScale(85),}}>
+                 <Text style={{
+                  color : "white",
+                  marginHorizontal : 10,
+                  fontSize : 17,
+                  fontFamily : "Poppins"
+                  }}>{shortTitle(item.title as string)}</Text> 
+                <View style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  marginHorizontal: 10,
+                }}>
+                  
+                  <Text style={{
+                    fontSize: 22, fontFamily: "Poppins",
+                    color : "white"
+                  }}>{toTitle(item.vendor as string)}</Text>
+                  <Text style={{
+                    fontSize: 22, marginVertical: 5,
+                    color : "white",
+                    fontFamily : "Poppins",
+                  }}>Rs. {(() => {
+                      let l = item.price.length;
+                      let pos = (l) - 3;
+                      if (pos > 0) {
+                        const firstPart = item.price.slice(0, pos);
+                        const secondPart = item.price.slice(pos);
 
-    return words.join(" "); 
-  }
-
-  shortTitle(str : string) : string {
-    if (str === undefined){
-      return ""
-    }
-    
-    const strTitle = this.toTitle(str);
-    str = (strTitle == "") ? str : strTitle;
-
-    const words = str.split(" ");
-    if(words.length < 3){
-      return str;
-    }
-
-    let three_words = [];
-
-    for(let i = 0;i < 3;i++){
-      if (words[i][0] === "("){
-        continue;
-      }
-      three_words.push(words[i])
-    }
-    return three_words.join(" ") + " ..." 
+                        // Concatenate the first part, substring, and second part
+                        const newString = firstPart + "," + secondPart;
+                        return newString;
+                      } else {
+                        return item.price
+                      }
+                    })()}</Text>
+                </View>
+                </View>
+              </LinearGradient>
+            </ImageBackground>
+    )
   }
 
   renderProducts = () => {
@@ -461,65 +444,7 @@ export default class App extends React.Component<{}, AppState> {
               source={require("../assets/basket.png")}/>
             </Animated.View>      
 
-            <ImageBackground
-              style={{
-                height : size.verticalScale(600), 
-              }}
-              imageStyle={{
-                borderRadius : 20,
-              }}
-              source={{ uri: ensureURLScheme(item.image_url) }}
-            >
-                {/* Implement background color detection and make that the background of the feed screen */}
-              <LinearGradient colors={["transparent" , "rgba(0,0,0,0.4)"]} style={{
-                marginTop : size.verticalScale(385) , 
-                height : size.verticalScale(215),
-                // backgroundColor : "rgba(52, 52, 52, 0.3)",
-                borderBottomLeftRadius : 20,
-                borderBottomRightRadius : 20,
-                
-              }}
-                >
-                  <View style={{marginTop : size.verticalScale(85),}}>
-                 <Text style={{
-                  color : "white",
-                  marginHorizontal : 10,
-                  fontSize : 17,
-                  fontFamily : "Poppins"
-                  }}>{this.shortTitle(item.title as string)}</Text> 
-                <View style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  marginHorizontal: 10,
-                }}>
-                  
-                  <Text style={{
-                    fontSize: 22, fontFamily: "Poppins",
-                    color : "white"
-                  }}>{this.toTitle(item.vendor as string)}</Text>
-                  <Text style={{
-                    fontSize: 22, marginVertical: 5,
-                    color : "white",
-                    fontFamily : "Poppins",
-                  }}>Rs. {(() => {
-                      let l = item.price.length;
-                      let pos = (l) - 3;
-                      if (pos > 0) {
-                        const firstPart = item.price.slice(0, pos);
-                        const secondPart = item.price.slice(pos);
-
-                        // Concatenate the first part, substring, and second part
-                        const newString = firstPart + "," + secondPart;
-                        return newString;
-                      } else {
-                        return item.price
-                      }
-                    })()}</Text>
-                </View>
-                </View>
-              </LinearGradient>
-            </ImageBackground>
+            <this.ItemCard item={item}/>
           </Animated.View>
         );
       } else {
@@ -537,65 +462,7 @@ export default class App extends React.Component<{}, AppState> {
               },
             ]}
           >
-            <ImageBackground
-              style={{
-                height : size.verticalScale(600), 
-              }}
-              imageStyle={{
-                borderRadius : 20,
-              }}
-              source={{ uri: ensureURLScheme(item.image_url) }}
-            >
-                {/* Implement background color detection and make that the background of the feed screen */}
-              <LinearGradient colors={["transparent" , "rgba(0,0,0,0.4)"]} style={{
-                marginTop : size.verticalScale(385) , 
-                height : size.verticalScale(215),
-                // backgroundColor : "rgba(52, 52, 52, 0.3)",
-                borderBottomLeftRadius : 20,
-                borderBottomRightRadius : 20,
-                
-              }}
-                >
-                  <View style={{marginTop : size.verticalScale(85),}}>
-                <Text style={{
-                  color : "white",
-                  marginHorizontal : 10,
-                  fontSize : 17,
-                  fontFamily : "Poppins"
-                  }}>{this.shortTitle(item.title as string)}</Text> 
-                <View style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  marginHorizontal: 10,
-                }}>
-                  
-                  <Text style={{
-                    fontSize: 22, fontFamily: "Poppins",
-                    color : "white"
-                  }}>{this.toTitle(item.vendor as string)}</Text>
-                  <Text style={{
-                    fontSize: 22, marginVertical: 5,
-                    color : "white",
-                    fontFamily : "Poppins",
-                  }}>Rs. {(() => {
-                      let l = item.price.length;
-                      let pos = (l) - 3;
-                      if (pos > 0) {
-                        const firstPart = item.price.slice(0, pos);
-                        const secondPart = item.price.slice(pos);
-
-                        // Concatenate the first part, substring, and second part
-                        const newString = firstPart + "," + secondPart;
-                        return newString;
-                      } else {
-                        return item.price
-                      }
-                    })()}</Text>
-                </View>
-                </View>
-              </LinearGradient>
-            </ImageBackground>
+            <this.ItemCard item={item}/>
           </Animated.View>
         );
       }
@@ -628,13 +495,12 @@ export default class App extends React.Component<{}, AppState> {
         <View style={{
           display : "flex", flexDirection : "row", 
           bottom : size.verticalScale(10),
-          alignSelf : "center",
-
+          justifyContent : "space-evenly",
           }}>
           <Pressable style={{
               marginHorizontal: 15,
-              width: size.scale(40),
-              height: size.scale(42),
+              width: size.scale(45),
+              height: size.scale(47),
               borderRadius: size.scale(25), // Half of the width/height to make it a circle
               backgroundColor: "white",
               justifyContent: "center", // Center vertically
@@ -665,7 +531,7 @@ export default class App extends React.Component<{}, AppState> {
             >
                 <Ionicons name="filter-sharp" size={size.scale(30)} color="black" />
             </Pressable>
-          <Pressable style={{
+          {/* <Pressable style={{
               marginHorizontal: 20,
               width: size.scale(60),
               height: size.scale(60),
@@ -682,11 +548,11 @@ export default class App extends React.Component<{}, AppState> {
             }} 
             >
               <Entypo name="magnifying-glass" size={size.scale(40)} color="black" />
-            </Pressable>
+            </Pressable> */}
           <Pressable style={{
               marginHorizontal: 15,
-              width: size.scale(40),
-              height: size.scale(40),
+              width: size.scale(45),
+              height: size.scale(45),
               borderRadius: size.scale(25), // Half of the width/height to make it a circle
               backgroundColor: "white",
               justifyContent: "center", // Center vertically
@@ -715,7 +581,7 @@ function Filter(props : ModalProps){
   return (
     
      <Modal
-        animationType="slide"
+        animationType="none"
         transparent={true}
         visible={props.modalVisible}
         onRequestClose={() => {
@@ -831,4 +697,46 @@ function Sharing(props : ModalProps){
       </Modal>
    
   )
+}
+
+
+function toTitle(str : string) : string {
+  if (str === undefined){
+    return ""
+  }
+  str = str.replaceAll("_" , " ");
+  const words = str.split(" ");
+  for (let i = 0; i < words.length; i++) {
+    try {
+      words[i] = words[i][0].toUpperCase() + words[i].substr(1);
+    } catch(e){
+      return ""
+    }
+  }
+
+  return words.join(" "); 
+}
+
+function shortTitle(str : string) : string {
+  if (str === undefined){
+    return ""
+  }
+  
+  const strTitle = toTitle(str);
+  str = (strTitle == "") ? str : strTitle;
+
+  const words = str.split(" ");
+  if(words.length < 3){
+    return str;
+  }
+
+  let three_words = [];
+
+  for(let i = 0;i < 3;i++){
+    if (words[i][0] === "("){
+      continue;
+    }
+    three_words.push(words[i])
+  }
+  return three_words.join(" ") + " ..." 
 }

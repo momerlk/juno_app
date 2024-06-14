@@ -103,10 +103,10 @@ const Welcome = () => {
               color: COLORS.white
             }}
           >
-            Swipe to Shop
+            Juno Swipe To Shop
           </Text>
 
-          <View style={{ marginVertical: 22 }}>
+          {/* <View style={{ marginVertical: 22 }}>
             <Text
               style={{
                 fontSize: 16,
@@ -124,7 +124,7 @@ const Welcome = () => {
             >
               Order From Your Favourite Brands.
             </Text>
-          </View>
+          </View> */}
 
           <Button
             title="Join Now"

@@ -20,7 +20,7 @@ export default function Example() {
   // TODO : Get User details from backend
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#121212' }}>
-      <Image source={require("../juno_icon.png")} 
+      <Image source={require("./juno_icon.png")} 
         style={{height : 100, width : 100, resizeMode : "cover", alignSelf : "center", marginTop : 10}} />
 
       <Text style={{fontSize : 25, color : "white", alignSelf : "center", fontFamily : "Poppins"}}>
