@@ -9,6 +9,7 @@ import * as size from "react-native-size-matters"
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import Entypo from '@expo/vector-icons/Entypo';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { AntDesign } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
 
@@ -44,7 +45,6 @@ const ensureURLScheme = (url: string) => {
 export default class App extends React.Component<{}, AppState> {
   position: Animated.ValueXY;
   rotate: Animated.AnimatedInterpolation<string>;
-  rotateAndTranslate: { transform: any[] };
   likeOpacity: Animated.AnimatedInterpolation<number>;
   dislikeOpacity: Animated.AnimatedInterpolation<number>;
   superLikeOpacity: Animated.AnimatedInterpolation<number>;
@@ -68,15 +68,6 @@ export default class App extends React.Component<{}, AppState> {
       extrapolate: 'clamp',
     });
 
-    this.rotateAndTranslate = {
-      transform: [
-        {
-          rotate: this.rotate,
-        },
-        ...this.position.getTranslateTransform(),
-      ],
-    };
-
     this.likeOpacity = this.position.x.interpolate({
       inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
       outputRange: [0, 0, 1],
@@ -94,6 +85,7 @@ export default class App extends React.Component<{}, AppState> {
       outputRange: [1, 0, 0],
       extrapolate: 'clamp',
     });
+
 
     this.nextCardOpacity = this.position.x.interpolate({
       inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
@@ -144,6 +136,7 @@ export default class App extends React.Component<{}, AppState> {
     });
 
   }
+
 
   async componentDidMount() {
     await fetchFonts();
@@ -331,7 +324,6 @@ export default class App extends React.Component<{}, AppState> {
               }}
               source={{ uri: ensureURLScheme(item.image_url) }}
             >
-                {/* Implement background color detection and make that the background of the feed screen */}
               <LinearGradient colors={["transparent" , "rgba(0,0,0,0.4)"]} style={{
                 marginTop : size.verticalScale(390) , 
                 height : size.verticalScale(230),
@@ -383,6 +375,11 @@ export default class App extends React.Component<{}, AppState> {
   }
 
   renderProducts = () => {
+    const rotate = this.position.x.interpolate({
+      inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
+      outputRange: ['-5deg', '0deg', '5deg'],
+      extrapolate: 'clamp',
+    });
     return this.state.cards.map((item, i) => {
       if (i < this.state.currentIndex) {
         return null;
@@ -393,7 +390,13 @@ export default class App extends React.Component<{}, AppState> {
 
             key={item.product_id}
             style={[
-              this.rotateAndTranslate,
+              {
+                transform: [
+                  { translateX: this.position.x },
+                  { translateY: this.position.y },
+                  { rotate: rotate },
+                ],
+              },
               {
                 height: SCREEN_HEIGHT - 120,
                 width: SCREEN_WIDTH,
@@ -405,44 +408,75 @@ export default class App extends React.Component<{}, AppState> {
             <Animated.View
               style={{
                 opacity: this.likeOpacity,
-                transform: [{ rotate: '-15deg' }],
                 position: 'absolute',
-                top: 50,
-                left: 40,
                 zIndex: 1000,
+                width : SCREEN_WIDTH * 0.9,
+                height : size.verticalScale(620),
               }}
             >
-              <Image style={{height : 160, width : 160}} 
-              source={require("../assets/heart.png")}/>
+              <LinearGradient colors={["rgba(0,0,0,0.52)" , "rgba(0,0,0,0.52)"]} style={{
+                
+                flex : 1,
+                
+              }}
+                >
+                  <AntDesign name="like2" size={100} color="white" style={{
+                    position : "absolute",
+                    top : (SCREEN_HEIGHT * 0.5) - 100,
+                    right : (SCREEN_WIDTH * 0.5) - 100,
+                  }}/>
+               
+              </LinearGradient>
             </Animated.View>
 
             <Animated.View
               style={{
                 opacity: this.dislikeOpacity,
-                transform: [{ rotate: '20deg' }],
                 position: 'absolute',
-                top: 50,
-                right: 40,
                 zIndex: 1000,
+                width : SCREEN_WIDTH * 0.95,
+                height : size.verticalScale(620),
               }}
             >
-              <Image style={{height : 160, width : 160}} 
-              source={require("../assets/cross.png")}/>
+              <LinearGradient colors={["rgba(0,0,0,0.52)" , "rgba(0,0,0,0.52)"]} style={{
+                
+                flex : 1,
+                
+              }}
+                >
+                  <AntDesign name="dislike2" size={100} color="white" style={{
+                    position : "absolute",
+                    top : (SCREEN_HEIGHT * 0.5) - 100,
+                    left : (SCREEN_WIDTH * 0.6) - 100,
+                  }}/>
+               
+              </LinearGradient>
             </Animated.View>
+
 
             <Animated.View
               style={{
                 opacity: this.superLikeOpacity,
-                transform: [{ rotate: '0deg' }],
                 position: 'absolute',
-                bottom: 150,
-                left: SCREEN_WIDTH * 0.24,
                 zIndex: 1000,
+                width : SCREEN_WIDTH * 0.95,
+                height : size.verticalScale(620),
               }}
             >
-              <Image style={{height : 200, width : 200}} 
-              source={require("../assets/basket.png")}/>
-            </Animated.View>      
+              <LinearGradient colors={["rgba(0,0,0,0.52)" , "rgba(0,0,0,0.52)"]} style={{
+                
+                flex : 1,
+                
+              }}
+                >
+                  <AntDesign name="shoppingcart" size={100} color="white" style={{
+                    position : "absolute",
+                    top : (SCREEN_HEIGHT * 0.5) - 100,
+                    left : (SCREEN_WIDTH * 0.6) - 100,
+                  }}/>
+               
+              </LinearGradient>
+            </Animated.View>   
 
             <this.ItemCard item={item}/>
           </Animated.View>
