@@ -36,7 +36,7 @@ export default function Example() {
       <Action 
         icon={(<FontAwesome name="user" size={23} color="white" style={{marginTop : 4}}/>)}
         name="Profile Details"
-        route="/settings/test"
+        route="/settings/profile"
       />
       <Action 
         icon={(<FontAwesome6 name="heart" size={23} color="#d3d3d3" style={{marginTop : 4}}/>)}
