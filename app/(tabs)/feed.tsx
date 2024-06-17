@@ -7,10 +7,10 @@ import { router } from 'expo-router';
 import { Appearance, ColorSchemeName, ActivityIndicator, Modal, PanResponderInstance, GestureResponderEvent, PanResponderGestureState, TouchableWithoutFeedback} from 'react-native';
 import * as size from "react-native-size-matters"
 import { TouchableHighlight } from 'react-native-gesture-handler';
-import Entypo from '@expo/vector-icons/Entypo';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, Ionicons, Entypo, EvilIcons} from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import DropDownPicker from 'react-native-dropdown-picker';
+
 
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -32,6 +32,9 @@ interface AppState {
   loading : boolean;
   modalVisible : boolean;
   shareVisible : boolean;
+  likeOpacity: number;
+  dislikeOpacity: number;
+  superLikeOpacity: number;
 }
 
 // Function to ensure URLs have the correct scheme
@@ -45,9 +48,7 @@ const ensureURLScheme = (url: string) => {
 export default class App extends React.Component<{}, AppState> {
   position: Animated.ValueXY;
   rotate: Animated.AnimatedInterpolation<string>;
-  likeOpacity: Animated.AnimatedInterpolation<number>;
-  dislikeOpacity: Animated.AnimatedInterpolation<number>;
-  superLikeOpacity: Animated.AnimatedInterpolation<number>;
+  direction : string;
   nextCardOpacity: Animated.AnimatedInterpolation<number>;
   nextCardScale: Animated.AnimatedInterpolation<number>;
   PanResponder: PanResponderInstance;
@@ -65,24 +66,6 @@ export default class App extends React.Component<{}, AppState> {
     this.rotate = this.position.x.interpolate({
       inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
       outputRange: ['-30deg', '0deg', '10deg'],
-      extrapolate: 'clamp',
-    });
-
-    this.likeOpacity = this.position.x.interpolate({
-      inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
-      outputRange: [0, 0, 1],
-      extrapolate: 'clamp',
-    });
-
-    this.dislikeOpacity = this.position.x.interpolate({
-      inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
-      outputRange: [1, 0, 0],
-      extrapolate: 'clamp',
-    });
-
-    this.superLikeOpacity = this.position.y.interpolate({
-      inputRange: [-SCREEN_HEIGHT / 2, 0, SCREEN_HEIGHT / 2],
-      outputRange: [1, 0, 0],
       extrapolate: 'clamp',
     });
 
@@ -106,7 +89,12 @@ export default class App extends React.Component<{}, AppState> {
       loading : true,
       modalVisible : false,
       shareVisible : false,
+      likeOpacity : 0,
+      superLikeOpacity : 0,
+      dislikeOpacity : 0,
     };
+
+    this.direction = "none";
 
     // Pan Responder for handling taps and swipes
     this.startTime = 0;
@@ -121,10 +109,40 @@ export default class App extends React.Component<{}, AppState> {
       },
       onPanResponderMove: (evt: GestureResponderEvent, gestureState: PanResponderGestureState) => {
         this.position.setValue({ x: gestureState.dx, y: gestureState.dy });
+        const dx = gestureState.dx;
+        const dy = gestureState.dy;
+
+        // TODO : optimise the number of renders even more
+        if (Math.abs(dx) > Math.abs(dy)) {
+          // Horizontal movement
+          if (dx > 70) {
+            const newDirection = 'right';
+            if (this.direction !== newDirection){
+              this.setState({likeOpacity : 1, dislikeOpacity : 0, superLikeOpacity : 0})
+            }
+          } else if (dx < -70) {
+            const newDirection = 'left';
+            if (this.direction !== newDirection){
+              this.setState({likeOpacity : 0, dislikeOpacity : 1, superLikeOpacity : 0})
+            }
+          }
+        } else {
+          // Vertical movement
+          if (dy > 110) {
+            const newDirection = 'down';
+          } else if (dy < -110) {
+            const newDirection = 'up';
+            if (this.direction !== newDirection){
+              this.setState({likeOpacity : 0, dislikeOpacity : 0, superLikeOpacity : 1})
+            }
+          }
+        }
       },
       onPanResponderRelease: (evt: GestureResponderEvent, gestureState: PanResponderGestureState) => {
         this.endTime = new Date().getTime();
         const timeDiff = this.endTime - this.startTime;
+        this.setState({likeOpacity : 0, dislikeOpacity : 0, superLikeOpacity : 0})
+
 
         // Detect tap if movement is minimal
         if (Math.abs(gestureState.dx) < 5 && Math.abs(gestureState.dy) < 5 && timeDiff < 200) {
@@ -297,7 +315,7 @@ export default class App extends React.Component<{}, AppState> {
       if (this.tapTimeout) {
         clearTimeout(this.tapTimeout);
       }
-      console.log(`double tap detected`)
+      // console.log(`double tap detected`)
       router.navigate({
         pathname: "/details",
         params: this.state.cards[this.state.currentIndex]
@@ -306,7 +324,7 @@ export default class App extends React.Component<{}, AppState> {
       // Single tap detected, wait to confirm if it is a double tap
       this.lastTap = now;
       this.tapTimeout = setTimeout(() => {
-        console.log(`single tap detected`);
+        // console.log(`single tap detected`);
       }, DOUBLE_PRESS_DELAY);
     }
   }
@@ -407,23 +425,23 @@ export default class App extends React.Component<{}, AppState> {
           >
             <Animated.View
               style={{
-                opacity: this.likeOpacity,
+                opacity: this.state.likeOpacity,
                 position: 'absolute',
                 zIndex: 1000,
-                width : SCREEN_WIDTH * 0.9,
-                height : size.verticalScale(620),
+                width : SCREEN_WIDTH - 10,
+                height : size.verticalScale(630),
               }}
             >
-              <LinearGradient colors={["rgba(0,0,0,0.52)" , "rgba(0,0,0,0.52)"]} style={{
+              <LinearGradient colors={["rgba(0,0,0,0.2)" , "rgba(0,0,0,0.8)"]} style={{
                 
                 flex : 1,
                 
               }}
                 >
-                  <AntDesign name="like2" size={100} color="white" style={{
+                  <EvilIcons name="heart" size={140} color="white" style={{
                     position : "absolute",
                     top : (SCREEN_HEIGHT * 0.5) - 100,
-                    right : (SCREEN_WIDTH * 0.5) - 100,
+                    left : (SCREEN_WIDTH * 0.6) - 120,
                   }}/>
                
               </LinearGradient>
@@ -431,19 +449,20 @@ export default class App extends React.Component<{}, AppState> {
 
             <Animated.View
               style={{
-                opacity: this.dislikeOpacity,
+                opacity: this.state.dislikeOpacity,
                 position: 'absolute',
                 zIndex: 1000,
-                width : SCREEN_WIDTH * 0.95,
-                height : size.verticalScale(620),
+                width : SCREEN_WIDTH - 19,
+                height : size.verticalScale(630),
               }}
             >
-              <LinearGradient colors={["rgba(0,0,0,0.52)" , "rgba(0,0,0,0.52)"]} style={{
+              <LinearGradient colors={["rgba(0,0,0,0.2)" , "rgba(0,0,0,0.8)"]} style={{
                 
                 flex : 1,
                 
               }}
                 >
+                  {/* Find a good cross icon */}
                   <AntDesign name="dislike2" size={100} color="white" style={{
                     position : "absolute",
                     top : (SCREEN_HEIGHT * 0.5) - 100,
@@ -456,14 +475,14 @@ export default class App extends React.Component<{}, AppState> {
 
             <Animated.View
               style={{
-                opacity: this.superLikeOpacity,
+                opacity: this.state.superLikeOpacity,
                 position: 'absolute',
                 zIndex: 1000,
-                width : SCREEN_WIDTH * 0.95,
-                height : size.verticalScale(620),
+                width : SCREEN_WIDTH,
+                height : size.verticalScale(622),
               }}
             >
-              <LinearGradient colors={["rgba(0,0,0,0.52)" , "rgba(0,0,0,0.52)"]} style={{
+              <LinearGradient colors={["rgba(0,0,0,0.2)" , "rgba(0,0,0,0.8)"]} style={{
                 
                 flex : 1,
                 
@@ -594,7 +613,13 @@ export default class App extends React.Component<{}, AppState> {
             }}
             onPress={() => {
                 // TODO : add share functionality 
-                this.setState({shareVisible : true})
+                // this.setState({shareVisible : true})
+
+                // TODO : shows details for now change this
+                router.navigate({
+                  pathname: "/details",
+                  params: this.state.cards[this.state.currentIndex]
+                })
             }} 
             >
               <Entypo name="paper-plane" size={size.scale(26)} color="black" />
@@ -611,7 +636,45 @@ interface ModalProps {
   modalVisible : boolean;
 }
 
+function DropDown(props : any){
+  const [open , setOpen] = useState(false);
+  const [value , setValue] = useState(null);
+  const [items, setItems] = useState(props.data);
+
+  return (
+    <View style={{
+      marginHorizontal : size.scale(20), 
+      marginVertical : size.verticalScale(15),
+      zIndex : open ? 3000 : 1,
+    }}>
+   
+      <DropDownPicker
+        open={open}
+        value={value}
+        items={items}
+        onChangeValue={props.onChange}
+        
+        setOpen={setOpen}
+        setValue={setValue}
+        setItems={setItems}
+        searchable={props.searchable}
+        textStyle={{
+          fontFamily: "Poppins",
+          fontSize: size.scale(14),
+        }}
+        placeholder={props.title}
+        placeholderStyle={{
+          fontWeight: "semibold",
+          fontSize: size.scale(15),
+        }}
+
+      />
+    </View>
+  )
+}
+
 function Filter(props : ModalProps){
+  // TODO : Add dropdown data to the state of the filter
   return (
     
      <Modal
@@ -636,6 +699,50 @@ function Filter(props : ModalProps){
             <Text style={{color : "white", fontSize : 30, alignSelf : "center", fontFamily : "Poppins", marginTop: 20,}}>
               FILTER
             </Text>
+            {/*TODO : Get dropdown data from backend
+            TODO : Send this filter data to server  */}
+            <DropDown 
+              data={[
+                {label: 'Clothes', value: 'clothes'},
+                {label: 'Shoes', value: 'shoes'},
+                {label: 'Acessories', value: 'accessories'}
+              ]} 
+              title="Category"
+              onChange={(t : any) => alert(`changed to ${t}`)}
+              searchable={false}
+            />     
+
+            <DropDown 
+              data={[
+                {label: 'Afrozeh', value: 'afrozeh'},
+                {label: 'Sana Safinaz', value: 'sana_safinaz'},
+                {label : "Bonanza Satrangi" , value : "bonanza_satrangi"}
+              ]} 
+              title="Brands"
+              onChange={(t : any) => alert(`changed to ${t}`)}
+              searchable={true}
+            />
+
+            <DropDown 
+              data={[
+                {label: 'Blue', value: 'blue'},
+                {label: 'Red', value: 'red'}
+              ]} 
+              title="Color"
+              onChange={(t : any) => alert(`changed to ${t}`)}
+              searchable={false}
+            />  
+
+            <DropDown 
+              data={[
+                {label: 'Rs. 0 - 5000', value: 'RS_0_5000'},
+                {label: 'Rs. > 5000', value: 'RS_5000_1000'}
+              ]} 
+              title="Price Range"
+              onChange={(t : any) => alert(`changed to ${t}`)}
+              searchable={false}
+            />       
+
             <Pressable
               style={[
                 {
