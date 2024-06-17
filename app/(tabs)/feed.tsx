@@ -35,6 +35,8 @@ interface AppState {
   likeOpacity: number;
   dislikeOpacity: number;
   superLikeOpacity: number;
+  width : number,
+  height : number,
 }
 
 // Function to ensure URLs have the correct scheme
@@ -92,6 +94,8 @@ export default class App extends React.Component<{}, AppState> {
       likeOpacity : 0,
       superLikeOpacity : 0,
       dislikeOpacity : 0,
+      height : 0,
+      width : 0,
     };
 
     this.direction = "none";
@@ -198,6 +202,20 @@ export default class App extends React.Component<{}, AppState> {
         if (products === undefined) {
           this.setState({ currentIndex: 0 })
         } else {
+          Image.getSize(
+            products[0].image_url,
+            (width, height) => {
+              const aspectRatio = width / height;
+            
+            // TODO : optimise these calculations
+            // Calculate the adjusted width based on the fixed height
+            const adjustedWidth = aspectRatio * size.verticalScale(620);
+            this.setState({ height : size.verticalScale(620) , width : adjustedWidth});
+            },
+            (error) => {
+              console.error('Failed to get image size', error);
+            }
+          );
           this.setState({ currentIndex: 0, cards: products });
         }
 
@@ -331,6 +349,7 @@ export default class App extends React.Component<{}, AppState> {
 
   ItemCard(props: any){
     const item = props.item;
+
     return (
       <ImageBackground
               style={{
@@ -427,12 +446,13 @@ export default class App extends React.Component<{}, AppState> {
               style={{
                 opacity: this.state.likeOpacity,
                 position: 'absolute',
+                left : 10,
                 zIndex: 1000,
-                width : SCREEN_WIDTH - 10,
+                width : this.state.width,
                 height : size.verticalScale(630),
               }}
             >
-              <LinearGradient colors={["rgba(0,0,0,0.2)" , "rgba(0,0,0,0.8)"]} style={{
+              <LinearGradient colors={["transparent" , "rgba(0,0,0,0.65)"]} style={{
                 
                 flex : 1,
                 
@@ -452,11 +472,11 @@ export default class App extends React.Component<{}, AppState> {
                 opacity: this.state.dislikeOpacity,
                 position: 'absolute',
                 zIndex: 1000,
-                width : SCREEN_WIDTH - 19,
+                width : this.state.width + 10,
                 height : size.verticalScale(630),
               }}
             >
-              <LinearGradient colors={["rgba(0,0,0,0.2)" , "rgba(0,0,0,0.8)"]} style={{
+              <LinearGradient colors={["transparent" , "rgba(0,0,0,0.65)"]} style={{
                 
                 flex : 1,
                 
@@ -482,7 +502,7 @@ export default class App extends React.Component<{}, AppState> {
                 height : size.verticalScale(622),
               }}
             >
-              <LinearGradient colors={["rgba(0,0,0,0.2)" , "rgba(0,0,0,0.8)"]} style={{
+              <LinearGradient colors={["transparent" , "rgba(0,0,0,0.65)"]} style={{
                 
                 flex : 1,
                 
