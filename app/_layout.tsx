@@ -30,12 +30,13 @@ export default function RootLayout() {
   }
   return (
     <Stack
-      screenOptions={{
-        // Hide the header for all other routes.
-        headerShown: false,
-      }}
-    >
-    </Stack>
+          screenOptions={{
+            // Hide the header for all other routes.
+            headerShown: false,
+          }}
+        >
+
+        </Stack>
   )
 
 }

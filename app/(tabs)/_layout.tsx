@@ -28,8 +28,10 @@ export default function TabLayout() {
           backgroundColor : "black",
           borderTopWidth : StyleSheet.hairlineWidth,
           paddingVertical : size.verticalScale(10),
+          paddingBottom : size.verticalScale(20),
           borderColor : "#2D2D2D",
-          height : size.verticalScale(50) , 
+          height : size.verticalScale(70) , 
+
         },
       }}>
       <Tabs.Screen
