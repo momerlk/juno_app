@@ -7,7 +7,7 @@ import Foundation from '@expo/vector-icons/Foundation';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
-
+import { Dimensions } from 'react-native';
 
 import {StyleSheet} from "react-native";
 
@@ -18,7 +18,11 @@ import * as size from "react-native-size-matters";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  let { height: screenHeight , width : screenWidth } = Dimensions.get('window');
 
+  // so that tabBarHeight is inversely proportional to screen height
+  const factor = screenHeight/screenWidth;
+  const vPadding = size.verticalScale(10/factor) + size.verticalScale(20/factor);
   return (
     <Tabs
       screenOptions={{
@@ -27,10 +31,10 @@ export default function TabLayout() {
         tabBarStyle : {
           backgroundColor : "black",
           borderTopWidth : StyleSheet.hairlineWidth,
-          paddingVertical : size.verticalScale(10),
-          paddingBottom : size.verticalScale(20),
+          paddingVertical : size.verticalScale(10/factor),
+          paddingBottom : size.verticalScale(20/factor),
           borderColor : "#2D2D2D",
-          height : size.verticalScale(70) , 
+          height : size.verticalScale((80/factor) + vPadding) , 
 
         },
       }}>

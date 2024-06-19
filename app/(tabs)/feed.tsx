@@ -349,11 +349,12 @@ export default class App extends React.Component<{}, AppState> {
 
   ItemCard(props: any){
     const item = props.item;
-
+    const height = size.verticalScale(610);
+    const textHeight = size.verticalScale(220);
     return (
       <ImageBackground
               style={{
-                height : size.verticalScale(620), 
+                height : height, 
               }}
               imageStyle={{
                 borderTopLeftRadius : 20,
@@ -362,8 +363,8 @@ export default class App extends React.Component<{}, AppState> {
               source={{ uri: ensureURLScheme(item.image_url) }}
             >
               <LinearGradient colors={["transparent" , "rgba(0,0,0,0.4)"]} style={{
-                marginTop : size.verticalScale(390) , 
-                height : size.verticalScale(230),
+                marginTop : height - textHeight , 
+                height : textHeight,
                 // backgroundColor : "rgba(52, 52, 52, 0.3)",
                 
               }}
