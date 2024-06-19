@@ -388,6 +388,7 @@ export default class Home extends React.Component<{},HomeState> {
 
         <ScrollView
           horizontal
+          showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
           directionalLockEnabled={true}
           alwaysBounceVertical={false}
@@ -398,6 +399,7 @@ export default class Home extends React.Component<{},HomeState> {
           numColumns={4}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
+          directionalLockEnabled={true}
           data={this.state.products}
           keyExtractor={(item) => item.product_id}
           renderItem={({ item }) => <Card item={item}/>} 

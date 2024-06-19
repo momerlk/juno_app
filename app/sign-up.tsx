@@ -4,7 +4,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import COLORS from './constants/colors';
 import { Ionicons } from "@expo/vector-icons";
 import Checkbox from "expo-checkbox";
-import Button from './components/Button';
 
 import {router} from "expo-router"
 

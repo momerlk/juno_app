@@ -11,13 +11,9 @@ import { Dimensions } from 'react-native';
 
 import {StyleSheet} from "react-native";
 
-import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
 import * as size from "react-native-size-matters";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
   let { height: screenHeight , width : screenWidth } = Dimensions.get('window');
 
   // so that tabBarHeight is inversely proportional to screen height

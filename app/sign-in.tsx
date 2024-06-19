@@ -3,8 +3,6 @@ import React, { useState, useEffect} from 'react';
 import { SafeAreaView } from "react-native-safe-area-context";
 import COLORS from './constants/colors';
 import { Ionicons } from "@expo/vector-icons";
-import Checkbox from "expo-checkbox";
-import Button from './components/Button';
 import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Font from "expo-font";

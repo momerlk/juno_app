@@ -1,12 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, View, Animated, PanResponder, Dimensions, Image, ImageBackground, Pressable } from 'react-native';
-import Button from "../components/Button";
 import * as Font from 'expo-font';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
 import { Appearance, ColorSchemeName, ActivityIndicator, Modal, PanResponderInstance, GestureResponderEvent, PanResponderGestureState, TouchableWithoutFeedback} from 'react-native';
 import * as size from "react-native-size-matters"
-import { TouchableHighlight } from 'react-native-gesture-handler';
 import { AntDesign, Ionicons, Entypo, EvilIcons} from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import DropDownPicker from 'react-native-dropdown-picker';

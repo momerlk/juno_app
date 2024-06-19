@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Image, View, Text, ScrollView, Pressable, ImageBackground} from 'react-native';
 import * as Font from "expo-font";
 import {router} from "expo-router";
-import Button from '../components/Button';
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TextInput } from 'react-native';
