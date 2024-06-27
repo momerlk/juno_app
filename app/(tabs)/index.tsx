@@ -208,29 +208,28 @@ function Card(props : any){
 
 
 async function getProducts(n : number){
-  const myHeaders = new Headers();
-  const token = await AsyncStorage.getItem("token");
-  myHeaders.append("Authorization", `Bearer ${token}`);
-
-
-  const requestOptions = {
-    method: "GET",
-    headers: myHeaders,
-   };
-
+  const token = await AsyncStorage.getItem("token")
+  if (token === null){
+    router.replace("/sign-in")
+  }
   try {
-    const resp = await fetch(`http://192.168.18.16:3000/user/products?n=${n}`, requestOptions);
+    const resp = await fetch(`http://172.24.6.108:8080/products?n=${n}`, {
+      method : "GET",
+      headers: {
+                    'Authorization' : token!, 
+                    'Content-Type': 'application/json',
+                },
+    });
+
     if (resp.status !== 200){
       router.replace("/sign-in");
       return null;
     }
     const data = await resp.json();
-
-  
-
+    
     return data;
   } catch(e){
-    alert(`failed to get data = ${e}`)
+    alert(`failed to get data at home from /products endpoint = ${e}`)
     return null;
   }
 }

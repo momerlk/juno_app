@@ -35,7 +35,7 @@ const Signup = () => {
   const handleSignup = async () => {
         // e.preventDefault();
         try {
-            const response = await fetch('http://192.168.18.16:3000/auth/signup', {
+            const response = await fetch('http://172.24.6.108:8080/signUp', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

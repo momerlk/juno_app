@@ -85,7 +85,7 @@ export default class App extends React.Component<{}, AppState> {
     this.state = {
       currentIndex: 0,
       cards: Users,
-      socket: new WebSocket("http://192.168.18.16:9001/feed"),
+      socket: new WebSocket("http://172.24.6.108:8080/feed"),
       loading : true,
       modalVisible : false,
       shareVisible : false,
@@ -160,10 +160,15 @@ export default class App extends React.Component<{}, AppState> {
 
   async componentDidMount() {
     await fetchFonts();
+    let token2 = ""
     try {
       const value = await AsyncStorage.getItem("authenticated");
       if (value === null || value === "false") {
         //router.navigate("/welcome");
+      }
+      const tokenData = await AsyncStorage.getItem("token")!
+      if (tokenData !== null) {
+        token2 = tokenData;
       }
     } catch (e) {
       alert(`error = ${e}`);
@@ -171,7 +176,8 @@ export default class App extends React.Component<{}, AppState> {
 
     setTimeout(async () => {
       // connecting to feed websocket
-      const socket = new WebSocket("ws://192.168.18.16:9001/feed");
+      var headers = {"Authorization" : token2};
+      const socket = new WebSocket("ws://172.24.6.108:8080/feed" , null, headers);
 
       socket.onmessage = (ev: MessageEvent<any>) => {
         const parsed = JSON.parse(ev.data);

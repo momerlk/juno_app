@@ -31,12 +31,12 @@ const Login = () => {
   const handleLogin = async () => {
         // e.preventDefault();
         try {
-            const response = await fetch('http://192.168.18.16:3000/auth/signin', {
+            const response = await fetch('http://172.24.6.108:8080/signIn', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ "email" : email, "password" : password })
+                body: JSON.stringify({ "username_email" : email, "password" : password })
             });
 
             const data = await response.json();

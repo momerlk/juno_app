@@ -175,19 +175,23 @@ function Card(props : any){
 
 
 async function getProducts(n : number){
-  const myHeaders = new Headers();
-  const token = await AsyncStorage.getItem("token");
-  myHeaders.append("Authorization", `Bearer ${token}`);
-
-
+  const token = await AsyncStorage.getItem("token")
+  if (token === null){
+    alert(`Authenticate again`)
+    router.replace("/sign-in")
+    return;
+  }
   const requestOptions = {
     method: "GET",
-    headers: myHeaders,
+    headers: {
+      "Authorization" : token!,
+      "Content-Type" : "application/json",
+    },
    };
 
   try {
     // TODO : change endpoint to liked
-    const resp = await fetch(`http://192.168.18.16:3000/user/products?n=${n}`, requestOptions);
+    const resp = await fetch(`http://172.24.6.108:8080/products?n=${n}`, requestOptions);
     if (resp.status !== 200){
       router.replace("/sign-in");
       return null;
