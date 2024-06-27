@@ -1,4 +1,4 @@
-import { View, Text, Image, Pressable, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, Image, Pressable, TextInput } from 'react-native';
 import React, { useState, useEffect} from 'react';
 import { SafeAreaView } from "react-native-safe-area-context";
 import COLORS from './constants/colors';
@@ -21,8 +21,6 @@ const Login = () => {
 
   const [email , setEmail] = useState("")
   const [password , setPassword] = useState("")
-  const [token, setToken] = useState("")
-  const [message , setMessage] = useState("")
 
   useEffect(() => {
     fetchFonts();
@@ -41,17 +39,19 @@ const Login = () => {
 
             const data = await response.json();
             if (response.ok) {
-                setMessage('Sign in successful');
-                setToken(data.token)
+                alert('Sign in successful');
+                await AsyncStorage.setItem("authenticated" , "true")
+                await AsyncStorage.setItem("token" ,  data.token)
+                router.navigate("/")
             } else {
-                setMessage('Error: ' + data.message);
+                alert('failed to login, error: ' + data.message);
             }
 
             setEmail('')
             setPassword('')
 
         } catch (error : any) {
-            setMessage('Error: ' + error.message);
+            alert('failed to login, error: ' + error.message);
         }
     };
 
@@ -135,7 +135,7 @@ const Login = () => {
               }}
             />
 
-            <TouchableOpacity
+            <Pressable
               onPress={() => setIsPasswordShown(!isPasswordShown)}
               style={{
                 position: "absolute",
@@ -149,7 +149,7 @@ const Login = () => {
                   <Ionicons name="eye" size={24} color={"white"} />
                 )
               }
-            </TouchableOpacity>
+            </Pressable>
           </View>
         </View>
 
@@ -169,17 +169,7 @@ const Login = () => {
         onPress={async () => {
             try {
               await handleLogin()
-              if(message == ""){
-                  alert(`try hitting the sign in button again!`)
-                  return
-              }
-              alert(message)
-              if (token === ""){
-                  return
-              }
-              await AsyncStorage.setItem("authenticated" , "true")
-              await AsyncStorage.setItem("token" ,  token)
-              router.navigate("/")
+              
           } catch (e){
               alert(`couldn't log in. error = ${e}`)
           }
@@ -213,7 +203,7 @@ const Login = () => {
           flexDirection: 'row',
           justifyContent: 'center'
         }}>
-          <TouchableOpacity
+          <Pressable
             onPress={() => console.log("Pressed")}
             style={{
               flex: 1,
@@ -238,9 +228,9 @@ const Login = () => {
             />
 
             <Text>Facebook</Text>
-          </TouchableOpacity>
+          </Pressable>
 
-          <TouchableOpacity
+          <Pressable
             onPress={() => console.log("Pressed")}
             style={{
               flex: 1,
@@ -265,7 +255,7 @@ const Login = () => {
             />
 
             <Text>Google</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View> */}
 
         <View style={{

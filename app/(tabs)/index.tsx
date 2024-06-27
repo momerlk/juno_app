@@ -222,6 +222,7 @@ async function getProducts(n : number){
     });
 
     if (resp.status !== 200){
+      alert(`failed , response = ${JSON.stringify(resp)}`)
       router.replace("/sign-in");
       return null;
     }
