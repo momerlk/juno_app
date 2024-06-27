@@ -176,32 +176,24 @@ export default class App extends React.Component<{}, AppState> {
 
     setTimeout(async () => {
       // connecting to feed websocket
-      var headers = {"Authorization" : token2};
-      const socket = new WebSocket("ws://172.24.6.108:8080/feed" , null, headers);
+      const socket = new WebSocket(`ws://172.24.6.108:8080/feed?token=${token2}`);
+      socket.onerror = (error : any) => {
+        alert(`websocket feed error = ${JSON.stringify(error)}`)
+      }
 
       socket.onmessage = (ev: MessageEvent<any>) => {
         const parsed = JSON.parse(ev.data);
         // no products
         // TODO : Create an error logger system which logs errors users face
-        if (parsed["products"] === undefined && parsed["status"] !== 200) {
-          if (parsed["message"] === "Invalid token"){
-            router.replace("/sign-in")
-            return;
-          }
-          else {
-            alert(`failed to get new recommendations, message = ${parsed["message"]}`);
-            return;
-          }
-        }
 
         if (parsed === null || parsed === undefined) {
           return;
         }
-        if (parsed["products"] === null || parsed["products"] == undefined) {
+        if (parsed === null || parsed == undefined) {
           return;
         }
 
-        let products = parsed["products"];
+        let products = parsed;
 
         if (products === undefined) {
           this.setState({ currentIndex: 0 })
@@ -229,28 +221,16 @@ export default class App extends React.Component<{}, AppState> {
       this.setState({ socket: socket });
     }, 500);
 
-    let token = null; // token null before loading
-    try {
-      token = await AsyncStorage.getItem("token");
-      // no token so returns user to sign in again
-      if (token == null) {
-        alert(`failed to get authentication token, sign in again!`)
-        router.replace("/sign-in");
-        return;
-      }
-    } catch (e) {
-      alert(`failed to get authentication token, sign in again!`)
-      router.replace("/sign-in");
-      return;
-    }
 
     setTimeout( // initial authentication to socket
       () => {
         try {
-        this.state.socket.send(JSON.stringify({
-            token: token,
-            action_type: "open" // handshake/webscoket open action
-        }))
+        this.state.socket.send(`{
+            "user_id" : "",
+            "action_type" : "open",
+            "action_timestamp" : "",
+            "product_id" : ""
+        }`)
         } catch (e){
             alert(`failed to connect, error = ${e}`)
         }
