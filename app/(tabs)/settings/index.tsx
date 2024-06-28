@@ -58,6 +58,11 @@ export default function Example() {
         name="About"
         route="/settings/about"
       />
+      <Action 
+        icon={(<Feather name="info" size={23} color="#d3d3d3" style={{marginTop : 4}}/>)}
+        name="Log Out"
+        route="/sign-in"
+      />
     </ScrollView>
   );
 }

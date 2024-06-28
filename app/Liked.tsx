@@ -191,7 +191,7 @@ async function getProducts(n : number){
 
   try {
     // TODO : change endpoint to liked
-    const resp = await fetch(`http://172.24.6.108:8080/products?n=${n}`, requestOptions);
+    const resp = await fetch(`http://192.168.18.16:8080/products?n=${n}`, requestOptions);
     if (resp.status !== 200){
       router.replace("/sign-in");
       return null;

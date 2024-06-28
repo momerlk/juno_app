@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import * as size from "react-native-size-matters";
 import * as Font from "expo-font";
+import {SwipeView} from "./feed"
 
 import {Feather, Ionicons} from "@expo/vector-icons"
 
@@ -210,10 +211,11 @@ function Card(props : any){
 async function getProducts(n : number){
   const token = await AsyncStorage.getItem("token")
   if (token === null){
+    alert(`sign in again!`)
     router.replace("/sign-in")
   }
   try {
-    const resp = await fetch(`http://172.24.6.108:8080/products?n=${n}`, {
+    const resp = await fetch(`http://192.168.18.16:8080/products?n=${n}`, {
       method : "GET",
       headers: {
                     'Authorization' : token!, 
@@ -222,9 +224,7 @@ async function getProducts(n : number){
     });
 
     if (resp.status !== 200){
-      alert(`failed , response = ${JSON.stringify(resp)}`)
-      router.replace("/sign-in");
-      return null;
+      return [];
     }
     const data = await resp.json();
     
@@ -235,10 +235,33 @@ async function getProducts(n : number){
   }
 }
 
+async function search(query : string){
+  if(query === ""){
+    return;
+  }
+  const resp = await fetch(`http://192.168.18.16:8080/search?q=${query}`, {
+    method : "GET",
+    headers: {
+                  'Content-Type': 'application/json',
+              },
+  });
+
+  if (resp.status !== 200){
+    return;
+  }
+  const data = await resp.json();
+  if(data === null || data === undefined){
+    return;
+  }
+  
+  return data;
+}
+
 interface HomeState {
   spotlight : any;
   products : any[];
   loading : boolean;
+  query : string;
 }
 
 export default class Home extends React.Component<{},HomeState> {
@@ -248,6 +271,7 @@ export default class Home extends React.Component<{},HomeState> {
       spotlight : item,
       products : [item, item, item, item, item], 
       loading : true,
+      query : "",
     }
   }
 
@@ -263,19 +287,7 @@ export default class Home extends React.Component<{},HomeState> {
     }
   }
 
-  render(){
-    if (this.state.loading){
-      return <View style={{flex : 1,backgroundColor : "black", paddingTop : 40, paddingLeft : 20}}>
-            
-            <ActivityIndicator style={{
-                position: 'absolute',
-                left: '50%',
-                top: '50%',
-                transform: [{ translateX: -50 }, { translateY: -50 }],
-            }} size={60} color="white"/>
-        </View>
-    }
-    // TODO : Add activity indicator when loading
+  renderHome(){
     return (
       <ScrollView style={{backgroundColor : "#121212"}}>
 
@@ -306,9 +318,20 @@ export default class Home extends React.Component<{},HomeState> {
           
         </View>
 
-        <Search />
-
-        {/* <Text style={{color : "white", fontFamily : "Poppins", fontSize : 24, alignSelf  :"center"}}>Feed</Text> */}
+        <Search 
+          placeholder="What do you want to buy?" 
+          onSubmit={async (v : string) => {
+            const products = await search(v);
+            if(products !== null && products !== undefined){
+              this.setState({query : v , products : products})
+            }
+          }}
+          onChange={(v : string) => {
+            if (v === ""){
+              this.setState({query : ""})
+            }
+          }}
+        />
 
         <Pressable onPress={() => router.navigate("/(tabs)/feed")}>
         <ImageBackground
@@ -405,6 +428,67 @@ export default class Home extends React.Component<{},HomeState> {
           renderItem={({ item }) => <Card item={item}/>} 
         />
         </ScrollView>
+      </ScrollView>
+    )
+  }
+
+  renderSearch(){
+    return (
+      <View style={{flex : 1, backgroundColor : "black"}}>
+        <View style={{marginVertical : size.verticalScale(10)}}></View>
+        <Pressable onPress={() => this.setState({query : ""})} style={{display : "flex" , flexDirection : "row", marginVertical : 8}}>
+                <View  style={{
+                    left : 10,
+                    top : 10,
+                    marginBottom : 10,
+                    }}>
+                    <Ionicons name="arrow-back" size={32} color="white"/>
+                </View>
+                <Text style={{
+                  color : "white", 
+                  fontFamily : "Poppins", 
+                  fontSize : 22 , 
+                  marginLeft : 20,
+                  marginTop : 10,
+                  }}>
+                    Home
+                </Text>
+        </Pressable>
+        <SwipeView 
+          cards={this.state.products} 
+          height={size.verticalScale(520)} 
+          onSwipe={(action : string) => {}}
+          onFilter={async (data : any) => {
+            try {
+            await AsyncStorage.setItem("filter" , JSON.stringify(data))
+            } catch (e){
+              alert(`failed to set storage , error = ${e}`)
+            }
+          }}
+          loading={false}
+        />
+      </View>
+    )
+  }
+
+  render(){
+    if (this.state.loading){
+      return <View style={{flex : 1,backgroundColor : "black", paddingTop : 40, paddingLeft : 20}}>
+            
+            <ActivityIndicator style={{
+                position: 'absolute',
+                left: '50%',
+                top: '50%',
+                transform: [{ translateX: -50 }, { translateY: -50 }],
+            }} size={60} color="white"/>
+        </View>
+    }
+    // TODO : Add activity indicator when loading
+    return (
+      <>
+        {/* <Text style={{color : "white", fontFamily : "Poppins", fontSize : 24, alignSelf  :"center"}}>Feed</Text> */}
+
+        {this.state.query === "" ? this.renderHome() : this.renderSearch()}
 
         {/* TODO : Add these two sections */}
 
@@ -412,7 +496,7 @@ export default class Home extends React.Component<{},HomeState> {
 
         <Text style={{color : "white", fontFamily : "Poppins", fontSize : 18 , marginLeft : 20, marginVertical : size.verticalScale(25)}}>Top Brands</Text> */}
 
-      </ScrollView>
+      </>
     )
   }
 }

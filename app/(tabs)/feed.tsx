@@ -171,7 +171,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
 
     // setTimeout(async () => {
     //   // connecting to feed websocket
-    //   const socket = new WebSocket(`ws://172.24.6.108:8080/feed?token=${token2}`);
+    //   const socket = new WebSocket(`ws://192.168.18.16:8080/feed?token=${token2}`);
     //   socket.onerror = (error : any) => {
     //     alert(`websocket feed error = ${JSON.stringify(error)}`)
     //   }
@@ -888,7 +888,7 @@ export default function App(){
     <SwipeView 
     cards={mockData} 
     height={size.verticalScale(580)} 
-    onSwipe={(action : string) => alert(`action = ${action}`)}
+    onSwipe={(action : string) => {}}
     onFilter={async (data : any) => {
       try {
       await AsyncStorage.setItem("filter" , JSON.stringify(data))

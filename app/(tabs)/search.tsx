@@ -112,7 +112,7 @@ export default function TabTwoScreen() {
 
 
 
-export const Search = () => {
+export const Search = (props : any) => {
   const [val, setVal] = useState("")
   const [cross , setCross] = useState(true)
 
@@ -123,12 +123,25 @@ export const Search = () => {
   } , [val])
 
   return(
-    <View style={{alignItems: 'center', display : "flex" , flexDirection : "row", 
-    width: size.scale(350),}}>
-      <TextInput style={styles.enterText} onChangeText={t => {
-        setVal(t)
-        setCross(true)
-      }} placeholder="What do you want to buy?" value={val}/>
+    <View 
+      style={{
+        alignItems: 'center', 
+        display : "flex" , 
+        flexDirection : "row", 
+        width: size.scale(350),
+      }}
+    >
+      <TextInput 
+        style={styles.enterText} 
+        onChangeText={t => {
+          setVal(t)
+          setCross(true)
+          props.onChange(val);
+        }}
+        onSubmitEditing={() => props.onSubmit(val)}
+        placeholder={props.placeholder}
+        value={val}
+      />
         <Ionicons size={25} name="search" color="black" style={{position : "absolute", marginLeft : 60,}}/>
 
         {cross ? 
