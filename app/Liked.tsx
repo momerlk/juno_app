@@ -25,59 +25,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 // TODO : Add backend data gettting logic
 // TODO : Add save progress logic
 
-const item = {
-  "product_id": "ef380375-0766-4476-9636-3312908c7b7a",
-  "product_url": "https://www.mariab.pk/products/mb-ea24-83-black",
-  "shopify_id": {
-    "$numberLong": "8133789122726"
-  },
-  "handle": "mb-ea24-83-black",
-  "title": "Printed Arabic Lawn Co Ord Set | Mb Ea24 83",
-  "vendor": "maria_b",
-  "vendor_title": "Maria B",
-  "category": "",
-  "product_type": "M.Basics Casuals",
-  "image_url": "https://cdn.shopify.com/s/files/1/0620/8788/9062/files/MB-EA24-83Black_fbe0ab6d-d366-4ea5-bbfe-647052531500.jpg?v=1716022716",
-  "description": "TopButton Down Loose Fit TopPrinted Front & BackColor: BlackFabric: Arabic LawnTrousersPrinted Dhaka TrousersElasticated WaistbandColor: BlackFabric: Arabic lawnModel is wearing size xsNote: Only Dry Clean",
-  "price": "5990",
-  "currency": "PKR",
-  "options": [
-    {
-      "name": "Size",
-      "position": 1,
-      "values": [
-        "XS",
-        "S",
-        "M",
-        "L",
-        "XL"
-      ]
-    },
-    {
-      "name": "Color",
-      "position": 2,
-      "values": [
-        "Black"
-      ]
-    }
-  ],
-  "tags": [
-    "14-May-24",
-    "_label_New",
-    "dhlcode:6104 1900",
-    "dhldes:Women Casual Shirt",
-    "Item_Tax_Rate:15",
-    "M.Basics",
-    "M.Basics Casuals",
-    "M.Basics New Arrivals",
-    "M.Basics Ready to Wear",
-    "M.Basics-Shirts",
-    "Printed",
-    "Shirts",
-    "women-size-guide"
-  ],
-  "available": true
-}
+
 
 function toTitle(str : string) : string {
     if (str === undefined){
@@ -126,7 +74,12 @@ function Card(props : any){
   const width = 200;
   const textHeight = 80;
   return (
-    <Pressable onPress={() => router.navigate("/(tabs)/feed")}>
+    <Pressable onPress={() => {
+      router.navigate({
+        pathname: "/details",
+        params: props.item
+      })
+    }}>
       <ImageBackground
               style={{
                 height : size.verticalScale(height), 
@@ -176,8 +129,7 @@ function Card(props : any){
 
 
 interface HomeState {
-  spotlight : any;
-  products : any[];
+  products : any[] | null;
   loading : boolean;
 }
 
@@ -185,20 +137,19 @@ export default class Home extends React.Component<{},HomeState> {
   constructor(props : any){
     super(props);
     this.state = {
-      spotlight : item,
-      products : [item, item, item, item, item], 
+      products : null, 
       loading : true,
     }
   }
 
   async componentDidMount(){
-    const products = await api.getProducts(7);
+    const products = await api.getLiked();
     if (products === null){
-      this.setState({loading : false})
+      this.setState({loading : false, products : null})
       return;
     }
     else {
-      this.setState({spotlight : products[3] , products : products , loading : false})
+      this.setState({products : products , loading : false})
     }
   }
 
@@ -240,7 +191,9 @@ export default class Home extends React.Component<{},HomeState> {
                 </Text>
         </Pressable>
         
-
+        {this.state.products === null ? <Text style={{
+          color : "white" , fontSize : 50,fontFamily : "Poppins"
+        }}>No Liked Products</Text> : 
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -258,8 +211,11 @@ export default class Home extends React.Component<{},HomeState> {
           renderItem={({ item }) => <Card item={item}/>} 
         />
         </ScrollView>
+        }
 
       </ScrollView>
     )
   }
 }
+
+

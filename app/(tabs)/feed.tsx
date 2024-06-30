@@ -519,7 +519,12 @@ export class SwipeView extends React.Component<AppProps, AppState> {
         );
       } else {
         // massive performance boost
-        if (i > this.state.currentIndex + 3){
+        // 3 products ahead
+        if (i > (this.state.currentIndex + 3)){
+          return;
+        }
+        // 2 products behind
+        if (i < (this.state.currentIndex - 2)){
           return;
         }
         return (

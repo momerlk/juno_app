@@ -68,20 +68,7 @@ export default function TabLayout() {
         }}
       />
 
-      <Tabs.Screen
-        name="search"
-        options={{
 
-          title: '',
-          tabBarIcon: ({ color, focused }) => {
-            if (!focused){
-              return <Ionicons name="search-outline" size={24} color="white" />
-            } else {
-              return <Ionicons name="search" size={24} color="white" />
-            }
-          },
-        }}
-      />
 
       <Tabs.Screen
         name="cart"

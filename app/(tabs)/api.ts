@@ -126,3 +126,36 @@ export async function search(query : string){
   
   return data;
 }
+
+export async function getLiked(){
+  const token = await AsyncStorage.getItem("token")
+  if (token === null){
+    alert(`Authenticate again`)
+    return null;
+  }
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      "Authorization" : token!,
+      "Content-Type" : "application/json",
+    },
+   };
+
+  try {
+    // TODO : change endpoint to liked
+    const resp = await fetch(`${base_url}/liked`, requestOptions);
+    if (resp.status === 401){
+        alert(`token expired sign in again`)
+        router.replace("/sign-in")
+        return null;
+    } else if (resp.status !== 200){
+        return null;
+    }
+    const data = await resp.json();
+
+    return data;
+  } catch(e){
+    alert(`failed to get data = ${e}`)
+    return null;
+  }
+}
