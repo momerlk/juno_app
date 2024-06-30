@@ -6,6 +6,7 @@ import {
   Pressable,
   ActivityIndicator,
   Animated,
+  TextInput,
   Easing,
 } from "react-native";
 import * as size from "react-native-size-matters";
@@ -13,10 +14,13 @@ import * as Font from "expo-font";
 import * as api from "./api"
 
 import {SwipeView} from "./feed"
-
 import {Feather, Ionicons} from "@expo/vector-icons"
+import {Search} from "./_search"
 
-import {Search} from "../search"
+(Text as any).defaultProps = (Text as any).defaultProps || {};
+(Text as any).defaultProps.allowFontScaling = false;
+(TextInput as any).defaultProps = (TextInput as any).defaultProps || {};
+(TextInput as any).defaultProps.allowFontScaling = false;
 
 const fetchFonts = () => {
   return Font.loadAsync({
@@ -26,6 +30,7 @@ const fetchFonts = () => {
 };
 
 import {router} from "expo-router";
+import {Logo} from "./_common"
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const styles = StyleSheet.create({
@@ -201,14 +206,7 @@ export default class Home extends React.Component<{},HomeState> {
     return (
       <ScrollView style={{backgroundColor : "#121212"}}>
 
-        <Text style={{
-          color : "white",
-          position : "absolute",
-          marginTop : size.verticalScale(30), 
-          marginHorizontal : 30,
-          fontSize : 25,
-          fontFamily : "Poppins"
-          }}>JUNO</Text>
+        <Logo />
 
         <View style={{
           display : "flex", 
@@ -428,148 +426,6 @@ export default class Home extends React.Component<{},HomeState> {
 
 
 const mockData = [
-    {
-        "product_id": "824913c8-c6fb-4208-b622-866baec4b261",
-        "product_url": "https://pk.ethnc.com/products/toddler-dress-e0759-301-707-707",
-        "shopify_id": "6877464199270",
-        "handle": "toddler-dress-e0759-301-707-707",
-        "title": "Printed Dress (E0759/301/707)",
-        "vendor": "ethnic",
-        "category": "",
-        "image_url": "https://cdn.shopify.com/s/files/1/2290/7917/files/E0759-301-707_1.jpg?v=1695815550",
-        "description": "Details:A fascinating design is layered over this elegant dress illustrating a graceful composition in grass green shade. Crafted in a chic silhouette, this contemporary dress is enhanced with floral illustrations printed in vibrant hues. Style this exquisite dress at fun gatherings this season.-Grass Green Color-1 piece\nSize & Fit:-Model height is 40-42 Inches-Model is wearing 3-4 Year size",
-        "price": 1590,
-        "currency": "PKR",
-        "options": [
-            {
-                "name": "SIZE",
-                "position": 1,
-                "values": [
-                    "12-18M",
-                    "2-3Y",
-                    "3-4Y",
-                    "4-5Y"
-                ]
-            },
-            {
-                "name": "Color",
-                "position": 2,
-                "values": [
-                    "Green"
-                ]
-            }
-        ],
-        "tags": [
-            "12-18M",
-            "2-3Y",
-            "3-4Y",
-            "4-5Y",
-            "Below - PKR 1990",
-            "Chota Fusion",
-            "Chota fusion dress",
-            "Chota fusion dress toddler",
-            "Chota fusion dress toddler'22",
-            "Chota fusion dress toddler'23",
-            "CHOTA FUSION TODDLER'23",
-            "dress",
-            "DRESS & JUMPSUIT TODDLER",
-            "DRESS & JUMPSUIT TODDLER'23",
-            "DRESS & JUMPSUIT TODDLER'23 fusion dress toddler",
-            "DRESSES",
-            "E0759/301/707dress",
-            "ESSALE21DEC",
-            "ESSALEKIDSALL21DEC",
-            "ESSALEKIDSCHOTAFUSION21DEC",
-            "FSSALEKIDSALL22NOVREV",
-            "FSSALEKIDSCHOTAFUSION22NOVREV",
-            "fusion dress toddler'22",
-            "fusion dress toddler'23",
-            "Fusion kids",
-            "Fusion-Full Price",
-            "girls toddler",
-            "kids fusion'23",
-            "Kids Fusion-Full Price",
-            "Kids New In",
-            "KIDS-F.P",
-            "matter-size",
-            "New-In Fusion Kids",
-            "one piece kids",
-            "Pret WS'23 Kids",
-            "toddler fusion WS'23",
-            "WF winter disc",
-            "WINTERSALEKIDSALL",
-            "WINTERSALEKIDSCHOTAFUSION",
-            "WS23-KIDS"
-        ],
-        "available": true
-    },
-    {
-        "product_id": "70753f3d-a2f8-4b9d-84a1-dbc992449294",
-        "product_url": "https://pk.ethnc.com/products/toddler-dress-e0555-301-411-411",
-        "shopify_id": "6859038589030",
-        "handle": "toddler-dress-e0555-301-411-411",
-        "title": "Dress (E0555/301/411)",
-        "vendor": "ethnic",
-        "category": "",
-        "image_url": "https://cdn.shopify.com/s/files/1/2290/7917/products/E0555-301-411_1.jpg?v=1681969911",
-        "description": "Details:A fascinating design is layered over this elegant dress rendered in lavender shade. Crafted in a chic peplum silhouette with gathers below yoke, this contemporary dress is enhanced with floral illustrations printed in vibrant hues. Style this exquisite dress at casual gatherings this season.-Lavender Color-Single Jersey Fabric-1 piece\nSize & Fit:-Model height is 40-42 Inches-Model is wearing 3-4 Year size",
-        "price": 790,
-        "currency": "PKR",
-        "options": [
-            {
-                "name": "SIZE",
-                "position": 1,
-                "values": [
-                    "12-18M",
-                    "2-3Y",
-                    "3-4Y",
-                    "4-5Y"
-                ]
-            },
-            {
-                "name": "Color",
-                "position": 2,
-                "values": [
-                    "Pink"
-                ]
-            }
-        ],
-        "tags": [
-            "12-18M",
-            "17 APRIL",
-            "2-3Y",
-            "3-4Y",
-            "4-5Y",
-            "Chota Fusion",
-            "Chota fusion dress",
-            "Chota fusion dress toddler",
-            "Chota fusion dress toddler'23",
-            "Chota fusion toddler",
-            "CHOTA FUSION TODDLER'23",
-            "DRESS & JUMPSUIT TODDLER",
-            "DRESS & JUMPSUIT TODDLER'23",
-            "E0171/301/321top",
-            "fusion dress toddler'23",
-            "Fusion-Full Price",
-            "girls toddler",
-            "kids fusion'23",
-            "Kids Fusion-Full Price",
-            "Kids New In",
-            "KIDS-F.P",
-            "matter-size",
-            "New-In Fusion Kids",
-            "one piece kids",
-            "Pret SS'23 Kids",
-            "SALEKIDS23AUGNEW",
-            "SALEKIDSALL23AUG",
-            "SALEKIDSCHOTAFUSION23AUG",
-            "SS23-KIDS",
-            "SUMMERCLEARANCEKIDSALL",
-            "SUMMERCLEARANCEKIDSCHOTAFUSION",
-            "toddler fusion SS'23"
-        ],
-        "available": true
-    },
     {
         "product_id": "dd37fd7a-0bac-4632-ad0e-437bcf8ba4d8",
         "product_url": "https://pk.ethnc.com/products/western-dress-e1600-108-522-522",

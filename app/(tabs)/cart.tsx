@@ -4,7 +4,7 @@ import * as Font from "expo-font";
 import {router} from "expo-router";
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import * as size from "react-native-size-matters";
-
+import {Logo} from "./_common"
 
 
 function toTitle(str : string) : string {
@@ -61,9 +61,9 @@ export default function TabTwoScreen() {
   }, []); // Empty dependency array to run only once when the component mounts
 
   return (
-    <View style={{flex : 1, backgroundColor : "#121212", paddingBottom : 40}}>
-      <Image source={require("../assets/juno_icon.png")} 
-        style={{height : 100, width : 100, resizeMode : "cover", alignSelf : "center", marginTop : 10}} />
+    <View style={{flex : 1, backgroundColor : "#121212"}}>
+      <Logo />
+      <View style={{marginTop : 100}}></View>
      <FlatList
           contentContainerStyle={{}}
           numColumns={1}

@@ -14,16 +14,17 @@ import {
   FontAwesome, FontAwesome6, MaterialIcons, Feather,
   Ionicons,
 } from '@expo/vector-icons';
-
+import * as size from "react-native-size-matters"
+import {Logo} from "../_common"
 
 export default function Example() {
   // TODO : Get User details from backend
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#121212' }}>
-      <Image source={require("./juno_icon.png")} 
-        style={{height : 100, width : 100, resizeMode : "cover", alignSelf : "center", marginTop : 10}} />
+     <Logo />
+      <View style={{marginTop : 100}}></View>
 
-      <Text style={{fontSize : 25, color : "white", alignSelf : "center", fontFamily : "Poppins"}}>
+      <Text style={{fontSize : 25, color : "white", alignSelf : "center", fontFamily : "Montserrat"}}>
         {"Omer Malik"}
       </Text> 
       <Text style={{fontSize : 18, color : "gray", alignSelf : "center", marginTop : 20, fontFamily : "Poppins"}}>

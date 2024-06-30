@@ -192,8 +192,10 @@ export default class Home extends React.Component<{},HomeState> {
         </Pressable>
         
         {this.state.products === null ? <Text style={{
-          color : "white" , fontSize : 50,fontFamily : "Poppins"
-        }}>No Liked Products</Text> : 
+          color : "white" , fontSize : 20,
+          margin : 50,
+          fontFamily : "Poppins"
+        }}>No Liked Products.</Text> : 
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}

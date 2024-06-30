@@ -70,45 +70,10 @@ function Category(props : any){
 
 const fetchFonts = () => {
   return Font.loadAsync({
-    'Poppins': require('./assets/fonts/Poppins-Medium.ttf'),
-    "Montserrat" : require("./assets/fonts/Montserrat.ttf"),
+    'Poppins': require('../assets/fonts/Poppins-Medium.ttf'),
+    "Montserrat" : require("../assets/fonts/Montserrat.ttf"),
   });
 };
-
-
-export default function TabTwoScreen() {
-  const [data, setData] = useState<any>([]);
-  const [req , setReq] = useState(0);
-  fetchFonts();
-
-  useEffect(() => {
-    
-  }, []); // Empty dependency array to run only once when the component mounts
-
-  return (
-    <ScrollView style={{backgroundColor : "#121212"}}>
-      <Search></Search>
-      <Category 
-          title="CLOTHES" 
-          image={{uri : "https://enews.hamariweb.com/tpl_assets/2023/05/19390895_1380758115349376_6758442144746647951_o-22w6h5b.jpg"}}
-          colors={["#5DE0E6" , "#004AAD"]}
-          route="/(tabs)/feed"
-          height={90}
-          width={70}
-        />
-        <Category 
-          title="ACCESSORIES" 
-          image={{uri : "https://karltayloreducation.com/wp-content/uploads/2020/09/Fashion-accessories-unretouched.jpg"}}
-          route="/(tabs)/feed"
-        />
-        <Category 
-          title="SHOES" 
-          image={{uri : "https://www.visittruro.org.uk/wp-content/uploads/elementor/thumbs/iStock-1397720527-q1kjbg4vhc7yvdfise5d47gkkajd3c052frz7xaiww.jpg"}}
-          route="/(tabs)/feed"
-        />
-    </ScrollView>
-  );
-}
 
 
 

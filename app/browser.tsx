@@ -8,6 +8,7 @@ import {Ionicons} from "@expo/vector-icons"
 export default function Browser(){
     
     const [uri , setUri] = useState<null | string>(null)
+    const [loading , setLoading] = useState(true)
     const params = useLocalSearchParams();
 
     useEffect(function (){
@@ -28,7 +29,7 @@ export default function Browser(){
     } else {
         return (
             <View style={{flex : 1, backgroundColor : "#121212"}}>
-                <Pressable onPress={() => router.back()} style={{display : "flex" , flexDirection : "row", marginVertical : 8}}>
+                <Pressable onPress={() => router.back()} style={{display : "flex" , flexDirection : "row", marginVertical : 23}}>
                         <View  style={{
                             left : 10,
                             top : 10,
@@ -46,7 +47,17 @@ export default function Browser(){
                             Go Back
                         </Text>
                 </Pressable>
-                <WebView source={{uri : uri}} />
+
+                <WebView 
+                    source={{uri : uri}} 
+                    startInLoadingState={true}
+                    renderLoading={() => <ActivityIndicator size={60} style={{
+                        position: 'absolute',
+                        left: '40%',
+                        top: '40%',
+                    }}/>}
+                    forceDarkOn={true}
+                />
             </View>
         )
     }
