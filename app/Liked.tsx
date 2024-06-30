@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import * as size from "react-native-size-matters";
 import * as Font from "expo-font";
+import * as api from "./(tabs)/api";
 
 import {Feather, Ionicons} from "@expo/vector-icons"
 
@@ -174,39 +175,6 @@ function Card(props : any){
 }
 
 
-async function getProducts(n : number){
-  const token = await AsyncStorage.getItem("token")
-  if (token === null){
-    alert(`Authenticate again`)
-    router.replace("/sign-in")
-    return;
-  }
-  const requestOptions = {
-    method: "GET",
-    headers: {
-      "Authorization" : token!,
-      "Content-Type" : "application/json",
-    },
-   };
-
-  try {
-    // TODO : change endpoint to liked
-    const resp = await fetch(`http://192.168.18.16:8080/products?n=${n}`, requestOptions);
-    if (resp.status !== 200){
-      router.replace("/sign-in");
-      return null;
-    }
-    const data = await resp.json();
-
-  
-
-    return data;
-  } catch(e){
-    alert(`failed to get data = ${e}`)
-    return null;
-  }
-}
-
 interface HomeState {
   spotlight : any;
   products : any[];
@@ -224,7 +192,7 @@ export default class Home extends React.Component<{},HomeState> {
   }
 
   async componentDidMount(){
-    const products = await getProducts(7);
+    const products = await api.getProducts(7);
     if (products === null){
       this.setState({loading : false})
       return;

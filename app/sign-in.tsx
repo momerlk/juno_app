@@ -6,6 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Font from "expo-font";
+import * as api from "./(tabs)/api"
 
 const fetchFonts = () => {
   return Font.loadAsync({
@@ -18,7 +19,7 @@ const fetchFonts = () => {
 
 const Login = () => {
   const [isPasswordShown, setIsPasswordShown] = useState(false);
-
+  // TODO : phone number or email
   const [email , setEmail] = useState("")
   const [password , setPassword] = useState("")
 
@@ -29,24 +30,7 @@ const Login = () => {
   const handleLogin = async () => {
         // e.preventDefault();
         try {
-            const response = await fetch('http://192.168.18.16:8080/signIn', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ "username_email" : email, "password" : password })
-            });
-
-            const data = await response.json();
-            if (response.ok) {
-                alert('Sign in successful');
-                await AsyncStorage.setItem("authenticated" , "true")
-                await AsyncStorage.setItem("token" ,  data.token)
-                router.navigate("/")
-            } else {
-                alert('failed to login, error: ' + data.message);
-            }
-
+            await api.signIn(email, password);
             setEmail('')
             setPassword('')
 

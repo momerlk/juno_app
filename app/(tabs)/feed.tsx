@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, Text, View, Animated, PanResponder, Dimensions, Image, ImageBackground, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Animated, PanResponder, Dimensions, Image, ImageBackground, Pressable, TextInput} from 'react-native';
 import * as Font from 'expo-font';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
@@ -171,7 +171,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
 
     // setTimeout(async () => {
     //   // connecting to feed websocket
-    //   const socket = new WebSocket(`ws://192.168.18.16:8080/feed?token=${token2}`);
+    //   const socket = new WebSocket(`ws://localhost:8080/feed?token=${token2}`);
     //   socket.onerror = (error : any) => {
     //     alert(`websocket feed error = ${JSON.stringify(error)}`)
     //   }
@@ -310,7 +310,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
       // console.log(`double tap detected`)
       router.navigate({
         pathname: "/details",
-        params: this.state.cards[this.state.currentIndex]
+        params: this.props.cards[this.state.currentIndex]
       })
     } else {
       // Single tap detected, wait to confirm if it is a double tap
@@ -390,7 +390,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
       outputRange: ['-5deg', '0deg', '5deg'],
       extrapolate: 'clamp',
     });
-    return this.state.cards.map((item, i) => {
+    return this.props.cards.map((item, i) => {
       if (i < this.state.currentIndex) {
         return null;
       } else if (i === this.state.currentIndex) {
@@ -616,7 +616,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
                 // TODO : shows details for now change this
                 router.navigate({
                   pathname: "/details",
-                  params: this.state.cards[this.state.currentIndex]
+                  params: this.props.cards[this.state.currentIndex]
                 })
             }} 
             >
@@ -677,6 +677,37 @@ function Filter(props : any){
   const [brands , setBrands] = useState("");
   const [price , setPrice] = useState(""); 
   const [color , setColor] = useState("");
+  const [lowerBound, setLowerBound] = useState('');
+  const [upperBound, setUpperBound] = useState('');
+
+  const styles = StyleSheet.create({
+      container: {
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-around',
+          padding: 16,
+          borderRadius: 8,
+          marginBottom: 16,
+          shadowColor: '#000',
+          shadowOffset: {
+              width: 0,
+              height: 2,
+          },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+          elevation: 5,
+      },
+      input: {
+          marginRight : 2,
+          height : 40,
+          width : 140,
+          paddingLeft : 10,
+          fontSize : 14,
+          fontFamily : "Poppins",
+          backgroundColor : "white",
+      },
+  });
+
 
   // TODO : Get dropdown options from backend like brands etc. 
   
@@ -709,8 +740,6 @@ function Filter(props : any){
             <DropDown 
               data={[
                 {label: 'Clothes', value: 'clothes'},
-                {label: 'Shoes', value: 'shoes'},
-                {label: 'Acessories', value: 'accessories'}
               ]} 
               title="Category"
               other={{multiple : true}}
@@ -718,19 +747,47 @@ function Filter(props : any){
               searchable={false}
             />     
 
+            {/* Brands */}
             <DropDown 
               data={[
-                {label: 'Afrozeh', value: 'afrozeh'},
-                {label: 'Sana Safinaz', value: 'sana_safinaz'},
-                {label : "Bonanza Satrangi" , value : "bonanza_satrangi"}
+                {"label" : "Afrozeh", "value" : "afrozeh" , "base_url" : "https://www.afrozeh.com"},
+                {"label" : "Ali Xeeshan", "value" : "ali_xeeshan" , "base_url" :  "https://alixeeshanempire.com"},
+                {"label" : "Alkaram Studio", "value" : "alkaram_studio" , "base_url" :  "https://www.alkaramstudio.com"},
+                {"label" : "Asim Jofa", "value" : "asim_jofa" , "base_url" :  "https://asimjofa.com"},
+                {"label" : "Beechtree", "value" : "beechtree" , "base_url" :  "https://beechtree.pk"},
+                {"label" : "Breakout" , "value" : "breakout" , "base_url" : "https://breakout.com.pk/"},
+
+                {"label" : "Bonanza Satrangi", "value" : "bonanza_satrangi" , "base_url" :  "https://bonanzasatrangi.com"},
+                {"label" : "Chinyere", "value" : "chinyere" , "base_url" :  "https://chinyere.pk"},
+                {"label" : "Cross stitch", "value" : "cross_stitch" , "base_url" :  "https://www.crossstitch.pk"},
+                {"label" : "Eden Robe", "value" : "edenrobe" , "base_url" :  "https://edenrobe.com"},
+                {"label" : "Ethnic", "value" : "ethnic" , "base_url" :  "https://pk.ethnc.com"},
+                {"label" : "Faiza Saqlain", "value" : "faiza_saqlain" , "base_url" :  "https://www.faizasaqlain.pk"},
+                {"label" : "Generation", "value" : "generation" , "base_url" :  "https://generation.com.pk"},
+                {"label" : "Hem Stich", "value" : "hem_stitch" , "base_url" :  "https://www.hemstitch.pk"},
+                {"label" : "Hussain Rehar", "value" : "hussain_rehar" , "base_url" :  "https://www.hussainrehar.com"},
+                {"label" : "Kanwal Malik", "value" : "kanwal_malik" , "base_url" :  "https://www.kanwalmalik.com"},
+                {"label" : "Kayseria", "value" : "kayseria" , "base_url" :  "https://www.kayseria.com"},
+                {"label" : "Limelight", "value" : "limelight" , "base_url" :  "https://www.limelight.pk"},
+                {"label" : "Maria b", "value" : "maria_b" , "base_url" :  "https://www.mariab.pk"},
+                {"label" : "Mushq", "value" : "mushq" , "base_url" :  "https://www.mushq.pk"},
+                {"label" : "Nishat Linen", "value" : "nishat_linen" , "base_url" :  "https://nishatlinen.com"},
+                {"label" : "Sadaf Fawad Khan", "value" : "sadaf_fawad_khan" , "base_url" :  "https://sadaffawadkhan.com"},
+                {"label" : "Sapphire", "value" : "sapphire" , "base_url" :  "https://pk.sapphireonline.pk"},
+                {"label" : "Zaha", "value" : "zaha" , "base_url" :  "https://www.zaha.pk"},
+                {"label" : "Zara Shah Jahan", "value" : "zara_shah_jahan" , "base_url" :  "https://zarashahjahan.com"},
+                {"label" : "Zellbury", "value" : "zellbury" , "base_url" :  "https://zellbury.com"},
+                {"label" : "Outfitters", "value" : "outfitters" , "base_url" : "https://outfitters.com.pk/"},
               ]} 
+              
+              
               title="Brands"
               other={{multiple : true}}
               onChange={(t : any) => setBrands(t)}
               searchable={true}
             />
 
-            <DropDown 
+            {/* <DropDown 
               data={[
                 {label: 'Blue', value: 'blue'},
                 {label: 'Red', value: 'red'},
@@ -741,17 +798,33 @@ function Filter(props : any){
               other={{multiple : true}}
               onChange={(t : any) => setColor(t)}
               searchable={false}
-            />  
+            />   */}
 
-            <DropDown 
-              data={[
-                {label: 'Rs. 0 - 5000', value: 'RS_0_5000'},
-                {label: 'Rs. > 5000', value: 'RS_5000_1000'}
-              ]} 
-              title="Price Range"
-              onChange={(t : any) => setPrice(t)}
-              searchable={false}
-            />       
+            <Text
+              style={{
+                fontSize : 20,
+                fontFamily : "Poppins",
+                color : "white",
+                marginHorizontal : 23,
+              }} 
+            >Price Range Rs.</Text>
+            <View style={styles.container}>
+                <TextInput
+                    placeholder="Lower Bound"
+                    value={lowerBound}
+                    onChangeText={text => setLowerBound(text)}
+                    keyboardType="numeric"
+                    style={styles.input}
+                />
+                <TextInput
+                    placeholder="Upper Bound"
+                    value={upperBound}
+                    onChangeText={text => setUpperBound(text)}
+                    keyboardType="numeric"
+                    
+                    style={styles.input}
+                />
+            </View>
 
             <Pressable
               style={[
@@ -773,13 +846,23 @@ function Filter(props : any){
               ]}
               onPress={() => {
                 props.setModalVisible(false);
-                  props.onConfirm({
-                      category : category,
-                      brands : brands,
-                      color : color, 
-                      price : price,
-                    })
-                }} 
+                let filter : any = {};
+                if (brands !== "") {
+                  filter["vendor"] = {"$in" : brands}
+                }
+                
+                let price : any = {};
+                let priceSet = false;
+                if (lowerBound !== "") { 
+                  price["$gte"] = parseInt(lowerBound);priceSet=true; 
+                }
+                if (upperBound !== "") { 
+                  price["$lte"] = parseInt(upperBound);priceSet = true;
+                }
+                if (priceSet === true){filter["price"] = price }
+                props.onConfirm(filter)
+
+              }} 
             >
               <Text 
                   style={{ fontSize: 18, color: "black", fontFamily : "Poppins" }} 
@@ -892,6 +975,7 @@ export default function App(){
     onFilter={async (data : any) => {
       try {
       await AsyncStorage.setItem("filter" , JSON.stringify(data))
+      alert(`filter = ${JSON.stringify(data)}`)
       } catch (e){
         alert(`failed to set storage , error = ${e}`)
       }

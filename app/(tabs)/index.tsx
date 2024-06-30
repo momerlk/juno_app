@@ -10,6 +10,8 @@ import {
 } from "react-native";
 import * as size from "react-native-size-matters";
 import * as Font from "expo-font";
+import * as api from "./api"
+
 import {SwipeView} from "./feed"
 
 import {Feather, Ionicons} from "@expo/vector-icons"
@@ -208,55 +210,6 @@ function Card(props : any){
 }
 
 
-async function getProducts(n : number){
-  const token = await AsyncStorage.getItem("token")
-  if (token === null){
-    alert(`sign in again!`)
-    router.replace("/sign-in")
-  }
-  try {
-    const resp = await fetch(`http://192.168.18.16:8080/products?n=${n}`, {
-      method : "GET",
-      headers: {
-                    'Authorization' : token!, 
-                    'Content-Type': 'application/json',
-                },
-    });
-
-    if (resp.status !== 200){
-      return [];
-    }
-    const data = await resp.json();
-    
-    return data;
-  } catch(e){
-    alert(`failed to get data at home from /products endpoint = ${e}`)
-    return null;
-  }
-}
-
-async function search(query : string){
-  if(query === ""){
-    return;
-  }
-  const resp = await fetch(`http://192.168.18.16:8080/search?q=${query}`, {
-    method : "GET",
-    headers: {
-                  'Content-Type': 'application/json',
-              },
-  });
-
-  if (resp.status !== 200){
-    return;
-  }
-  const data = await resp.json();
-  if(data === null || data === undefined){
-    return;
-  }
-  
-  return data;
-}
-
 interface HomeState {
   spotlight : any;
   products : any[];
@@ -277,7 +230,7 @@ export default class Home extends React.Component<{},HomeState> {
 
   async componentDidMount(){
     await fetchFonts();
-    const products = await getProducts(7);
+    const products = await api.getProducts(7);
     if (products === null){
       this.setState({loading : false})
       return;
@@ -321,7 +274,7 @@ export default class Home extends React.Component<{},HomeState> {
         <Search 
           placeholder="What do you want to buy?" 
           onSubmit={async (v : string) => {
-            const products = await search(v);
+            const products = await api.search(v);
             if(products !== null && products !== undefined){
               this.setState({query : v , products : products})
             }
@@ -432,15 +385,19 @@ export default class Home extends React.Component<{},HomeState> {
     )
   }
 
+  update(products : any){
+    this.setState({products : products})
+  }
+
   renderSearch(){
     return (
       <View style={{flex : 1, backgroundColor : "black"}}>
         <View style={{marginVertical : size.verticalScale(10)}}></View>
-        <Pressable onPress={() => this.setState({query : ""})} style={{display : "flex" , flexDirection : "row", marginVertical : 8}}>
+        <Pressable onPress={() => this.setState({query : ""})} style={{display : "flex" , flexDirection : "row", marginTop : 8}}>
                 <View  style={{
                     left : 10,
                     top : 10,
-                    marginBottom : 10,
+                    marginBottom :5,
                     }}>
                     <Ionicons name="arrow-back" size={32} color="white"/>
                 </View>
@@ -456,11 +413,15 @@ export default class Home extends React.Component<{},HomeState> {
         </Pressable>
         <SwipeView 
           cards={this.state.products} 
-          height={size.verticalScale(520)} 
+          height={size.verticalScale(510)} 
           onSwipe={(action : string) => {}}
-          onFilter={async (data : any) => {
-            try {
-            await AsyncStorage.setItem("filter" , JSON.stringify(data))
+          onFilter={async (filter : any) => {
+            try { 
+              const products = await api.queryProducts(this.state.query , filter);
+              if (products === null || products === undefined){
+                return;
+              }
+              this.update(products);
             } catch (e){
               alert(`failed to set storage , error = ${e}`)
             }

@@ -8,6 +8,7 @@ import Checkbox from "expo-checkbox";
 import {router} from "expo-router"
 
 import * as Font from "expo-font";
+import * as api from "./(tabs)/api"
 
 const fetchFonts = () => {
   return Font.loadAsync({
@@ -35,20 +36,7 @@ const Signup = () => {
   const handleSignup = async () => {
         // e.preventDefault();
         try {
-            const response = await fetch('http://192.168.18.16:8080/signUp', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({"email" : email,"phone_number" : number  , "password" : password})
-            });
-
-            const data = await response.json();
-            if (response.ok) {
-                setMessage(data.message);
-            } else {
-                setMessage('Error: ' + data.message);
-            }
+            await api.signUp(email , number , password);
             setEmail("")
             setNumber("")
             setPassword("")
@@ -231,11 +219,6 @@ const Signup = () => {
         onPress={async () => {
             try {
               await handleSignup()
-              if (message === "") {
-                  alert("created account!")
-              } else {
-                  alert(message)
-              }
               router.navigate("/sign-in")
           } catch (e){
               alert(`couldn't log in. error = ${e}`)
