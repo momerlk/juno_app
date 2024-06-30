@@ -104,7 +104,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
       filter : {},
     };
 
-    this.direction = "none";
+    this.direction = "center";
 
     // Pan Responder for handling taps and swipes
     this.startTime = 0;
@@ -125,25 +125,29 @@ export class SwipeView extends React.Component<AppProps, AppState> {
         // TODO : optimise the number of renders even more
         if (Math.abs(dx) > Math.abs(dy)) {
           // Horizontal movement
-          if (dx > 70) {
+          if (dx > 80) {
             const newDirection = 'right';
             if (this.direction !== newDirection){
               this.setState({likeOpacity : 1, dislikeOpacity : 0, superLikeOpacity : 0})
+              this.direction = newDirection;
             }
-          } else if (dx < -70) {
+          } else if (dx < -100) {
             const newDirection = 'left';
             if (this.direction !== newDirection){
               this.setState({likeOpacity : 0, dislikeOpacity : 1, superLikeOpacity : 0})
+              this.direction = newDirection;
             }
           }
         } else {
           // Vertical movement
-          if (dy > 110) {
+          if (dy > 120) {
             const newDirection = 'down';
+            this.direction = newDirection;
           } else if (dy < -110) {
             const newDirection = 'up';
             if (this.direction !== newDirection){
               this.setState({likeOpacity : 0, dislikeOpacity : 0, superLikeOpacity : 1})
+              this.direction = newDirection;
             }
           }
         }
@@ -152,7 +156,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
         this.endTime = new Date().getTime();
         const timeDiff = this.endTime - this.startTime;
         this.setState({likeOpacity : 0, dislikeOpacity : 0, superLikeOpacity : 0})
-
+        this.direction = "center";
 
         // Detect tap if movement is minimal
         if (Math.abs(gestureState.dx) < 5 && Math.abs(gestureState.dy) < 5 && timeDiff < 200) {
@@ -251,26 +255,32 @@ export class SwipeView extends React.Component<AppProps, AppState> {
       Animated.spring(this.position, {
         toValue: { x: SCREEN_WIDTH + 100, y: gestureState.dy },
         useNativeDriver: true,
+        speed: 25, // Adjust speed for faster animation
+        bounciness: 0, // Remove bounciness for quicker completion
       }).start(() => {
+        this.position.setValue({ x: 0, y: 0 });
         this.setState(
           { currentIndex: this.state.currentIndex + 1 },
-          async () => {
-            this.position.setValue({ x: 0, y: 0 });
-            await this.handleSwipeAction("like");
+          () => {
+            // Start the swipe action handling without awaiting it
+            this.handleSwipeAction("like");
           }
         );
       });
+
     } else if (gestureState.dx < -120) {
       // Swipe left
       Animated.spring(this.position, {
         toValue: { x: -SCREEN_WIDTH - 100, y: gestureState.dy },
         useNativeDriver: true,
+        speed: 25, // Adjust speed for faster animation
+        bounciness: 0, // Remove bounciness for quicker completion
       }).start(() => {
+        this.position.setValue({ x: 0, y: 0 });
         this.setState(
           { currentIndex: this.state.currentIndex + 1 },
-          async () => {
-            this.position.setValue({ x: 0, y: 0 });
-            await this.handleSwipeAction("dislike");
+          () => {
+            this.handleSwipeAction("dislike");
           }
         );
       });
@@ -279,15 +289,19 @@ export class SwipeView extends React.Component<AppProps, AppState> {
       Animated.spring(this.position, {
         toValue: { x: gestureState.dx, y: -SCREEN_HEIGHT - 100 },
         useNativeDriver: true,
+        speed: 40, // Adjust speed for faster animation
+        bounciness: 0, // Remove bounciness for quicker completion
       }).start(() => {
+        this.position.setValue({ x: 0, y: 0 });
         this.setState(
           { currentIndex: this.state.currentIndex + 1 },
-          async () => {
-            this.position.setValue({ x: 0, y: 0 });
-            await this.handleSwipeAction("added_to_cart");
+          () => {
+            // Start the swipe action handling without awaiting it
+            this.handleSwipeAction("added_to_cart");
           }
         );
       });
+
     } else {
       // Reset position if no significant swipe
       Animated.spring(this.position, {
@@ -419,16 +433,16 @@ export class SwipeView extends React.Component<AppProps, AppState> {
               style={{
                 opacity: this.state.likeOpacity,
                 position: 'absolute',
-                left : 10,
                 zIndex: 1000,
-                width : this.state.width,
+                width : SCREEN_WIDTH,
                 height : this.props.height,
+                borderRadius : 20,
               }}
             >
-              <LinearGradient colors={["transparent" , "rgba(0,0,0,0.65)"]} style={{
-                
+              <LinearGradient colors={["transparent" , "rgba(0,0,0,0.4)"]} style={{
                 flex : 1,
-                
+                width : SCREEN_WIDTH - 20,
+                borderRadius : 20,
               }}
                 >
                   <EvilIcons name="heart" size={140} color="white" style={{
@@ -445,12 +459,13 @@ export class SwipeView extends React.Component<AppProps, AppState> {
                 opacity: this.state.dislikeOpacity,
                 position: 'absolute',
                 zIndex: 1000,
-                width : this.state.width + 10,
+                width : SCREEN_WIDTH,
                 height : this.props.height,
+                borderRadius : 20,
               }}
             >
-              <LinearGradient colors={["transparent" , "rgba(0,0,0,0.65)"]} style={{
-                
+              <LinearGradient colors={["transparent" , "rgba(0,0,0,0.4)"]} style={{
+                width : SCREEN_WIDTH - 20,
                 flex : 1,
                 
               }}
@@ -470,16 +485,16 @@ export class SwipeView extends React.Component<AppProps, AppState> {
               style={{
                 opacity: this.state.superLikeOpacity,
                 position: 'absolute',
-                marginBottom : SCREEN_HEIGHT - this.props.height,
                 zIndex: 1000,
                 width : SCREEN_WIDTH,
-                height : this.props.height - 8,
+                height : this.props.height,
+                borderRadius : 20,
               }}
             >
-              <LinearGradient colors={["transparent" , "rgba(0,0,0,0.65)"]} style={{
-                width : this.state.width,
-                height : this.props.height,
-              }}
+              <LinearGradient colors={["transparent" , "rgba(0,0,0,0.4)"]} style={{
+                    width : SCREEN_WIDTH - 20,
+                    flex : 1,
+                  }}
                 >
                   <AntDesign name="shoppingcart" size={100} color="white" style={{
                     position : "absolute",
@@ -494,6 +509,10 @@ export class SwipeView extends React.Component<AppProps, AppState> {
           </Animated.View>
         );
       } else {
+        // massive performance boost
+        if (i > this.state.currentIndex + 3){
+          return;
+        }
         return (
           <Animated.View
             key={item.product_id}

@@ -29,13 +29,18 @@ const Login = () => {
 
   const handleLogin = async () => {
         // e.preventDefault();
+        let ok = false;
         try {
-            await api.signIn(email, password);
+            ok = await api.signIn(email, password);
             setEmail('')
             setPassword('')
 
         } catch (error : any) {
             alert('failed to login, error: ' + error.message);
+        }
+
+        if(ok){
+          router.replace("/")
         }
     };
 
@@ -78,6 +83,7 @@ const Login = () => {
           }}>
             <TextInput
               placeholder='Enter your email address'
+              value={email}
               onChangeText={(text : string) => setEmail(text)}
               placeholderTextColor={"white"}
               keyboardType='email-address'
@@ -109,7 +115,7 @@ const Login = () => {
           }}>
             <TextInput
               placeholder='Enter your password'
-            //   value={password}
+              value={password}
               onChangeText={(text:string) => setPassword(text)}
               placeholderTextColor={"white"}
               secureTextEntry={!isPasswordShown}
