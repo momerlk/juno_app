@@ -13,12 +13,18 @@ import {StyleSheet} from "react-native";
 
 import * as size from "react-native-size-matters";
 
+let { height: screenHeight , width : screenWidth } = Dimensions.get('window');
+const factor = screenHeight/screenWidth;
+const paddingTop = size.verticalScale(15/factor);
+const paddingBottom = size.verticalScale(20/factor);
+const vPadding = paddingTop + paddingBottom;
+export const tabBarHeight = size.verticalScale((80/factor) + vPadding);
+
 export default function TabLayout() {
-  let { height: screenHeight , width : screenWidth } = Dimensions.get('window');
+  
 
   // so that tabBarHeight is inversely proportional to screen height
-  const factor = screenHeight/screenWidth;
-  const vPadding = size.verticalScale(10/factor) + size.verticalScale(20/factor);
+  
   return (
     <Tabs
       screenOptions={{
@@ -27,10 +33,10 @@ export default function TabLayout() {
         tabBarStyle : {
           backgroundColor : "black",
           borderTopWidth : StyleSheet.hairlineWidth,
-          paddingVertical : size.verticalScale(10/factor),
-          paddingBottom : size.verticalScale(20/factor),
+          paddingTop : paddingTop,
+          paddingBottom : paddingBottom,
           borderColor : "#2D2D2D",
-          height : size.verticalScale((80/factor) + vPadding) , 
+          height : tabBarHeight , 
 
         },
       }}>

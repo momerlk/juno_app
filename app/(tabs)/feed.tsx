@@ -43,6 +43,7 @@ interface AppProps {
   onSwipe : Function;
   onFilter : Function;
   loading : boolean;
+  paddingTop : number;
 }
 
 // Function to ensure URLs have the correct scheme
@@ -337,7 +338,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
 
   ItemCard(props: any){
     const item = props.item;
-    const textHeight = props.height/2.5;
+    const textHeight = props.height/(SCREEN_HEIGHT/380);
     return (
       <ImageBackground
               style={{
@@ -348,35 +349,37 @@ export class SwipeView extends React.Component<AppProps, AppState> {
               }}
               source={{ uri: ensureURLScheme(item.image_url) }}
             >
-              <LinearGradient colors={["transparent" , "rgba(0,0,0,0.4)"]} style={{
+              <LinearGradient colors={["transparent" , "rgba(0,0,0,0.6)"]} style={{
                 marginTop : props.height - textHeight , 
                 height : textHeight,
+                borderRadius : 20,
                 // backgroundColor : "rgba(52, 52, 52, 0.3)",
                 
               }}
                 >
-                  <View style={{marginTop : size.verticalScale(85),}}>
+                  <View style={{marginTop : props.height * 0.14,}}>
                  <Text style={{
                   color : "white",
                   marginHorizontal : 10,
-                  fontSize : 17,
+                  fontSize : props.height * 0.035,
                   fontFamily : "Poppins"
                   }}>{shortTitle(item.title as string)}</Text> 
-                <View style={{
+                {/* <View style={{
                   display: "flex",
                   flexDirection: "row",
                   justifyContent: "space-between",
-                  marginHorizontal: 10,
-                }}>
+                }}> */}
                   
                   <Text style={{
-                    fontSize: 22, fontFamily: "Poppins",
-                    color : "white"
+                    fontSize: props.height * 0.028, fontFamily: "Poppins",
+                    color : "white",
+                    marginHorizontal : 10,
                   }}>{toTitle(item.vendor as string)}</Text>
                   <Text style={{
-                    fontSize: 22, marginVertical: 5,
+                    fontSize: props.height * 0.025, marginVertical: 5,
                     color : "white",
                     fontFamily : "Poppins",
+                    marginHorizontal : 10,
                   }}>Rs. {(() => {
                       let l = item.price.length;
                       let pos = (l) - 3;
@@ -391,7 +394,8 @@ export class SwipeView extends React.Component<AppProps, AppState> {
                         return item.price
                       }
                     })()}</Text>
-                </View>
+                  
+                {/* </View> */}
                 </View>
               </LinearGradient>
             </ImageBackground>
@@ -425,6 +429,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
                 height: this.props.height - 120,
                 width: SCREEN_WIDTH,
                 padding: 10,
+                borderRadius : 20,
                 position: 'absolute',
               },
             ]}
@@ -435,13 +440,14 @@ export class SwipeView extends React.Component<AppProps, AppState> {
                 position: 'absolute',
                 zIndex: 1000,
                 width : SCREEN_WIDTH,
-                height : this.props.height,
+                height : this.props.height + (SCREEN_HEIGHT * 0.011),
+                left : 10,
                 borderRadius : 20,
               }}
             >
               <LinearGradient colors={["transparent" , "rgba(0,0,0,0.4)"]} style={{
                 flex : 1,
-                width : SCREEN_WIDTH - 20,
+                width : SCREEN_WIDTH ,
                 borderRadius : 20,
               }}
                 >
@@ -460,14 +466,15 @@ export class SwipeView extends React.Component<AppProps, AppState> {
                 position: 'absolute',
                 zIndex: 1000,
                 width : SCREEN_WIDTH,
-                height : this.props.height,
                 borderRadius : 20,
+                height : this.props.height + (SCREEN_HEIGHT * 0.012),
+                left : 10,
               }}
             >
               <LinearGradient colors={["transparent" , "rgba(0,0,0,0.4)"]} style={{
                 width : SCREEN_WIDTH - 20,
                 flex : 1,
-                
+                borderRadius : 20,
               }}
                 >
                   {/* Find a good cross icon */}
@@ -487,13 +494,15 @@ export class SwipeView extends React.Component<AppProps, AppState> {
                 position: 'absolute',
                 zIndex: 1000,
                 width : SCREEN_WIDTH,
-                height : this.props.height,
+                height : this.props.height + (SCREEN_HEIGHT * 0.012),
+                left : 10,
                 borderRadius : 20,
               }}
             >
               <LinearGradient colors={["transparent" , "rgba(0,0,0,0.4)"]} style={{
                     width : SCREEN_WIDTH - 20,
                     flex : 1,
+                    borderRadius : 20,
                   }}
                 >
                   <AntDesign name="shoppingcart" size={100} color="white" style={{
@@ -547,8 +556,18 @@ export class SwipeView extends React.Component<AppProps, AppState> {
         </View>
     } else {
     return (
-      <View style={{ flex: 1,backgroundColor: "black", paddingTop : SCREEN_HEIGHT * 0.042, paddingBottom : (SCREEN_HEIGHT - this.props.height) - size.verticalScale(130)}}>
-        <View style={{ flex: 1 }}>{this.renderProducts()}</View>
+      <View style={{ 
+        flex: 1,
+        backgroundColor: "black",
+        paddingTop : this.props.paddingTop, 
+        paddingBottom : (SCREEN_HEIGHT - this.props.height) - size.verticalScale(130)
+        }}
+      >
+        <View style={{ flex: 1 }}>
+          {this.renderProducts()}
+        </View>
+
+
         <Filter 
           modalVisible={this.state.modalVisible} 
           filter={this.state.filter}
@@ -559,6 +578,8 @@ export class SwipeView extends React.Component<AppProps, AppState> {
           modalVisible={this.state.shareVisible} 
           setModalVisible={(v: boolean) => this.setState({shareVisible : v})}
         />
+
+
         <View style={{
           display : "flex", flexDirection : "row", 
           bottom : size.verticalScale(10),
@@ -983,13 +1004,15 @@ function shortTitle(str : string) : string {
 
 
 
-
+import { tabBarHeight } from './_layout';
 export default function App(){
 
   return (
+    <>
     <SwipeView 
+    paddingTop={30}
     cards={mockData} 
-    height={size.verticalScale(580)} 
+    height={(SCREEN_HEIGHT * 0.95) - tabBarHeight} 
     onSwipe={(action : string) => {}}
     onFilter={async (data : any) => {
       try {
@@ -1000,7 +1023,7 @@ export default function App(){
       }
     }}
     loading={false}
-    />
+    /></>
   )
 }
 

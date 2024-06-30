@@ -392,7 +392,7 @@ export default class Home extends React.Component<{},HomeState> {
   renderSearch(){
     return (
       <View style={{flex : 1, backgroundColor : "black"}}>
-        <View style={{marginVertical : size.verticalScale(10)}}></View>
+        <View style={{marginTop : size.verticalScale(10)}}></View>
         <Pressable onPress={() => this.setState({query : ""})} style={{display : "flex" , flexDirection : "row", marginTop : 8}}>
                 <View  style={{
                     left : 10,
@@ -412,8 +412,9 @@ export default class Home extends React.Component<{},HomeState> {
                 </Text>
         </Pressable>
         <SwipeView 
+          paddingTop={1}
           cards={this.state.products} 
-          height={size.verticalScale(510)} 
+          height={size.verticalScale(540)} 
           onSwipe={(action : string) => {}}
           onFilter={async (filter : any) => {
             try { 
