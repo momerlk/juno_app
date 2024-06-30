@@ -28,23 +28,24 @@ export default function Browser(){
     } else {
         return (
             <View style={{flex : 1, backgroundColor : "#121212"}}>
-                <Pressable onPress={() => router.back()} style={{
-                    position : "absolute",
-                    left : 30,
-                    top : 50,
-                    }}>
-                    <Ionicons name="arrow-back" size={35} color="white"/>
+                <Pressable onPress={() => router.back()} style={{display : "flex" , flexDirection : "row", marginVertical : 8}}>
+                        <View  style={{
+                            left : 10,
+                            top : 10,
+                            marginBottom : 10,
+                            }}>
+                            <Ionicons name="arrow-back" size={32} color="white"/>
+                        </View>
+                        <Text style={{
+                        color : "white", 
+                        fontFamily : "Poppins", 
+                        fontSize : 22 , 
+                        marginLeft : 20,
+                        marginTop : 10,
+                        }}>
+                            Go Back
+                        </Text>
                 </Pressable>
-                <Image source={require("./assets/juno_icon.png")} 
-                    style={{
-                        height : 100, 
-                        width : 100,
-                        resizeMode : "cover", 
-                        alignSelf : "center", 
-                        justifyContent :"center",
-                        marginTop : 10
-                    }} 
-                />
                 <WebView source={{uri : uri}} />
             </View>
         )
