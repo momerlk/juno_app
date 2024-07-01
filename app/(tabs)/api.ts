@@ -261,3 +261,29 @@ export async function getFilter(){
 
   return data;
 }
+
+export async function getCart(){
+  let token = null
+  try {
+    token = await AsyncStorage.getItem("token");
+    if (token === null){
+      return null;
+    }
+  } catch(e){
+    return null;
+  }
+
+  const response = await fetch(`${base_url}/cart` , {
+    method : "GET",
+    headers : {
+      "Authorization" : token,
+      "Content-Type" : "application/json",
+    },
+  })
+  if (!response.ok){
+    return null;
+  }
+
+  const data = await response.json();
+  return data;
+}
