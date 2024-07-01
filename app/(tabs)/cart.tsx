@@ -52,7 +52,7 @@ function toTitle(str : string) : string {
 
 
 
-export default function TabTwoScreen() {
+export default function CartPage() {
   const [data, setData] = useState<any>(mockData);
   const [req , setReq] = useState(0);
   const [loading , setLoading] = useState(false);
@@ -111,10 +111,10 @@ export function Cart (props : any) {
   // TODO : replace with actual shopify permalink
   const [uri, setUri] = useState("https://bonanzasatrangi.com/46417313955/checkouts/531f95efefddbac87d62de1968606d6c?note=This+was+order+was+placed+with+the+help+of+juno.&ref=JUNO")
 
-  
+  // TODO : add delete and update functions and connect them to server
 
   return(
-    <View style={{marginTop : 40}}>
+    <View style={{marginTop : 40 , paddingBottom : 50}}>
       
         <Text style={{marginTop : 10, color : "white", fontSize : 24, marginLeft : 14, fontFamily : "Poppins", }}>
           {toTitle(vendor_data.vendor)}</Text>

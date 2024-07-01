@@ -179,6 +179,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
   
 
   async handleSwipeAction(action: string) {
+    alert(`this.state.cards[this.state.currentIndex].title = ${this.state.cards[this.state.currentIndex].title} , this.props.card[this.state.currentIndex].title = ${this.props.cards[this.state.currentIndex].title}`)
     this.props.onSwipe(action , this.state.currentIndex);
   }
 
