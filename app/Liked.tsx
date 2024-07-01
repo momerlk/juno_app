@@ -70,8 +70,8 @@ function toTitle(str : string) : string {
     
 function Card(props : any){
   // TODO : Load this specific item in feed
-  const height = 350;
-  const width = 200;
+  const height = 280;
+  const width = 180;
   const textHeight = 80;
   return (
     <Pressable onPress={() => {
@@ -205,7 +205,7 @@ export default class Home extends React.Component<{},HomeState> {
         >
         <FlatList
           contentContainerStyle={{alignSelf: 'flex-start',marginLeft : 4}}
-          numColumns={2}
+          numColumns={4}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
           data={this.state.products}
