@@ -244,3 +244,20 @@ export async function getLiked(){
     return null;
   }
 }
+
+
+export async function getFilter(){
+  const requestOptions = {
+    method: "GET",
+    "Content-Type" : "application/json",
+  };
+
+  const response = await fetch("http://localhost:8080/filter", requestOptions)
+  if (!response.ok){
+    alert(`failed to get filter data from the internet`)
+    return null;
+  }
+  const data = await response.json();
+
+  return data;
+}
