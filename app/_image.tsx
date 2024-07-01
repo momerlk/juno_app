@@ -1,93 +1,136 @@
-import React from 'react';
-import { View, StyleSheet, Dimensions, ImageSourcePropType } from 'react-native';
-import { PinchGestureHandler, State, PinchGestureHandlerGestureEvent } from 'react-native-gesture-handler';
-import Animated, { useSharedValue, useAnimatedStyle, withTiming, useAnimatedGestureHandler } from 'react-native-reanimated';
-import Carousel from 'react-native-snap-carousel';
+import React, { useRef, useState } from 'react';
+import {
+  View,
+  ScrollView,
+  Image,
+  Dimensions,
+  StyleSheet,
+  Animated,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+} from 'react-native';
 
-const { width: screenWidth } = Dimensions.get('window');
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
-// PinchableImage component
-const PinchableImage: React.FC<{ source: ImageSourcePropType }> = ({ source }) => {
-  const scale = useSharedValue(1);
+interface PinchableImageProps {
+  source: { uri: string };
+}
 
-  const onPinchEvent = useAnimatedGestureHandler<PinchGestureHandlerGestureEvent>({
-    onActive: (event) => {
-      scale.value = event.scale;
-    },
-    onEnd: () => {
-      scale.value = withTiming(1, { duration: 300 });
-    },
-  });
+const PinchableImage: React.FC<PinchableImageProps> = ({ source }) => {
+  const scale = useRef(new Animated.Value(1)).current;
 
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ scale: scale.value }],
-    };
-  });
+  const handlePinch = Animated.event(
+    [
+      {
+        nativeEvent: { scale: scale },
+      },
+    ],
+    { useNativeDriver: true }
+  );
 
   return (
-    <PinchGestureHandler onGestureEvent={onPinchEvent}>
-      <Animated.View style={{ flex: 1 }}>
-        <Animated.Image
-          source={source}
-          style={[styles.image, animatedStyle]}
-          resizeMode="contain"
-        />
-      </Animated.View>
-    </PinchGestureHandler>
+    <Animated.View style={styles.imageContainer}>
+      <Animated.Image
+        source={source}
+        style={[styles.image, { transform: [{ scale: scale }] }]}
+        resizeMode="contain"
+      />
+    </Animated.View>
   );
 };
 
-// PinchableImageCarousel component
-const PinchableImageCarousel: React.FC<{ images: string[] }> = ({ images }) => {
-  const renderItem = ({ item }: { item: string }) => {
-    return (
-      <View style={styles.slide}>
-        <PinchableImage source={{ uri: item }} />
-      </View>
-    );
+interface ImageCarouselProps {
+  images: string[];
+}
+
+const ImageCarousel: React.FC<ImageCarouselProps> = ({ images }) => {
+  const scrollRef = useRef<ScrollView>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const contentOffsetX = event.nativeEvent.contentOffset.x;
+    const newIndex = Math.round(contentOffsetX / screenWidth);
+    setCurrentIndex(newIndex);
   };
 
-  return (
-    <Carousel
-      data={images}
-      renderItem={renderItem}
-      sliderWidth={screenWidth}
-      itemWidth={screenWidth}
-      layout={'default'}
-    />
-  );
-};
-
-// App component
-const App: React.FC = () => {
-  const images = [
-    'https://example.com/image1.jpg',
-    'https://example.com/image2.jpg',
-    'https://example.com/image3.jpg',
-  ];
 
   return (
-    <View style={styles.container}>
-      <PinchableImageCarousel images={images} />
+    <View style={styles.carouselContainer}>
+      <ScrollView
+        ref={scrollRef}
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+      >
+        {images.map((uri, index) => (
+          <View key={index} style={{
+                width: screenWidth,
+                height: screenHeight * 0.7,
+                justifyContent: 'center',
+                alignItems: 'center',
+            }}>
+            <PinchableImage source={{ uri }} />
+          </View>
+        ))}
+      </ScrollView>
+      <View style={styles.pagination}>
+        {images.map((_, index) => (
+          <View
+            key={index}
+            style={[
+              styles.paginationDot,
+              currentIndex === index ? styles.activeDot : {},
+            ]}
+          />
+        ))}
+      </View>
     </View>
   );
 };
 
-// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  slide: {
-    flex: 1,
+  carouselContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imageContainer: {
+    width: '100%',
+    height: '100%',
   },
   image: {
     width: '100%',
     height: '100%',
   },
+  pagination: {
+    position: 'absolute',
+    bottom: 10,
+    flexDirection: 'row',
+  },
+  paginationDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: 'gray',
+    margin: 5,
+  },
+  activeDot: {
+    backgroundColor: 'white',
+  },
 });
+
+const App = (props : any) => {
+  return (
+    <View style={styles.container}>
+      <ImageCarousel images={props.images} />
+    </View>
+  );
+};
 
 export default App;

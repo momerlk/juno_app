@@ -10,6 +10,8 @@ import { ImageBackground, Pressable } from 'react-native';
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import Feather from 'react-native-vector-icons/Feather';
 
+import PinchableCarousel from "./_image"
+
 
 function toTitle(str : string) : string {
   if(str === undefined){
@@ -30,9 +32,8 @@ const ProductDetail: React.FC<any> = () => {
   const params = useLocalSearchParams();
 
   const { 
-    title, vendor, description, body_html , price, image_url , product_url
-  } = params;
-
+    title, vendor, description , images , variants , price, image_url , product_url
+  } = params; // TODO : cannot send arrays in params url
 
   // swipe left to go back.
 
@@ -57,33 +58,7 @@ const ProductDetail: React.FC<any> = () => {
   return (
     <>
       <ScrollView style={{...styles.container , backgroundColor : "#121212"}}>
-        <ImageBackground
-          style={styles.imageBackground}
-          source={{ uri: image_url as string }}>
-          <View style={styles.topBar}>
-            <Pressable
-              onPress={() => router.back()}
-              style={styles.wishlistButton}>
-              <Feather
-                name="chevron-left"
-                size={scale(20)}
-                color={'#C80321'} // Replacing appColors.primary with '#FF6347'
-              />
-            </Pressable>
-
-            <Pressable
-              onPress={() => {
-                // Handle add to wishlist functionality
-              }}
-              style={styles.wishlistButton}>
-              <Feather
-                name="heart"
-                size={scale(20)}
-                color={'#C80321'} // Replacing appColors.primary with '#FF6347'
-              />
-            </Pressable>
-          </View>
-        </ImageBackground>
+        <PinchableCarousel images={[image_url]}/>
 
         <View style={{...styles.detailsContainer , backgroundColor : "#121212"}}>
           <Text style={styles.title}>{title}</Text>
