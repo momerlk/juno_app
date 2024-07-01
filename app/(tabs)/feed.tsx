@@ -451,8 +451,8 @@ export class SwipeView extends React.Component<AppProps, AppState> {
         );
       } else {
         // massive performance boost
-        // 3 products ahead
-        if (i > (this.state.currentIndex + 3)){
+        // 2 products ahead
+        if (i > (this.state.currentIndex + 1)){
           return;
         }
         // 2 products behind
@@ -464,6 +464,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
             key={item.product_id}
             style={[
               {
+                // this next card opacity causes it to go black for a second as it is re rendered
                 opacity: this.nextCardOpacity,
                 transform: [{ scale: this.nextCardScale }],
                 height: this.props.height - 120,
@@ -956,13 +957,14 @@ export default class App extends React.Component<any , any> {
       products: [],
       mock: mockData,
       WSFeed: null,
+      loading : false,
     };
   }
 
   async componentDidMount() {
     const token = await AsyncStorage.getItem('token');
     const wsfeed = new api.WSFeed(token!, (data : any) => {
-      this.setState({ products: this.state.products.concat(data) });
+      this.setState({ products: this.state.products.concat(data)});
     });
     this.setState({ WSFeed: wsfeed });
   }
@@ -970,13 +972,13 @@ export default class App extends React.Component<any , any> {
   async componentWillUnmount() {
     // closes on reload; major bug fix
     if(this.state.WSFeed !== null && this.state.WSFeed?.open){
-      alert(`closing websocket connection`)
       this.state.WSFeed.close();
     }
   }
 
   handleSwipe = async (action_type : string, index : number) => {
     console.log(`products.length = ${this.state.products.length} , index = ${index}`)
+    console.log(`WSFeed open = ${this.state.WSFeed?.open}`)
     const filterString = await AsyncStorage.getItem('filter');
     const filter = JSON.parse(filterString as string);
     const { WSFeed, products, mock } = this.state;
@@ -1046,11 +1048,11 @@ export default class App extends React.Component<any , any> {
       <>
         <SwipeView
           paddingTop={30}
-          cards={this.state.products.length === 0 ? this.state.mock : this.state.products}
           height={(SCREEN_HEIGHT * 0.95) - tabBarHeight}
+          cards={this.state.products.length === 0 ? this.state.mock : this.state.products}
           onSwipe={this.handleSwipe}
           onFilter={this.handleFilter}
-          loading={false}
+          loading={this.state.loading}
         />
       </>
     );

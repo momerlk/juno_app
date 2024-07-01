@@ -176,6 +176,7 @@ interface HomeState {
   queryProducts : any[];
   loading : boolean;
   query : string;
+  WSFeed : api.WSFeed | null;
 }
 
 export default class Home extends React.Component<{},HomeState> {
@@ -187,10 +188,17 @@ export default class Home extends React.Component<{},HomeState> {
       loading : true,
       query : "",
       queryProducts : [],
+      WSFeed : null,
     }
   }
 
   async componentDidMount(){
+    const token = await AsyncStorage.getItem('token');
+    const wsfeed = new api.WSFeed(token!, (data : any) => {
+      this.setState({ queryProducts: this.state.queryProducts.concat(data) });
+    });
+    this.setState({ WSFeed: wsfeed });
+
     await fetchFonts();
     const products = await api.getProducts(7);
     if (products === null){
@@ -201,6 +209,31 @@ export default class Home extends React.Component<{},HomeState> {
       this.setState({spotlight : products[3] , products : products , loading : false})
     }
   }
+
+  async componentWillUnmount() {
+    // closes on reload; major bug fix
+    if(this.state.WSFeed !== null && this.state.WSFeed?.open){
+      this.state.WSFeed.close();
+    }
+  }
+
+  handleSwipe = async (action_type : string, index : number) => {
+    console.log(`products.length = ${this.state.products.length} , index = ${index}`)
+    const filterString = await AsyncStorage.getItem('filter');
+    const filter = JSON.parse(filterString as string);
+    const { WSFeed, queryProducts, products } = this.state;
+    if (WSFeed && WSFeed.open) {
+      if (queryProducts.length === 0) {
+        WSFeed.sendAction(action_type, products[index].product_id, api.createQuery(null, filter));
+        return;
+      }
+      try {
+        WSFeed.sendAction(action_type, queryProducts[index].product_id, api.createQuery(null, filter));
+      } catch (e) {
+        console.log(`products.length = ${queryProducts.length}, index = ${index}, error = ${e}`);
+      }
+    }
+  };
 
   renderHome(){
     return (
@@ -376,7 +409,7 @@ export default class Home extends React.Component<{},HomeState> {
           paddingTop={1}
           cards={this.state.queryProducts} 
           height={size.verticalScale(540)} 
-          onSwipe={(action : string) => {}}
+          onSwipe={this.handleSwipe}
           onFilter={async (filter : any) => {
             try { 
               const products = await api.queryProducts(this.state.query , filter);
