@@ -509,7 +509,11 @@ export class SwipeView extends React.Component<AppProps, AppState> {
           modalVisible={this.state.modalVisible} 
           filter={this.state.filter}
           setModalVisible={(v: boolean) => this.setState({modalVisible : v})}
-          onConfirm={this.props.onFilter}
+          onConfirm={() => {
+            this.props.onFilter();
+            // TODO : this change in index when filter is called may cause some issues.
+            this.setState({currentIndex : 0})
+          }}
         />
         <Sharing 
           modalVisible={this.state.shareVisible} 
@@ -942,46 +946,71 @@ function shortTitle(str : string) : string {
 
 
 import { tabBarHeight } from './_layout';
-export default function App(){
-  const [products , setProducts] = useState(mockData);
-  const [WSFeed , setWSFeed] = useState<api.WSFeed | null>(null);
-  useEffect(() => {
-    (async () => {
-      let token = await AsyncStorage.getItem("token");
-      const wsfeed = new api.WSFeed(token! , (products : any) => {
-        alert(`${JSON.stringify(products)}`)
-      });
-      setWSFeed(wsfeed);
-    })() 
-  }, [])
-   
-  return (
-    <>
-    <SwipeView 
-    paddingTop={30}
-    cards={products} 
-    height={(SCREEN_HEIGHT * 0.95) - tabBarHeight} 
-    onSwipe={async (action_type : string , index : number) => {
-      const filterString = await AsyncStorage.getItem("filter")
-      const filter = await JSON.parse(filterString as string);
-      if (WSFeed !== null){
-        if (WSFeed!.open === true){
-          WSFeed.sendAction(action_type , products[index].product_id , api.createQuery("" , filter))
-        }
+export default class App extends React.Component<any , any> {
+  constructor(props : any) {
+    super(props);
+    this.state = {
+      products: [],
+      mock: mockData,
+      WSFeed: null,
+    };
+  }
+
+  async componentDidMount() {
+    const token = await AsyncStorage.getItem('token');
+    const wsfeed = new api.WSFeed(token!, (data : any) => {
+      this.setState({ products: this.state.products.concat(data) });
+    });
+    this.setState({ WSFeed: wsfeed });
+  }
+
+  handleSwipe = async (action_type : string, index : number) => {
+    console.log(`products.length = ${this.state.products.length} , index = ${index}`)
+    const filterString = await AsyncStorage.getItem('filter');
+    const filter = JSON.parse(filterString as string);
+    const { WSFeed, products, mock } = this.state;
+    if (WSFeed && WSFeed.open) {
+      if (products.length === 0) {
+        WSFeed.sendAction(action_type, mock[index].product_id, api.createQuery(null, filter));
+        return;
       }
-    }}
-    onFilter={async (data : any) => {
       try {
-      await AsyncStorage.setItem("filter" , JSON.stringify(data))
-      alert(`filter = ${JSON.stringify(data)}`)
-      } catch (e){
-        alert(`failed to set storage , error = ${e}`)
+        WSFeed.sendAction(action_type, products[index].product_id, api.createQuery(null, filter));
+      } catch (e) {
+        console.log(`products.length = ${products.length}, index = ${index}, error = ${e}`);
       }
-    }}
-    loading={false}
-    /></>
-  )
+    }
+  };
+
+  handleFilter = async (data : any) => {
+    try {
+      await AsyncStorage.setItem('filter', JSON.stringify(data));
+      this.setState({ products: [] });
+      const { WSFeed } = this.state;
+      WSFeed?.sendAction('open', '', api.createQuery(null, data));
+      console.log('on filter called');
+    } catch (e) {
+      alert(`failed to set storage, error = ${e}`);
+    }
+  };
+
+  render() {
+    return (
+      <>
+        <SwipeView
+          paddingTop={30}
+          cards={this.state.products.length === 0 ? this.state.mock : this.state.products}
+          height={(SCREEN_HEIGHT * 0.95) - tabBarHeight}
+          onSwipe={this.handleSwipe}
+          onFilter={this.handleFilter}
+          loading={false}
+        />
+      </>
+    );
+  }
 }
+
+
 
 const mockData = [
     {

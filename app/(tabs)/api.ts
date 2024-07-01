@@ -22,7 +22,7 @@ export class WS {
           console.log(`failed to connect to websocket, error = ${error}`) 
         }
         this.socket.onmessage = (ev : MessageEvent<any>) => {
-          onMessage(ev.data);
+          onMessage(JSON.parse(ev.data));
         }
         this.socket.onclose = (ev : CloseEvent) => {
           this.open = false;
@@ -51,7 +51,16 @@ export class WSFeed extends WS {
     })
   }
 
-  sendAction(action_type : string , product_id : string , query : any){
+  sendAction(action_type : string , product_id : string , query : any | null){
+    if(query === null){
+      this.sendJSON({
+        user_id : "",
+        action_type : action_type,
+        action_timestamp : "",
+        product_id : product_id,
+      })
+      return;
+    }
     this.sendJSON({
       user_id : "",
       action_type : action_type,
@@ -62,7 +71,23 @@ export class WSFeed extends WS {
   }
 }
 
-export function createQuery(text : any | null, filter : any){
+export function createQuery(text : any | null, filter : any | null){
+  
+  if(filter === null && text === null){
+    return null;
+  }
+
+  if (text === null && filter !== null){
+    return {
+      filter : filter
+    }
+  }
+  if (filter === null && text !== null){
+    return {
+      text : text,
+    }
+  }
+
   return {
     text : text, 
     filter : filter,
