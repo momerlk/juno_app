@@ -173,81 +173,12 @@ export class SwipeView extends React.Component<AppProps, AppState> {
 
   async componentDidMount() {
     await fetchFonts();
-
-    // setTimeout(async () => {
-    //   // connecting to feed websocket
-    //   const socket = new WebSocket(`ws://localhost:8080/feed?token=${token2}`);
-    //   socket.onerror = (error : any) => {
-    //     alert(`websocket feed error = ${JSON.stringify(error)}`)
-    //   }
-
-    //   socket.onmessage = (ev: MessageEvent<any>) => {
-    //     const parsed = JSON.parse(ev.data);
-    //     // no products
-    //     // TODO : Create an error logger system which logs errors users face
-
-    //     if (parsed === null || parsed === undefined) {
-    //       return;
-    //     }
-    //     if (parsed === null || parsed == undefined) {
-    //       return;
-    //     }
-
-    //     let products = parsed;
-
-    //     if (products === undefined) {
-    //       this.setState({ currentIndex: 0 })
-    //     } else {
-    //       Image.getSize(
-    //         products[0].image_url,
-    //         (width, height) => {
-    //           const aspectRatio = width / height;
-            
-    //         // TODO : optimise these calculations
-    //         // Calculate the adjusted width based on the fixed height
-    //         const adjustedWidth = aspectRatio * this.props.height;
-    //         this.setState({ height : this.props.height , width : adjustedWidth});
-    //         },
-    //         (error) => {
-    //           console.error('Failed to get image size', error);
-    //         }
-    //       );
-    //       this.setState({ currentIndex: 0, cards: products });
-    //     }
-
-    //     this.setState({loading : false})
-    //   };
-
-    //   this.setState({ socket: socket });
-    // }, 500);
-
-
-    // setTimeout( // initial authentication to socket
-    //   () => {
-    //     try {
-    //     this.state.socket.send(`{
-    //         "user_id" : "",
-    //         "action_type" : "open",
-    //         "action_timestamp" : "",
-    //         "product_id" : ""
-    //     }`)
-    //     } catch (e){
-    //         alert(`failed to connect, error = ${e}`)
-    //     }
-    
-    // }, 1000)
   }
 
   
 
   async handleSwipeAction(action: string) {
-    // this.state.socket.send(JSON.stringify({
-    //   user_id : "",
-    //   action_type: action,
-    //   action_timestamp: new Date().toJSON(),
-    //   product_id: this.state.cards[this.state.currentIndex]["product_id"],
-    // }))
-    this.props.onSwipe(action);
+    this.props.onSwipe(action , this.state.currentIndex);
   }
 
   handleSwipe = (gestureState: any) => {

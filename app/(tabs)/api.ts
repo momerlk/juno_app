@@ -7,7 +7,16 @@ const base_url = "http://localhost:8080"
 const ws_base_url = "ws://localhost:8080"
 const feed_url = `${ws_base_url}/feed`
 
-class WSFeed{}
+class WSFeed{
+    socket : WebSocket;
+    constructor(){
+        this.socket = new WebSocket(feed_url);
+        this.socket.onerror = (error : any) => {
+          alert(`failed to connect to websocket`)
+          console.log(`failed to connect to websocket, error = ${error}`) 
+        }
+    }
+}
 
 export async function signIn(email : string, password : string){
     const response = await fetch(base_url + '/signIn', {
