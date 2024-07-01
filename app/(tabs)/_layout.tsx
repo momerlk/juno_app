@@ -35,10 +35,9 @@ export default function TabLayout() {
         headerShown: false,
         tabBarStyle : {
           backgroundColor : "black",
-          borderTopWidth : StyleSheet.hairlineWidth,
+          borderTopColor : "black",
           paddingTop : paddingTop,
           paddingBottom : paddingBottom,
-          borderColor : "#2D2D2D",
           height : tabBarHeight , 
 
         },
