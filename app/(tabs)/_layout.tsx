@@ -14,7 +14,10 @@ import {StyleSheet} from "react-native";
 import * as size from "react-native-size-matters";
 
 let { height: screenHeight , width : screenWidth } = Dimensions.get('window');
-const factor = screenHeight/screenWidth;
+let factor = screenHeight/screenWidth;
+if (factor < 1){
+  factor = 2;
+}
 const paddingTop = size.verticalScale(15/factor);
 const paddingBottom = size.verticalScale(20/factor);
 const vPadding = paddingTop + paddingBottom;

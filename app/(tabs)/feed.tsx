@@ -509,8 +509,8 @@ export class SwipeView extends React.Component<AppProps, AppState> {
           modalVisible={this.state.modalVisible} 
           filter={this.state.filter}
           setModalVisible={(v: boolean) => this.setState({modalVisible : v})}
-          onConfirm={() => {
-            this.props.onFilter();
+          onConfirm={(data : any) => {
+            this.props.onFilter(data);
             // TODO : this change in index when filter is called may cause some issues.
             this.setState({currentIndex : 0})
           }}
@@ -946,6 +946,9 @@ function shortTitle(str : string) : string {
 
 
 import { tabBarHeight } from './_layout';
+
+
+
 export default class App extends React.Component<any , any> {
   constructor(props : any) {
     super(props);
@@ -962,6 +965,14 @@ export default class App extends React.Component<any , any> {
       this.setState({ products: this.state.products.concat(data) });
     });
     this.setState({ WSFeed: wsfeed });
+  }
+
+  async componentWillUnmount() {
+    // closes on reload; major bug fix
+    if(this.state.WSFeed !== null && this.state.WSFeed?.open){
+      alert(`closing websocket connection`)
+      this.state.WSFeed.close();
+    }
   }
 
   handleSwipe = async (action_type : string, index : number) => {
@@ -983,6 +994,42 @@ export default class App extends React.Component<any , any> {
   };
 
   handleFilter = async (data : any) => {
+    const deepEqual = (obj1 : any, obj2 : any) => {
+      if (obj1 === obj2) {
+        return true;
+      }
+
+      if (typeof obj1 !== 'object' || obj1 === null || typeof obj2 !== 'object' || obj2 === null) {
+        return false;
+      }
+
+      const keys1 = Object.keys(obj1);
+      const keys2 = Object.keys(obj2);
+
+      if (keys1.length !== keys2.length) {
+        return false;
+      }
+
+      for (let key of keys1) {
+        if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    if (data === null || data === undefined){
+      return;
+    }
+    try {
+      const filterString = await AsyncStorage.getItem("filter")
+      const filter = JSON.parse(filterString as string);
+      if (deepEqual(filter , data)){
+        return;
+      }
+
+    } catch(e){}
     try {
       await AsyncStorage.setItem('filter', JSON.stringify(data));
       this.setState({ products: [] });
@@ -990,7 +1037,7 @@ export default class App extends React.Component<any , any> {
       WSFeed?.sendAction('open', '', api.createQuery(null, data));
       console.log('on filter called');
     } catch (e) {
-      alert(`failed to set storage, error = ${e}`);
+      alert(`failed to set filter, error = ${e}`);
     }
   };
 
