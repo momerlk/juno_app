@@ -179,8 +179,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
   
 
   async handleSwipeAction(action: string) {
-    alert(`this.state.cards[this.state.currentIndex].title = ${this.state.cards[this.state.currentIndex].title} , this.props.card[this.state.currentIndex].title = ${this.props.cards[this.state.currentIndex].title}`)
-    this.props.onSwipe(action , this.state.currentIndex);
+    this.props.onSwipe(action);
   }
 
   handleSwipe = (gestureState: any) => {
@@ -945,6 +944,7 @@ export default class App extends React.Component<any , any> {
       mock: mockData,
       WSFeed: null,
       loading : false,
+      currentIndex : 0,
     };
   }
 
@@ -958,28 +958,39 @@ export default class App extends React.Component<any , any> {
 
   async componentWillUnmount() {
     // closes on reload; major bug fix
+    alert(`setting index to 0`)
+    this.setState({currentIndex : 0})
     if(this.state.WSFeed !== null && this.state.WSFeed?.open){
       this.state.WSFeed.close();
     }
   }
 
-  handleSwipe = async (action_type : string, index : number) => {
-    console.log(`products.length = ${this.state.products.length} , index = ${index}`)
+  handleSwipe = async (action_type : string) => {
+
+    console.log(`products.length = ${this.state.products.length} , index = ${this.state.currentIndex}`)
     console.log(`WSFeed open = ${this.state.WSFeed?.open}`)
+
     const filterString = await AsyncStorage.getItem('filter');
     const filter = JSON.parse(filterString as string);
+
     const { WSFeed, products, mock } = this.state;
+
     if (WSFeed && WSFeed.open) {
       if (products.length === 0) {
-        WSFeed.sendAction(action_type, mock[index].product_id, api.createQuery(null, filter));
         return;
       }
       try {
-        WSFeed.sendAction(action_type, products[index].product_id, api.createQuery(null, filter));
+        WSFeed.sendAction(
+            action_type,
+             products[this.state.currentIndex].product_id, 
+            api.createQuery(null, filter)
+          );
       } catch (e) {
-        console.log(`products.length = ${products.length}, index = ${index}, error = ${e}`);
+        console.log(`products.length = ${products.length}, index = ${this.state.currentIndex}, error = ${e}`);
       }
     }
+
+    this.setState({currentIndex : this.state.currentIndex + 1})
   };
 
   handleFilter = async (data : any) => {
@@ -1021,7 +1032,7 @@ export default class App extends React.Component<any , any> {
     } catch(e){}
     try {
       await AsyncStorage.setItem('filter', JSON.stringify(data));
-      this.setState({ products: [] });
+      this.setState({ products: [], currentIndex : 0});
       const { WSFeed } = this.state;
       WSFeed?.sendAction('open', '', api.createQuery(null, data));
       console.log('on filter called');

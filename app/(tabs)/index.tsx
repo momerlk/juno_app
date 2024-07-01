@@ -177,6 +177,7 @@ interface HomeState {
   loading : boolean;
   query : string;
   WSFeed : api.WSFeed | null;
+  currentIndex : number;
 }
 
 export default class Home extends React.Component<{},HomeState> {
@@ -189,6 +190,7 @@ export default class Home extends React.Component<{},HomeState> {
       query : "",
       queryProducts : [],
       WSFeed : null,
+      currentIndex : 0,
     }
   }
 
