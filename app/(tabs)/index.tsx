@@ -471,16 +471,16 @@ export default class Home extends React.Component<{},HomeState> {
 
 const mockData = [
     {
-        "product_id": "dd37fd7a-0bac-4632-ad0e-437bcf8ba4d8",
-        "product_url": "https://pk.ethnc.com/products/western-dress-e1600-108-522-522",
-        "shopify_id": "7237305892966",
-        "handle": "western-dress-e1600-108-522-522",
-        "title": "Dress (E1600/108/522)",
+        "product_id": "e937ef8e-752a-480d-9fd5-c0d727e14259",
+        "product_url": "https://pk.ethnc.com/products/casual-shirt-e4035-102-329-329",
+        "shopify_id": "6968144101478",
+        "handle": "casual-shirt-e4035-102-329-329",
+        "title": "Embroidered Shirt (E4035/102/329)",
         "vendor": "ethnic",
         "category": "",
-        "image_url": "https://cdn.shopify.com/s/files/1/2290/7917/files/E1600-108-522_1.jpg?v=1716294189",
-        "description": "Details:Style like a diva in this vibrant dress rendered in mesmerizing shades. Crafted in a contemporary silhouette, this gorgeous dress is beautifully adorned with fascinating floral prints in vibrant purple orchid color. Style this statement dress at fun events this season.-Purple Orchid Color-Cotton Linen Fabric-Stitched Article-1 piece\nSize & Fit:-Model height is 5'6.-Model is wearing XS size.",
-        "price": 4890,
+        "image_url": "https://cdn.shopify.com/s/files/1/2290/7917/files/E4035-102-329_1.jpg?v=1707802671",
+        "description": "Details:Crafted from a fascinating pale coral fabric, this elegant shirt illustrates a contemporary striped shirt enriched with intricate embroidery at front with floral designs with schiffli technique layered on a contemporary silhouette. The design is completed with delicate lace and trendy embellishments at front placket resulting in a gorgeous look to style this season.-Pale Coral Color-Yarn Dyed Fabric-Stitched Article-1 piece\nSize & Fit:-Model height is 5'6.-Model is wearing XS size.",
+        "price": 2490,
         "currency": "PKR",
         "options": [
             {
@@ -491,118 +491,6 @@ const mockData = [
                     "S",
                     "M",
                     "L"
-                ]
-            },
-            {
-                "name": "Color",
-                "position": 2,
-                "values": [
-                    "Purple"
-                ]
-            }
-        ],
-        "tags": [
-            "CGST15",
-            "DRESSES",
-            "E1600/108/522-1-dress-SimplifiedSizechart",
-            "New-In Western",
-            "one piece pret",
-            "ONGOING SS'24",
-            "PRET SS'24",
-            "shopify",
-            "SS-24",
-            "SummerSale24WomenALL27June24",
-            "SummerSale24WomenPret27June24",
-            "SummerSale24WomenWestern27June24",
-            "Western",
-            "Western dress",
-            "western dress'23",
-            "western summer'24",
-            "Western'24",
-            "Western-Full Price",
-            "Western-Full PriceFP24",
-            "Women New In",
-            "WOMEN-F.P"
-        ],
-        "available": true
-    },
-    {
-        "product_id": "4a180ce4-48eb-4620-8e08-7c7adc3bbefe",
-        "product_url": "https://pk.ethnc.com/products/western-dress-e1568-108-307-307",
-        "shopify_id": "7219459293286",
-        "handle": "western-dress-e1568-108-307-307",
-        "title": "Dress (E1568/108/307)",
-        "vendor": "ethnic",
-        "category": "",
-        "image_url": "https://cdn.shopify.com/s/files/1/2290/7917/files/E1568-108-307_1.jpg?v=1714638020",
-        "description": "Details:Style like a diva in this vibrant dress rendered in mesmerizing shades. Crafted in a contemporary silhouette, this gorgeous dress is beautifully adorned with fascinating floral prints in vibrant colors. Style this statement dress at fun events this season.-Crimson Red Color-Cotton Linen Fabric-Stitched Article-1 piece\nSize & Fit:-Model height is 5'6.-Model is wearing XS size.",
-        "price": 4890,
-        "currency": "PKR",
-        "options": [
-            {
-                "name": "SIZE",
-                "position": 1,
-                "values": [
-                    "XS",
-                    "S",
-                    "M",
-                    "L"
-                ]
-            },
-            {
-                "name": "Color",
-                "position": 2,
-                "values": [
-                    "Red"
-                ]
-            }
-        ],
-        "tags": [
-            "CGST15",
-            "DRESSES",
-            "E1568/108/307-1-dress-SimplifiedSizechart",
-            "New-In Western",
-            "one piece pret",
-            "ONGOING SS'24",
-            "PRET SS'24",
-            "shopify",
-            "SS-24",
-            "SummerSale24WomenALL27June24",
-            "SummerSale24WomenPret27June24",
-            "SummerSale24WomenWestern27June24",
-            "Western",
-            "Western dress",
-            "western dress'23",
-            "western summer'24",
-            "Western'24",
-            "Western-Full Price",
-            "Western-Full PriceFP24",
-            "Women New In",
-            "WOMEN-F.P"
-        ],
-        "available": true
-    },
-    {
-        "product_id": "350f1bba-9b53-4aa7-aa70-513ccc6043be",
-        "product_url": "https://pk.ethnc.com/products/toddler-dress-e0272-301-423-423",
-        "shopify_id": "6817365229670",
-        "handle": "toddler-dress-e0272-301-423-423",
-        "title": "Dress (E0272/301/423)",
-        "vendor": "ethnic",
-        "category": "",
-        "image_url": "https://cdn.shopify.com/s/files/1/2290/7917/products/E0272-301-423_1.jpg?v=1666003294",
-        "description": "Details:A fascinating design is layered over this elegant dress rendered in blush pink shade. Crafted in a chic silhouette with gathers below yoke and adorned with pockets, this contemporary dress is enhanced with quirky cartoon illustration prints in vibrant hues. Style this exquisite dress at casual gatherings this season.-Blush Pink Color-Jersey Fabric-1 piece\nSize & Fit:-Model height is 40-42 Inches-Model is wearing 3-4 Year size",
-        "price": 850,
-        "currency": "PKR",
-        "options": [
-            {
-                "name": "SIZE",
-                "position": 1,
-                "values": [
-                    "12-18M",
-                    "2-3Y",
-                    "3-4Y",
-                    "4-5Y"
                 ]
             },
             {
@@ -614,354 +502,396 @@ const mockData = [
             }
         ],
         "tags": [
-            "12-18M",
-            "17 oct",
-            "2-3Y",
-            "3-4Y",
-            "4-5Y",
-            "AS22-KIDS",
-            "Below - PKR 1990",
-            "Chota Fusion",
-            "Chota fusion dress",
-            "Chota fusion toddler",
-            "CHOTA FUSION TODDLER'23",
-            "DRESS & JUMPSUIT TODDLER",
-            "DRESS & JUMPSUIT TODDLER'23",
-            "fusion dress toddler",
-            "fusion dress toddler'22",
-            "girls toddler",
-            "GTTF313046dress",
-            "kids fusion'23",
-            "Kids New In",
-            "KIDS-F.P",
-            "matter-size",
-            "New-In Fusion Kids",
-            "one piece kids",
-            "PARTSALEKIDSALL10MAY",
-            "PARTSALEKIDSCHOTAFUSION10MAY",
-            "pink",
-            "Pret AS'22 Kids",
-            "Pret SS'23 Kids",
-            "SS23-KIDS",
-            "SUMMERCLEARANCEKIDSALL",
-            "SUMMERCLEARANCEKIDSCHOTAFUSION",
-            "toddler fusion AS'22",
-            "wonderland kids fusion"
-        ],
-        "available": true
-    },
-    {
-        "product_id": "09da78cd-2d59-4ef5-87d4-b39109b3c9e9",
-        "product_url": "https://pk.ethnc.com/products/western-dress-e1527-108-112-112",
-        "shopify_id": "6959789998182",
-        "handle": "western-dress-e1527-108-112-112",
-        "title": "Dress (E1527/108/112)",
-        "vendor": "ethnic",
-        "category": "",
-        "image_url": "https://cdn.shopify.com/s/files/1/2290/7917/files/E1527-108-112_1.jpg?v=1706004461",
-        "description": "Details:A gracefully elegant composition is layered over this trendy dress rendered in a classy yellow beige shade. Crafted in a contemporary silhouette this flowy dress with round neck is adorned with checkered prints in subtle hues. Style this contemporary dress at fun parties and be the epitome of grace this season.-Yellow Beige Color-Cotton Linen Fabric-Stitched Article-1 piece\nSize & Fit:-Model height is 5'6.-Model is wearing XS size.",
-        "price": 3490,
-        "currency": "PKR",
-        "options": [
-            {
-                "name": "SIZE",
-                "position": 1,
-                "values": [
-                    "XS",
-                    "S",
-                    "M",
-                    "L"
-                ]
-            },
-            {
-                "name": "Color",
-                "position": 2,
-                "values": [
-                    "Beige"
-                ]
-            }
-        ],
-        "tags": [
             "AZADISALEWOMENALL22MAR",
             "AZADISALEWOMENPret22MAR",
+            "Casual",
+            "Casual shirt",
+            "casual'23",
+            "casual'24",
+            "Casual-Full Price",
             "CGST15",
-            "dress",
-            "DRESSES",
-            "E1527/108/112-1-dress-SimplifiedSizechart",
-            "E1527/108/112-SimplifiedSizechart",
+            "E4035/102/329-1-shirt-SimplifiedSizechart",
             "L",
             "M",
             "MSSALEWOMENALL8MAY",
+            "MSSALEWomenCasual8MAY",
             "MSSALEWOMENPret8MAY",
-            "MSSALEWomenWestern8MAY",
-            "New-In Western",
-            "one piece pret",
-            "ONGOING WS'23",
-            "PKR 6000 - Above",
-            "PRET SS'24",
-            "S",
-            "Western",
-            "Western dress",
-            "western dress'23",
-            "western summer'23",
-            "western summer'24",
-            "Western'23",
-            "Western'24",
-            "Western-Full Price",
-            "Western-Full PriceFP23",
-            "Women New In",
-            "WOMEN-F.P",
-            "WS-23",
-            "XS"
-        ],
-        "available": true
-    },
-    {
-        "product_id": "05150ab0-a351-4a61-8067-cc0090642b51",
-        "product_url": "https://pk.ethnc.com/products/western-dress-e1512-108-003-003",
-        "shopify_id": "7012652384358",
-        "handle": "western-dress-e1512-108-003-003",
-        "title": "Dress (E1512/108/003)",
-        "vendor": "ethnic",
-        "category": "",
-        "image_url": "https://cdn.shopify.com/s/files/1/2290/7917/files/E1512-108-003_1.jpg?v=1708420625",
-        "description": "Details:A gracefully elegant composition is layered over this contemporary dress rendered in a classy coconut milk shade and illustrating a checkered canvas. Crafted in an on-trend silhouette with gathers, this flowy dress is enriched with captivating pattern embroidered in vibrant hues. Style this classy dress at fun parties and be the epitome of grace this season.-Coconut Milk Color-Cotton Linen Fabric-Stitched Article-1 piece\nSize & Fit:-Model height is 5'6.-Model is wearing XS size.",
-        "price": 4490,
-        "currency": "PKR",
-        "options": [
-            {
-                "name": "SIZE",
-                "position": 1,
-                "values": [
-                    "XS",
-                    "S",
-                    "M",
-                    "L"
-                ]
-            },
-            {
-                "name": "Color",
-                "position": 2,
-                "values": [
-                    "Off White"
-                ]
-            }
-        ],
-        "tags": [
-            "AZADISALEWOMENALL22MAR",
-            "AZADISALEWOMENPret22MAR",
-            "CGST15",
-            "dress",
-            "DRESSES",
-            "E1512/108/003-1-dress-SimplifiedSizechart",
-            "L",
-            "M",
-            "MSSALEWOMENALL8MAY",
-            "MSSALEWOMENPret8MAY",
-            "MSSALEWomenWestern8MAY",
-            "New-In Western",
-            "one piece pret",
-            "ONGOING SS'23",
-            "PKR 4000 - PKR 5990",
-            "PRET SS'24",
-            "S",
-            "SS-24",
-            "Western",
-            "Western dress",
-            "western dress'23",
-            "western winter'23",
-            "Western'23",
-            "Western'24",
-            "Western-Full Price",
-            "Western-Full PriceFP23",
-            "Women New In",
-            "WOMEN-F.P",
-            "XS"
-        ],
-        "available": true
-    },
-    {
-        "product_id": "c2963e9c-1cc8-4718-af76-7989f532de6a",
-        "product_url": "https://pk.ethnc.com/products/western-dress-e1568-108-626-626",
-        "shopify_id": "7219459326054",
-        "handle": "western-dress-e1568-108-626-626",
-        "title": "Dress (E1568/108/626)",
-        "vendor": "ethnic",
-        "category": "",
-        "image_url": "https://cdn.shopify.com/s/files/1/2290/7917/files/E1568-108-626_1.jpg?v=1714638050",
-        "description": "Details:Style like a diva in this vibrant dress rendered in lavender shade. Crafted in a contemporary silhouette, this gorgeous dress is beautifully adorned with fascinating floral prints in refreshing lavender blue tones. Style this statement dress at fun events this season.-Lavender Blue Color-Cotton Linen Fabric-Stitched Article-1 piece\nSize & Fit:-Model height is 5'6.-Model is wearing XS size.",
-        "price": 4890,
-        "currency": "PKR",
-        "options": [
-            {
-                "name": "SIZE",
-                "position": 1,
-                "values": [
-                    "XS",
-                    "S",
-                    "M",
-                    "L"
-                ]
-            },
-            {
-                "name": "Color",
-                "position": 2,
-                "values": [
-                    "Blue"
-                ]
-            }
-        ],
-        "tags": [
-            "CGST15",
-            "DRESSES",
-            "E1568/108/626-1-shirt-SimplifiedSizechart",
-            "New-In Western",
             "one piece pret",
             "ONGOING SS'24",
             "PRET SS'24",
-            "shopify",
+            "S",
             "SS-24",
-            "SummerSale24WomenALL27June24",
-            "SummerSale24WomenPret27June24",
-            "SummerSale24WomenWestern27June24",
-            "Western",
-            "Western dress",
-            "western dress'23",
-            "western summer'24",
-            "Western'24",
-            "Western-Full Price",
-            "Western-Full PriceFP24",
             "Women New In",
-            "WOMEN-F.P"
+            "WOMEN-F.P",
+            "XS"
         ],
         "available": true
     },
     {
-        "product_id": "7d1bdf17-289f-4b4b-b3dc-16491028ef10",
-        "product_url": "https://pk.ethnc.com/products/western-dress-e1532-108-113-113",
-        "shopify_id": "6959790030950",
-        "handle": "western-dress-e1532-108-113-113",
-        "title": "Dress (E1532/108/113)",
+        "product_id": "9139255b-4d61-4c03-981e-87ed16a561b5",
+        "product_url": "https://beechtree.pk/products/ppwesbw230255-multi",
+        "shopify_id": "13411366338720",
+        "handle": "ppwesbw230255-multi",
+        "title": "Button Down Striped Shirt",
+        "vendor": "beechtree",
+        "category": "",
+        "image_url": "https://cdn.shopify.com/s/files/1/0488/9201/8848/files/PPWESBW230255_1.jpg?v=1715338882",
+        "description": "Designed with long sleeves and a button-front design with embroidery on pocket, this shirt is perfect for your handsome one.\nFeatures:\nLong Sleeves\nFront Pocket\nFabric:\nYarn Dyed",
+        "price": 749,
+        "currency": "PKR",
+        "options": [
+            {
+                "name": "Size",
+                "position": 1,
+                "values": [
+                    "6-7Y",
+                    "7-8Y",
+                    "8-9Y",
+                    "9-10Y",
+                    "11-12Y",
+                    "13-14Y"
+                ]
+            },
+            {
+                "name": "COLOR",
+                "position": 2,
+                "values": [
+                    "MULTI"
+                ]
+            },
+            {
+                "name": "FABRIC",
+                "position": 3,
+                "values": [
+                    "YARN DYED"
+                ]
+            }
+        ],
+        "tags": [
+            "11-12Y",
+            "13-14Y",
+            "6-7Y",
+            "7-8Y",
+            "8-9Y",
+            "9-10Y",
+            "Boys",
+            "Boys-Shirts",
+            "Boys-WN",
+            "Boys-WN23",
+            "Boys-WN23-Shirts",
+            "child",
+            "F-30",
+            "Multi",
+            "PKR 2000 - PKR 2499",
+            "PL-70",
+            "pl-sale",
+            "pl-winter",
+            "pl-winter-boys",
+            "sale",
+            "sale-boys",
+            "sale-by-percentage",
+            "sale-season",
+            "salebypercenatge",
+            "t_size_11-12Y: 25.5\"-15\"-17.25\"-22.5\"",
+            "t_size_13-14Y: 26.75\"-15.75\"-17.75\"-23.5\"",
+            "t_size_6-7Y: 20.75\"-12.5\"-15\"-16.5\"",
+            "t_size_7-8Y: 22.05\"-13.25\"-15.75\"-18.5\"",
+            "t_size_8-9Y: 22.75\"-13.75\"-16.5\"-19.5\"",
+            "t_size_9-10Y: 24.25\"-14\"-17\"-20.5\"",
+            "trouser_size::length-shoulder-chest-sleeve length",
+            "w23tag",
+            "winter",
+            "winter collection",
+            "Yarn Dyed"
+        ],
+        "available": true
+    },
+    {
+        "product_id": "7141e20c-3c37-448b-8df1-4bc425e5d932",
+        "product_url": "https://pk.ethnc.com/products/casual-suit-e0476-402-313-313-casual-suit-e0476-302-313-313",
+        "shopify_id": "6945103118438",
+        "handle": "casual-suit-e0476-402-313-313-casual-suit-e0476-302-313-313",
+        "title": "Embroidered Suit (E0476/402/313 E0476/302/313)",
         "vendor": "ethnic",
         "category": "",
-        "image_url": "https://cdn.shopify.com/s/files/1/2290/7917/files/E1532-108-113_1.jpg?v=1706004513",
-        "description": "Details:A gracefully elegant composition is layered over this trendy dress rendered in a classy beige shade. Crafted in a contemporary silhouette with panels, this flowy dress with V neck and elasticated sleeves opening is must have to style this season. Style this contemporary dress at fun parties and be the epitome of grace.-Beige Color-Cotton Linen Fabric-Stitched Article-1 piece\nSize & Fit:-Model height is 5'6.-Model is wearing XS size.",
-        "price": 3490,
+        "image_url": "https://cdn.shopify.com/s/files/1/2290/7917/files/E0476-402-313_1.jpg?v=1702978471",
+        "description": "Details:A fascinating composition is layered over this beautiful outfit rendered in an appealing baby coral shade. It features a classy silhouette shirt enriched with captivating floral embroidery in vibrant hues. Enhanced with fabric buttons at front, this aesthetic shirt is paired with a solid trouser. Let your girls look graceful in this statement outfit.-Baby Coral Color-Cross Hatch Fabric-Stitched Article-2 piece\nSize & Fit:-Model height is 45-46 Inches-Model is wearing 05-06 Year size",
+        "price": 3590,
         "currency": "PKR",
         "options": [
             {
                 "name": "SIZE",
                 "position": 1,
                 "values": [
-                    "XS",
-                    "S",
-                    "M",
-                    "L"
+                    "3-4Y",
+                    "4-5Y",
+                    "5-6Y",
+                    "6-7Y",
+                    "7-8Y",
+                    "8-9Y",
+                    "9-10Y",
+                    "10-11Y",
+                    "11-12Y"
                 ]
             },
             {
                 "name": "Color",
                 "position": 2,
                 "values": [
-                    "Beige"
+                    "Pink"
                 ]
             }
         ],
         "tags": [
-            "AZADISALEWOMENALL22MAR",
-            "AZADISALEWOMENPret22MAR",
+            "10-11Y",
+            "11-12Y",
+            "3-4Y",
+            "4-5Y",
+            "5-6Y",
+            "6-7Y",
+            "7-8Y",
+            "8-9Y",
+            "9-10Y",
+            "Casual",
+            "casual kids",
+            "Casual kids New In",
+            "casual kids'22",
+            "casual kids'23",
+            "casual kids'24",
+            "casual suits kids",
+            "Casual-Full Price",
             "CGST15",
-            "dress",
-            "DRESSES",
-            "E1532/108/002-SimplifiedSizechart",
-            "L",
-            "M",
-            "MSSALEWOMENALL8MAY",
-            "MSSALEWOMENPret8MAY",
-            "MSSALEWomenWestern8MAY",
-            "New-In Western",
-            "one piece pret",
-            "ONGOING WS'23",
-            "PKR 6000 - Above",
-            "PRET SS'24",
-            "S",
-            "Western",
-            "Western dress",
-            "western dress'23",
-            "western summer'23",
-            "western summer'24",
-            "Western'23",
-            "Western'24",
-            "Western-Full Price",
-            "Western-Full PriceFP23",
-            "Women New In",
-            "WOMEN-F.P",
-            "WS-23",
-            "XS"
+            "E0476/402/313-1-shirt-SimplifiedSizechart",
+            "E0476/402/313-2-trouser-SimplifiedSizechart",
+            "eastern kids",
+            "EASTERN KIDS'23",
+            "EASTERN KIDS'24",
+            "embroidered",
+            "Kids New In",
+            "KIDS-F.P",
+            "MSSALEKIDSALL8MAY",
+            "MSSALEKidsCasual8MAY",
+            "MSSALEKIDSEASTERN8MAY",
+            "New-In Casual Kids",
+            "PKR 2000 - PKR 3990",
+            "PRET SS'24 Kids",
+            "SS24-KIDS",
+            "two piece kids"
         ],
         "available": true
     },
     {
-        "product_id": "7115fa70-28e3-4396-888f-44d1d486bc47",
-        "product_url": "https://pk.ethnc.com/products/western-dress-e1119-108-999-999",
-        "shopify_id": "6875328053350",
-        "handle": "western-dress-e1119-108-999-999",
-        "title": "Printed Dress (E1119/108/999)",
-        "vendor": "ethnic",
+        "product_id": "4c8b9efc-2aeb-4081-bfad-ac457e3c96df",
+        "product_url": "https://beechtree.pk/products/btj-11651e-std",
+        "shopify_id": "8485824266400",
+        "handle": "btj-11651e-std",
+        "title": "Earrings",
+        "vendor": "beechtree",
         "category": "",
-        "image_url": "https://cdn.shopify.com/s/files/1/2290/7917/files/E1119-108-999_1.jpg?v=1697441318",
-        "description": "Details:Style like a diva in this vibrant dress rendered in a vibrant shade. Crafted in a contemporary silhouette with pleats at front, this gorgeous dress is beautifully adorned with artistic floral prints in monochromatic tones. Style this statement dress at fun events this season.-Multi Color-Interlock Fabric-1 piece\nSize & Fit:-Model height is 5'6.-Model is wearing XS size.",
-        "price": 2690,
+        "image_url": "https://cdn.shopify.com/s/files/1/0488/9201/8848/files/btj-11651e_1.jpg?v=1685351341",
+        "description": "Statement studs are a staple",
+        "price": 534,
         "currency": "PKR",
         "options": [
             {
-                "name": "SIZE",
+                "name": "Size",
+                "position": 1,
+                "values": [
+                    "1 PAIR"
+                ]
+            }
+        ],
+        "tags": [
+            "10",
+            "12",
+            "14",
+            "40",
+            "40%OFF",
+            "8",
+            "Accessories",
+            "full-price",
+            "Jewellery",
+            "Jewellery-Earrings",
+            "NA-ACC-Jewellery",
+            "num_size:8-10-12-14",
+            "PKR 500 - PKR 999",
+            "s23tag",
+            "Sale-ACC",
+            "sale-acc-jewellery",
+            "salepercent40",
+            "STD",
+            "SUMMERCOLLECTION",
+            "YarnDyed"
+        ],
+        "available": true
+    },
+    {
+        "product_id": "cf53f250-d640-4c59-aec5-0a06d55de177",
+        "product_url": "https://www.crossstitch.pk/products/zinnia-3",
+        "shopify_id": "6955423334465",
+        "handle": "zinnia-3",
+        "title": "Zinnia 3",
+        "vendor": "cross_stitch",
+        "category": "",
+        "image_url": "https://cdn.shopify.com/s/files/1/0178/4492/8612/files/0123STBBAS0203_3.jpg?v=1682497435",
+        "description": "100% COTTON CAMBRIC DYED BASIC PANTS",
+        "price": 1460,
+        "currency": "PKR",
+        "options": [
+            {
+                "name": "Size",
                 "position": 1,
                 "values": [
                     "XS",
-                    "S",
+                    "L",
                     "M",
-                    "L"
+                    "S"
                 ]
             },
             {
                 "name": "Color",
                 "position": 2,
                 "values": [
-                    "Multi"
+                    "ANGORA"
+                ]
+            },
+            {
+                "name": "Fabric",
+                "position": 3,
+                "values": [
+                    "CAMBRIC"
                 ]
             }
         ],
         "tags": [
-            "dress",
-            "DRESSES",
-            "E0218/108/707-SimplifiedSizechart",
-            "FSSALEWOMENALL22NOVNR",
-            "FSSALEWOMENPret22NOVNR",
-            "L",
-            "M",
-            "New-In Western",
-            "Nov S Disc",
-            "one piece pret",
-            "ONGOING WS'23",
-            "PKR 2000 - PKR 3990",
-            "PRET WS'23",
-            "S",
-            "SALEWOMENALL3Nov",
-            "SALEWOMENPret3Nov",
-            "SUMMERCLEARANCEWOMENALL",
-            "SUMMERCLEARANCEWOMENPret",
-            "Western",
-            "Western dress",
-            "western dress'23",
-            "western summer'23",
-            "Western'23",
-            "Western-Full Price",
-            "Western-Full PriceFP23",
-            "Women New In",
-            "WOMEN-F.P",
-            "WS-23",
-            "XS"
+            "0123STBBAS0203",
+            "APRIL 2023",
+            "Basic Pants",
+            "Bottoms",
+            "CLASS: BOTTOM",
+            "COLLECTION: SS-23 RTW BASIC PANTS EDIT-2",
+            "DCS: PRO TYP: RTWBTMBPA",
+            "PRO TYP: SEMI FORMAL",
+            "Sale",
+            "SEASON: SS-23",
+            "SF TRT: DYED"
         ],
         "available": true
-    }]
+    },
+    {
+        "product_id": "3cabe682-d064-4723-ba41-bb0ca36fa9ba",
+        "product_url": "https://www.alkaramstudio.com/products/dyed-cambric-kurta-gmku1010-grey",
+        "shopify_id": "7449099370676",
+        "handle": "dyed-cambric-kurta-gmku1010-grey",
+        "title": "Dyed Cambric Kurta",
+        "vendor": "alkaram_studio",
+        "category": "",
+        "image_url": "https://cdn.shopify.com/s/files/1/0623/6481/1444/products/R-SP-304_1.jpg?v=1718587639",
+        "description": "Fabric: CambricFit: SlimCollar Style: Bend",
+        "price": 2065,
+        "currency": "PKR",
+        "options": [
+            {
+                "name": "Size",
+                "position": 1,
+                "values": [
+                    "XS",
+                    "S",
+                    "M",
+                    "L",
+                    "XL",
+                    "XXL"
+                ]
+            },
+            {
+                "name": "Color",
+                "position": 2,
+                "values": [
+                    "Grey"
+                ]
+            },
+            {
+                "name": "Fabric",
+                "position": 3,
+                "values": [
+                    "Cambric"
+                ]
+            }
+        ],
+        "tags": [
+            "25%Off",
+            "FLAT 30%",
+            "GMKU1010-Grey-Simplifiedsizechart",
+            "Kurta",
+            "Man",
+            "New In",
+            "Ready To Wear",
+            "Sale 2022",
+            "Sale Man Ready to Wear",
+            "show-quickview",
+            "showpret",
+            "uploaded-02-Nov"
+        ],
+        "available": true
+    },
+    {
+        "product_id": "c6aa488c-08ba-44e7-a0a8-c3b0f99ca186",
+        "product_url": "https://outfitters.com.pk//products/f0938-106",
+        "shopify_id": "7855321841855",
+        "handle": "f0938-106",
+        "title": "All Over Print T Shirt",
+        "vendor": "outfitters",
+        "category": "",
+        "image_url": "https://cdn.shopify.com/s/files/1/2290/7887/files/F0938106999_6.jpg?v=1718191792",
+        "description": "Fit RegularThe name says it all the right size slightly snugs the body leaving enough room for comfort in the sleeves and waist. Does not taper down and offers a relaxed silhouette for your everyday looks Composition & Care  \n100%  Cotton \nMachine wash up to 30C/86F, gentle cycle \nDo not bleach\nIron up to 110C/230F\nDo not iron directly on prints/embroidery/embellishments\nDo not dry clean\nDo not tumble dry\n",
+        "price": 2290,
+        "currency": "PKR",
+        "options": [
+            {
+                "name": "Color",
+                "position": 1,
+                "values": [
+                    "Multi Color"
+                ]
+            },
+            {
+                "name": "Size",
+                "position": 2,
+                "values": [
+                    "S",
+                    "M",
+                    "L",
+                    "XL"
+                ]
+            },
+            {
+                "name": "Season",
+                "position": 3,
+                "values": [
+                    "HS-24"
+                ]
+            }
+        ],
+        "tags": [
+            "2023-2024",
+            "2024",
+            "B15-SS24",
+            "M- Tshirt-SS-24",
+            "M-TS-Regular-SimplifiedSizechart",
+            "Men",
+            "men-size-chart",
+            "Multi Color",
+            "NewMenSS-24",
+            "Pattern",
+            "PKR 2090 - PKR 2990",
+            "Regular",
+            "SS-24",
+            "Summer",
+            "Summer-24",
+            "T-Shirts",
+            "Tees",
+            "Top"
+        ],
+        "available": true
+    }
+]
