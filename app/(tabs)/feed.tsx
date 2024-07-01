@@ -9,6 +9,7 @@ import { AntDesign, Ionicons, Entypo, EvilIcons} from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import DropDownPicker from 'react-native-dropdown-picker';
 
+import * as api from "./api";
 
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -942,14 +943,33 @@ function shortTitle(str : string) : string {
 
 import { tabBarHeight } from './_layout';
 export default function App(){
-
+  const [products , setProducts] = useState(mockData);
+  const [WSFeed , setWSFeed] = useState<api.WSFeed | null>(null);
+  useEffect(() => {
+    (async () => {
+      let token = await AsyncStorage.getItem("token");
+      const wsfeed = new api.WSFeed(token! , (products : any) => {
+        alert(`${JSON.stringify(products)}`)
+      });
+      setWSFeed(wsfeed);
+    })() 
+  }, [])
+   
   return (
     <>
     <SwipeView 
     paddingTop={30}
-    cards={mockData} 
+    cards={products} 
     height={(SCREEN_HEIGHT * 0.95) - tabBarHeight} 
-    onSwipe={(action : string) => {}}
+    onSwipe={async (action_type : string , index : number) => {
+      const filterString = await AsyncStorage.getItem("filter")
+      const filter = await JSON.parse(filterString as string);
+      if (WSFeed !== null){
+        if (WSFeed!.open === true){
+          WSFeed.sendAction(action_type , products[index].product_id , api.createQuery("" , filter))
+        }
+      }
+    }}
     onFilter={async (data : any) => {
       try {
       await AsyncStorage.setItem("filter" , JSON.stringify(data))

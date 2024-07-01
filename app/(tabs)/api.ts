@@ -7,15 +7,66 @@ const base_url = "http://localhost:8080"
 const ws_base_url = "ws://localhost:8080"
 const feed_url = `${ws_base_url}/feed`
 
-class WSFeed{
+export class WS {
     socket : WebSocket;
-    constructor(){
-        this.socket = new WebSocket(feed_url);
+    open : boolean;
+    constructor(url : string, onOpen: Function, onMessage : Function){
+        this.socket = new WebSocket(url);
+        this.open = false;
+        this.socket.onopen = (ev : Event) => {
+          this.open = true;
+          onOpen();
+        }
         this.socket.onerror = (error : any) => {
           alert(`failed to connect to websocket`)
           console.log(`failed to connect to websocket, error = ${error}`) 
         }
+        this.socket.onmessage = (ev : MessageEvent<any>) => {
+          onMessage(ev.data);
+        }
+        this.socket.onclose = (ev : CloseEvent) => {
+          this.open = false;
+        }
     }
+
+    sendJSON(data : any){
+      this.socket.send(JSON.stringify(data));
+    }
+
+    send(message : any){
+      this.socket.send(message)
+    }
+
+    close(){
+      this.socket.close();
+    }
+}
+
+export class WSFeed extends WS {
+  constructor(token : string, setProducts : Function){
+    super(`${feed_url}?token=${token}` , () => { // on open
+      this.sendAction("open" , "" , null)
+    } , (data : any) => { // on message
+      setProducts(data);
+    })
+  }
+
+  sendAction(action_type : string , product_id : string , query : any){
+    this.sendJSON({
+      user_id : "",
+      action_type : action_type,
+      action_timestamp : "",
+      product_id : product_id,
+      query : query,
+    })
+  }
+}
+
+export function createQuery(text : any | null, filter : any){
+  return {
+    text : text, 
+    filter : filter,
+  }
 }
 
 export async function signIn(email : string, password : string){
