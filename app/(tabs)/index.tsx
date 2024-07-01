@@ -184,7 +184,7 @@ export default class Home extends React.Component<{},HomeState> {
     super(props);
     this.state = {
       spotlight : mockData[0],
-      products : mockData, 
+      products : mockData.splice(1,8), 
       loading : true,
       query : "",
       queryProducts : [],
@@ -193,13 +193,13 @@ export default class Home extends React.Component<{},HomeState> {
   }
 
   async getProducts(){
-    const products = await api.getProducts(7);
+    const products = await api.getProducts(9);
     if (products === null){
       this.setState({loading : false})
       return;
     }
     else {
-      this.setState({spotlight : products[3] , products : products , loading : false})
+      this.setState({spotlight : products[0] , products : products.splice(1,8) , loading : false})
     }
   }
 
@@ -471,16 +471,146 @@ export default class Home extends React.Component<{},HomeState> {
 
 const mockData = [
     {
-        "product_id": "e937ef8e-752a-480d-9fd5-c0d727e14259",
-        "product_url": "https://pk.ethnc.com/products/casual-shirt-e4035-102-329-329",
-        "shopify_id": "6968144101478",
-        "handle": "casual-shirt-e4035-102-329-329",
-        "title": "Embroidered Shirt (E4035/102/329)",
+        "product_id": "231195ed-c1e4-499d-a600-904ee7d608a5",
+        "product_url": "https://bonanzasatrangi.com/products/sas231p12-blue",
+        "shopify_id": "8199757856931",
+        "handle": "sas231p12-blue",
+        "title": "Blue Yarn Dyed 1 Piece (Sas231P12)",
+        "vendor": "bonanza_satrangi",
+        "category": "",
+        "image_url": "https://cdn.shopify.com/s/files/1/0464/1731/3955/files/SAS231P12_1.jpg?v=1706524729",
+        "description": "Stitched 1-Piece Suit\nShirt:Yarn Dyed Shirt Button Dawn Loose Fit Long Tunic With Shirt Collar And Cuffed Sleeves.\nModel Height: 5'7 And She Is Wearing Size 8",
+        "price": 3680,
+        "currency": "PKR",
+        "options": [
+            {
+                "name": "size",
+                "position": 1,
+                "values": [
+                    "8",
+                    "10",
+                    "12",
+                    "14",
+                    "16"
+                ]
+            },
+            {
+                "name": "Color",
+                "position": 2,
+                "values": [
+                    "BLUE"
+                ]
+            },
+            {
+                "name": "Design",
+                "position": 3,
+                "values": [
+                    "SAS231P12"
+                ]
+            }
+        ],
+        "tags": [
+            "1-Piece",
+            "10",
+            "12",
+            "14",
+            "16",
+            "1Piece",
+            "6",
+            "8",
+            "Alive",
+            "Blue",
+            "Collection: Summers",
+            "Design-23",
+            "designcode_SAS231P12-BLUE",
+            "Female",
+            "First10",
+            "New Arrivals",
+            "NewArrivals",
+            "Piece-2023",
+            "PKR 2500 - PKR 3999",
+            "Pret",
+            "Printed",
+            "Ready To Wear",
+            "sizechart_link:https://cdn.shopify.com/s/files/1/0464/1731/3955/files/SAS231P12.jpg",
+            "Stitched",
+            "Summer 2024",
+            "SUMMER COLLECTION 2024",
+            "Summers Pret",
+            "WINTER COLLECTION '23",
+            "Winter Collection 2023",
+            "Women",
+            "Women Ready to Wear",
+            "Yarn Dyed"
+        ],
+        "available": true
+    },
+    {
+        "product_id": "0d807f62-11f8-401c-b096-d7617f0ada9f",
+        "product_url": "https://generation.com.pk/products/s24b4304-sky-blue",
+        "shopify_id": "8314317209825",
+        "handle": "s24b4304-sky-blue",
+        "title": "Mother Of Pearls Asmani 2 Piece",
+        "vendor": "generation",
+        "category": "",
+        "image_url": "https://cdn.shopify.com/s/files/1/0650/8249/1105/files/S24B4304_Skyblue.jpg?v=1711631258",
+        "description": "Printed Kurta with gota details on neckline & sleeves, paired with tiered flared printed pants.MODEL DETAILS: Model is wearing size 8 and height is 5' 7''FABRICShirt: LawnLower: LawnLENGTHSleeve Length: FullShirt Length: Medium",
+        "price": 6998,
+        "currency": "PKR",
+        "options": [
+            {
+                "name": "Size",
+                "position": 1,
+                "values": [
+                    "8",
+                    "10",
+                    "12",
+                    "14",
+                    "16"
+                ]
+            },
+            {
+                "name": "Colour",
+                "position": 2,
+                "values": [
+                    "Sky Blue"
+                ]
+            }
+        ],
+        "tags": [
+            "addon | black | s24b4304-black",
+            "addon | red | s24b4304-red",
+            "Category_2-Piece",
+            "Colour_Sky Blue",
+            "Fabric_Lawn",
+            "Length_Medium",
+            "Matching 2 Piece",
+            "New-In",
+            "Pre-Spring-2024",
+            "PRICE_ UNDER 8000",
+            "Printed 2 Piece",
+            "s24b4304-sky-blue",
+            "Shirt & Gharara 2 Piece",
+            "Size_ 8",
+            "Size_10",
+            "Size_12",
+            "Size_14",
+            "Size_16",
+            "Type_Printed"
+        ],
+        "available": true
+    },
+    {
+        "product_id": "4e2e68d9-ba76-420f-95d2-1714f746995c",
+        "product_url": "https://pk.ethnc.com/products/casual-suit-e4134-102-121-121",
+        "shopify_id": "6950556008550",
+        "handle": "casual-suit-e4134-102-121-121",
+        "title": "Embroidered Suit (E4134/102/121)",
         "vendor": "ethnic",
         "category": "",
-        "image_url": "https://cdn.shopify.com/s/files/1/2290/7917/files/E4035-102-329_1.jpg?v=1707802671",
-        "description": "Details:Crafted from a fascinating pale coral fabric, this elegant shirt illustrates a contemporary striped shirt enriched with intricate embroidery at front with floral designs with schiffli technique layered on a contemporary silhouette. The design is completed with delicate lace and trendy embellishments at front placket resulting in a gorgeous look to style this season.-Pale Coral Color-Yarn Dyed Fabric-Stitched Article-1 piece\nSize & Fit:-Model height is 5'6.-Model is wearing XS size.",
-        "price": 2490,
+        "image_url": "https://cdn.shopify.com/s/files/1/2290/7917/files/E4134-102-121_1.jpg?v=1704435394",
+        "description": "Details:An aesthetically appealing composition is portrayed on this graceful outfit rendered in mid olive shade. It features a classy shirt beautifully adorned with intricate embroidery at front and sleeves illustrating captivating floral designs in green hues. Illustrating an embossed canvas with floral designs, this sophisticated shirt is paired with a trendy trouser. Style this gorgeous outfit at formal gatherings this season.-Mid Olive Color-Lurex Fabric-Stitched Article-2 piece\nSize & Fit:-Model height is 5'6.-Model is wearing XS size.",
+        "price": 3490,
         "currency": "PKR",
         "options": [
             {
@@ -497,7 +627,7 @@ const mockData = [
                 "name": "Color",
                 "position": 2,
                 "values": [
-                    "Light Pink"
+                    "Olive Green"
                 ]
             }
         ],
@@ -505,22 +635,24 @@ const mockData = [
             "AZADISALEWOMENALL22MAR",
             "AZADISALEWOMENPret22MAR",
             "Casual",
-            "Casual shirt",
-            "casual'23",
-            "casual'24",
+            "Casual suit",
+            "Casual'23",
+            "Casual'24",
             "Casual-Full Price",
             "CGST15",
-            "E4035/102/329-1-shirt-SimplifiedSizechart",
+            "E4134/102/121-1-shirt-SimplifiedSizechart",
+            "E4134/102/121-2-trouser-SimplifiedSizechart",
             "L",
             "M",
             "MSSALEWOMENALL8MAY",
             "MSSALEWomenCasual8MAY",
             "MSSALEWOMENPret8MAY",
-            "one piece pret",
             "ONGOING SS'24",
+            "PKR 6000 - Above",
             "PRET SS'24",
             "S",
             "SS-24",
+            "two piece pret",
             "Women New In",
             "WOMEN-F.P",
             "XS"
@@ -528,267 +660,186 @@ const mockData = [
         "available": true
     },
     {
-        "product_id": "9139255b-4d61-4c03-981e-87ed16a561b5",
-        "product_url": "https://beechtree.pk/products/ppwesbw230255-multi",
-        "shopify_id": "13411366338720",
-        "handle": "ppwesbw230255-multi",
-        "title": "Button Down Striped Shirt",
-        "vendor": "beechtree",
+        "product_id": "d716266d-eefb-431a-8fdb-1b925207ae08",
+        "product_url": "https://pk.sapphireonline.pk/products/2s-dy24v2-19-s-1",
+        "shopify_id": "7587575365706",
+        "handle": "2s-dy24v2-19-s-1",
+        "title": "Printed Lawn Shirt",
+        "vendor": "sapphire",
         "category": "",
-        "image_url": "https://cdn.shopify.com/s/files/1/0488/9201/8848/files/PPWESBW230255_1.jpg?v=1715338882",
-        "description": "Designed with long sleeves and a button-front design with embroidery on pocket, this shirt is perfect for your handsome one.\nFeatures:\nLong Sleeves\nFront Pocket\nFabric:\nYarn Dyed",
-        "price": 749,
+        "image_url": "https://cdn.shopify.com/s/files/1/1592/0041/files/002SDY24V219_3.jpg?v=1714383633",
+        "description": "Drop Shoulder ShirtCurate a playful summer look with our printed cream white, textured lawn drop shoulder shirt featuring a band neckline with placket.\nDetails: Printed Front, Printed Back, Full Sleeves, Band Neckline with a placketColour: Cream WhiteFabric: Textured Lawn\nSIZE & FITModel height: 5 Feet 6 InchesModel Wears: XS\n\n\n\nSize\nXS\nS\nM\nL\n\n\nLength\n33\n34\n35\n36\n\n\nChest\n22\n24\n26\n28\n\n\nFront Border\n24\n26\n28\n30\n\n\nBack Border\n24\n26\n28\n30\n\n\nArm hole\n10.5\n11\n11\n11.5\n\n\nSleeve Length\n24.5\n25\n25.5\n26\n\n\n",
+        "price": 1943,
         "currency": "PKR",
         "options": [
             {
                 "name": "Size",
                 "position": 1,
                 "values": [
-                    "6-7Y",
-                    "7-8Y",
-                    "8-9Y",
-                    "9-10Y",
-                    "11-12Y",
-                    "13-14Y"
+                    "XXS",
+                    "XS",
+                    "S",
+                    "M",
+                    "L",
+                    "XL"
+                ]
+            }
+        ],
+        "tags": [
+            "002SDY24V219",
+            "002SDY24V219-size-chart",
+            "1 Piece",
+            "1000 - 3000",
+            "15-Percent-Tax",
+            "1PC",
+            "2S-DY24V2-19 S",
+            "35% OFF",
+            "all-woman-ready-to-wear",
+            "Ban",
+            "Band",
+            "Band Neckline",
+            "brands in pakistan",
+            "Casual",
+            "clothes",
+            "Daily",
+            "Daily Clothing",
+            "Daily Wear",
+            "Daily Wear Clothing",
+            "DAILY-RTW-29th-April-24",
+            "Day to Day",
+            "Drop Shoulder",
+            "Drop Shoulder Shirt",
+            "everything-June-sale-under-2000",
+            "everything-June-sale-under-3000",
+            "everything-June-sale-under-5000",
+            "fashion",
+            "Full Sleeves",
+            "home-edition",
+            "June-sale-2024",
+            "Kameez",
+            "kapde",
+            "kapdon ke design",
+            "Kurta",
+            "Kurti",
+            "Ladies",
+            "Ladies Pret",
+            "Ladies Ready To Wear",
+            "Ladies Stitched",
+            "ladies suit design",
+            "Lawn",
+            "matching-separates",
+            "Multi",
+            "Multi Shaded",
+            "Multicolored",
+            "new dress design",
+            "New in stitched 2024",
+            "New-all-29th-April-24",
+            "new-in-june-2022",
+            "new-in-rtw-2021",
+            "Office Wear",
+            "One Piece",
+            "pakistani dresses",
+            "Pop",
+            "Pop Art",
+            "Pop Collection",
+            "POP-ART-RTW-29th-April-24",
+            "Pret",
+            "Printed",
+            "Ready to wear",
+            "Ready to wear dresses",
+            "Readymade",
+            "Readymade clothing",
+            "RTW",
+            "RTW-29th-April-24",
+            "rtw-boxy-kurta",
+            "rtw-printed",
+            "rtw-shirts",
+            "rtw-short-kurti",
+            "rtw-spring-summer-24",
+            "RTW-Stitched-June-sale-2024",
+            "salwar kameez design",
+            "Shirt",
+            "Shirts",
+            "Single Piece",
+            "size-chart",
+            "stiched",
+            "Stitched",
+            "suit design",
+            "Summer",
+            "Summer 24",
+            "Summer Clothing",
+            "Summer Pret",
+            "Summer Ready to Wear Clothing",
+            "Summer RTW",
+            "Summers",
+            "Textured",
+            "Textured Lawn",
+            "UAE_FREE_SHIPPING",
+            "woman-all-products",
+            "Women",
+            "Women-all-products",
+            "womens",
+            "Womens Pret",
+            "Womens Ready To Wear",
+            "Womens Suit"
+        ],
+        "available": true
+    },
+    {
+        "product_id": "dab61366-aeb6-42e9-889f-42d98ac4c9f0",
+        "product_url": "https://breakout.com.pk//products/4dsmd639-blu",
+        "shopify_id": "7473808375862",
+        "handle": "4dsmd639-blu",
+        "title": "Stretch Slim Fit Denim",
+        "vendor": "breakout",
+        "category": "",
+        "image_url": "https://cdn.shopify.com/s/files/1/0202/5884/8822/files/4DSMD639-BLU_1.jpg?v=1715673623",
+        "description": "98% Cotton 2% Lycra",
+        "price": 4499,
+        "currency": "PKR",
+        "options": [
+            {
+                "name": "Size",
+                "position": 1,
+                "values": [
+                    "30",
+                    "32",
+                    "34",
+                    "36",
+                    "38"
                 ]
             },
             {
                 "name": "COLOR",
                 "position": 2,
                 "values": [
-                    "MULTI"
-                ]
-            },
-            {
-                "name": "FABRIC",
-                "position": 3,
-                "values": [
-                    "YARN DYED"
+                    "BLUE"
                 ]
             }
         ],
         "tags": [
-            "11-12Y",
-            "13-14Y",
-            "6-7Y",
-            "7-8Y",
-            "8-9Y",
-            "9-10Y",
-            "Boys",
-            "Boys-Shirts",
-            "Boys-WN",
-            "Boys-WN23",
-            "Boys-WN23-Shirts",
-            "child",
-            "F-30",
-            "Multi",
-            "PKR 2000 - PKR 2499",
-            "PL-70",
-            "pl-sale",
-            "pl-winter",
-            "pl-winter-boys",
-            "sale",
-            "sale-boys",
-            "sale-by-percentage",
-            "sale-season",
-            "salebypercenatge",
-            "t_size_11-12Y: 25.5\"-15\"-17.25\"-22.5\"",
-            "t_size_13-14Y: 26.75\"-15.75\"-17.75\"-23.5\"",
-            "t_size_6-7Y: 20.75\"-12.5\"-15\"-16.5\"",
-            "t_size_7-8Y: 22.05\"-13.25\"-15.75\"-18.5\"",
-            "t_size_8-9Y: 22.75\"-13.75\"-16.5\"-19.5\"",
-            "t_size_9-10Y: 24.25\"-14\"-17\"-20.5\"",
-            "trouser_size::length-shoulder-chest-sleeve length",
-            "w23tag",
-            "winter",
-            "winter collection",
-            "Yarn Dyed"
+            "24-SUM",
+            "98% Cotton 2% Lycra",
+            "BOTTOM",
+            "DENIM",
+            "FS",
+            "Garments",
+            "MEN",
+            "new"
         ],
         "available": true
     },
     {
-        "product_id": "7141e20c-3c37-448b-8df1-4bc425e5d932",
-        "product_url": "https://pk.ethnc.com/products/casual-suit-e0476-402-313-313-casual-suit-e0476-302-313-313",
-        "shopify_id": "6945103118438",
-        "handle": "casual-suit-e0476-402-313-313-casual-suit-e0476-302-313-313",
-        "title": "Embroidered Suit (E0476/402/313 E0476/302/313)",
-        "vendor": "ethnic",
+        "product_id": "eee586d6-0690-438c-ba9a-3d5ad853f0e1",
+        "product_url": "https://www.mariab.pk/products/mb-ef24-185-black",
+        "shopify_id": "7918866825382",
+        "handle": "mb-ef24-185-black",
+        "title": "Dyed Tunic Dress | Mb Ef24 185",
+        "vendor": "maria_b",
         "category": "",
-        "image_url": "https://cdn.shopify.com/s/files/1/2290/7917/files/E0476-402-313_1.jpg?v=1702978471",
-        "description": "Details:A fascinating composition is layered over this beautiful outfit rendered in an appealing baby coral shade. It features a classy silhouette shirt enriched with captivating floral embroidery in vibrant hues. Enhanced with fabric buttons at front, this aesthetic shirt is paired with a solid trouser. Let your girls look graceful in this statement outfit.-Baby Coral Color-Cross Hatch Fabric-Stitched Article-2 piece\nSize & Fit:-Model height is 45-46 Inches-Model is wearing 05-06 Year size",
-        "price": 3590,
-        "currency": "PKR",
-        "options": [
-            {
-                "name": "SIZE",
-                "position": 1,
-                "values": [
-                    "3-4Y",
-                    "4-5Y",
-                    "5-6Y",
-                    "6-7Y",
-                    "7-8Y",
-                    "8-9Y",
-                    "9-10Y",
-                    "10-11Y",
-                    "11-12Y"
-                ]
-            },
-            {
-                "name": "Color",
-                "position": 2,
-                "values": [
-                    "Pink"
-                ]
-            }
-        ],
-        "tags": [
-            "10-11Y",
-            "11-12Y",
-            "3-4Y",
-            "4-5Y",
-            "5-6Y",
-            "6-7Y",
-            "7-8Y",
-            "8-9Y",
-            "9-10Y",
-            "Casual",
-            "casual kids",
-            "Casual kids New In",
-            "casual kids'22",
-            "casual kids'23",
-            "casual kids'24",
-            "casual suits kids",
-            "Casual-Full Price",
-            "CGST15",
-            "E0476/402/313-1-shirt-SimplifiedSizechart",
-            "E0476/402/313-2-trouser-SimplifiedSizechart",
-            "eastern kids",
-            "EASTERN KIDS'23",
-            "EASTERN KIDS'24",
-            "embroidered",
-            "Kids New In",
-            "KIDS-F.P",
-            "MSSALEKIDSALL8MAY",
-            "MSSALEKidsCasual8MAY",
-            "MSSALEKIDSEASTERN8MAY",
-            "New-In Casual Kids",
-            "PKR 2000 - PKR 3990",
-            "PRET SS'24 Kids",
-            "SS24-KIDS",
-            "two piece kids"
-        ],
-        "available": true
-    },
-    {
-        "product_id": "4c8b9efc-2aeb-4081-bfad-ac457e3c96df",
-        "product_url": "https://beechtree.pk/products/btj-11651e-std",
-        "shopify_id": "8485824266400",
-        "handle": "btj-11651e-std",
-        "title": "Earrings",
-        "vendor": "beechtree",
-        "category": "",
-        "image_url": "https://cdn.shopify.com/s/files/1/0488/9201/8848/files/btj-11651e_1.jpg?v=1685351341",
-        "description": "Statement studs are a staple",
-        "price": 534,
-        "currency": "PKR",
-        "options": [
-            {
-                "name": "Size",
-                "position": 1,
-                "values": [
-                    "1 PAIR"
-                ]
-            }
-        ],
-        "tags": [
-            "10",
-            "12",
-            "14",
-            "40",
-            "40%OFF",
-            "8",
-            "Accessories",
-            "full-price",
-            "Jewellery",
-            "Jewellery-Earrings",
-            "NA-ACC-Jewellery",
-            "num_size:8-10-12-14",
-            "PKR 500 - PKR 999",
-            "s23tag",
-            "Sale-ACC",
-            "sale-acc-jewellery",
-            "salepercent40",
-            "STD",
-            "SUMMERCOLLECTION",
-            "YarnDyed"
-        ],
-        "available": true
-    },
-    {
-        "product_id": "cf53f250-d640-4c59-aec5-0a06d55de177",
-        "product_url": "https://www.crossstitch.pk/products/zinnia-3",
-        "shopify_id": "6955423334465",
-        "handle": "zinnia-3",
-        "title": "Zinnia 3",
-        "vendor": "cross_stitch",
-        "category": "",
-        "image_url": "https://cdn.shopify.com/s/files/1/0178/4492/8612/files/0123STBBAS0203_3.jpg?v=1682497435",
-        "description": "100% COTTON CAMBRIC DYED BASIC PANTS",
-        "price": 1460,
-        "currency": "PKR",
-        "options": [
-            {
-                "name": "Size",
-                "position": 1,
-                "values": [
-                    "XS",
-                    "L",
-                    "M",
-                    "S"
-                ]
-            },
-            {
-                "name": "Color",
-                "position": 2,
-                "values": [
-                    "ANGORA"
-                ]
-            },
-            {
-                "name": "Fabric",
-                "position": 3,
-                "values": [
-                    "CAMBRIC"
-                ]
-            }
-        ],
-        "tags": [
-            "0123STBBAS0203",
-            "APRIL 2023",
-            "Basic Pants",
-            "Bottoms",
-            "CLASS: BOTTOM",
-            "COLLECTION: SS-23 RTW BASIC PANTS EDIT-2",
-            "DCS: PRO TYP: RTWBTMBPA",
-            "PRO TYP: SEMI FORMAL",
-            "Sale",
-            "SEASON: SS-23",
-            "SF TRT: DYED"
-        ],
-        "available": true
-    },
-    {
-        "product_id": "3cabe682-d064-4723-ba41-bb0ca36fa9ba",
-        "product_url": "https://www.alkaramstudio.com/products/dyed-cambric-kurta-gmku1010-grey",
-        "shopify_id": "7449099370676",
-        "handle": "dyed-cambric-kurta-gmku1010-grey",
-        "title": "Dyed Cambric Kurta",
-        "vendor": "alkaram_studio",
-        "category": "",
-        "image_url": "https://cdn.shopify.com/s/files/1/0623/6481/1444/products/R-SP-304_1.jpg?v=1718587639",
-        "description": "Fabric: CambricFit: SlimCollar Style: Bend",
-        "price": 2065,
+        "image_url": "https://cdn.shopify.com/s/files/1/0620/8788/9062/files/MB-EF-24-185_3.jpg?v=1707745977",
+        "description": "Behold the divine allure with our dyed tunic dress crafting vertical stripes heightened with exquisite button detailing.Details: Dyed Long Tunic Dress, Ban Overlapping Neckline With Button Detailing, Full Sleeves With Button DetailingColour: BlackFabric: Yarn DyedNote: Only Dry CleanModel is wearing size xs",
+        "price": 3493,
         "currency": "PKR",
         "options": [
             {
@@ -799,59 +850,53 @@ const mockData = [
                     "S",
                     "M",
                     "L",
-                    "XL",
-                    "XXL"
+                    "XL"
                 ]
             },
             {
                 "name": "Color",
                 "position": 2,
                 "values": [
-                    "Grey"
-                ]
-            },
-            {
-                "name": "Fabric",
-                "position": 3,
-                "values": [
-                    "Cambric"
+                    "Black"
                 ]
             }
         ],
         "tags": [
-            "25%Off",
-            "FLAT 30%",
-            "GMKU1010-Grey-Simplifiedsizechart",
-            "Kurta",
-            "Man",
-            "New In",
-            "Ready To Wear",
-            "Sale 2022",
-            "Sale Man Ready to Wear",
-            "show-quickview",
-            "showpret",
-            "uploaded-02-Nov"
+            "2 Piece",
+            "30-Jan-24",
+            "_label_New",
+            "dhlcode:6104 1900",
+            "dhldes:Women Casual Shirt and Trouser",
+            "Item_Tax_Rate:15",
+            "M.Basics",
+            "M.Basics Casuals",
+            "M.Basics New Arrivals",
+            "M.Basics Ready to Wear",
+            "Monochrome",
+            "Solids",
+            "women-size-guide"
         ],
         "available": true
     },
     {
-        "product_id": "c6aa488c-08ba-44e7-a0a8-c3b0f99ca186",
-        "product_url": "https://outfitters.com.pk//products/f0938-106",
-        "shopify_id": "7855321841855",
-        "handle": "f0938-106",
-        "title": "All Over Print T Shirt",
+        "product_id": "514276a7-d50d-4cf7-a156-9290f09e407d",
+        "product_url": "https://outfitters.com.pk//products/f0075-102",
+        "shopify_id": "7556148068543",
+        "handle": "f0075-102",
+        "title": "Ribbed Sleeveless Sweater",
         "vendor": "outfitters",
         "category": "",
-        "image_url": "https://cdn.shopify.com/s/files/1/2290/7887/files/F0938106999_6.jpg?v=1718191792",
-        "description": "Fit RegularThe name says it all the right size slightly snugs the body leaving enough room for comfort in the sleeves and waist. Does not taper down and offers a relaxed silhouette for your everyday looks Composition & Care  \n100%  Cotton \nMachine wash up to 30C/86F, gentle cycle \nDo not bleach\nIron up to 110C/230F\nDo not iron directly on prints/embroidery/embellishments\nDo not dry clean\nDo not tumble dry\n",
-        "price": 2290,
+        "image_url": "https://cdn.shopify.com/s/files/1/2290/7887/files/F0075102901M_2.jpg?v=1698383333",
+        "description": "(model-data)\nThe model is wearing size: L; Model height: 6.0ft\n(model-data-end)\n(main-data)\nFit Regular\n Composition & Care \n\n100% Turkish Acrylic\nMachine wash up to 30C/86F, gentle cycle\nDo not bleach\nIron up to 110C/230F\nDo not iron directly on prints/embroidery/embellishments\nDo not dry clean\nDo not tumble dry\n",
+        "price": 2490,
         "currency": "PKR",
         "options": [
             {
                 "name": "Color",
                 "position": 1,
                 "values": [
-                    "Multi Color"
+                    "Black",
+                    "Antique White"
                 ]
             },
             {
@@ -868,29 +913,146 @@ const mockData = [
                 "name": "Season",
                 "position": 3,
                 "values": [
-                    "HS-24"
+                    "WS-23"
                 ]
             }
         ],
         "tags": [
-            "2023-2024",
-            "2024",
-            "B15-SS24",
-            "M- Tshirt-SS-24",
-            "M-TS-Regular-SimplifiedSizechart",
+            "2023",
+            "2023-2023",
+            "Antique White",
+            "B12-WS23",
+            "end-winter23",
+            "FP-Slow",
+            "M-Sweater",
             "Men",
             "men-size-chart",
-            "Multi Color",
-            "NewMenSS-24",
-            "Pattern",
-            "PKR 2090 - PKR 2990",
-            "Regular",
-            "SS-24",
-            "Summer",
-            "Summer-24",
-            "T-Shirts",
-            "Tees",
-            "Top"
+            "men-winter-sale",
+            "menspecialprices",
+            "MenSweaterSale",
+            "N//A",
+            "NewMen",
+            "PKR 4090 - PKR 4990",
+            "revert-great-weeked-23",
+            "s-seller",
+            "saleagain24",
+            "Sweaters",
+            "Sweates",
+            "Top",
+            "Tops",
+            "Winter",
+            "Winter-23"
+        ],
+        "available": true
+    },
+    {
+        "product_id": "2edd3995-f182-43e1-9e82-932c93e36ddc",
+        "product_url": "https://outfitters.com.pk//products/f0201-208",
+        "shopify_id": "7610651803839",
+        "handle": "f0201-208",
+        "title": "Cotton Trousers With Elastic Trims",
+        "vendor": "outfitters",
+        "category": "",
+        "image_url": "https://cdn.shopify.com/s/files/1/2290/7887/files/F0201208121_lowersM_4_fc46825f-b96b-4215-9293-47afebf456a5.jpg?v=1706633784",
+        "description": "(model-data)\nThe model is wearing size: S; Model height: 5.4ft\n(model-data-end)\n(main-data)\nFit Wide Leg\nComposition & Care\n\n100% Cotton\nMachine wash up to 30C/86F, gentle cycle\nDo not bleach\nIron up to 110C/230F\nDo not iron directly on prints/embroidery/embellishments\nDo not dry clean\nDo not tumble dry\n",
+        "price": 3090,
+        "currency": "PKR",
+        "options": [
+            {
+                "name": "Color",
+                "position": 1,
+                "values": [
+                    "Mid Olive"
+                ]
+            },
+            {
+                "name": "Size",
+                "position": 2,
+                "values": [
+                    "XS",
+                    "S",
+                    "M",
+                    "L"
+                ]
+            },
+            {
+                "name": "Season",
+                "position": 3,
+                "values": [
+                    "WS-23"
+                ]
+            }
+        ],
+        "tags": [
+            "2022-2023",
+            "2023",
+            "B26-WS23",
+            "Bottom",
+            "fd-waly",
+            "Joggers",
+            "Mid Olive",
+            "mss24",
+            "N/A",
+            "PKR 4090 - PKR 4990",
+            "Trousers",
+            "W-Trousers-",
+            "Winter",
+            "Winter-23",
+            "Women",
+            "women-size-chart",
+            "womenspecialprices",
+            "WomenTrouserSale"
+        ],
+        "available": true
+    },
+    {
+        "product_id": "1aa61826-94bf-4071-9271-761e04253f6e",
+        "product_url": "https://nishatlinen.com/products/pe24-398",
+        "shopify_id": "8055358357703",
+        "handle": "pe24-398",
+        "title": "Basic Trousers   Pe24 398",
+        "vendor": "nishat_linen",
+        "category": "",
+        "image_url": "https://cdn.shopify.com/s/files/1/0534/2065/4791/files/PE24-398-_1.jpg?v=1715233935",
+        "description": "Add a layer of glamour to your summer outfit with this basic trousers from the latest pret summer collection.\nProduct DetailBasic Trousers\nTrousersLoose Straight Trousers With Lace DetailFabric: Cambric Color: Beige\nNote:Product color may vary slightly due to photographic lighting sources or monitor settings.",
+        "price": 1990,
+        "currency": "PKR",
+        "options": [
+            {
+                "name": "Size",
+                "position": 1,
+                "values": [
+                    "XS",
+                    "S",
+                    "M",
+                    "L",
+                    "XL"
+                ]
+            }
+        ],
+        "tags": [
+            "15%",
+            "16-may-pret",
+            "1pc",
+            "31898",
+            "all-pret-sum-2024",
+            "all-sum-2024",
+            "beige",
+            "bottoms-sum-2024",
+            "cambric",
+            "l",
+            "low-sum-2024-eid-2",
+            "lower-sum-2024",
+            "lux-pret-sum-2024-eid-2",
+            "m",
+            "new in low",
+            "new-in-all",
+            "rtw-16-may-2024",
+            "s",
+            "solids",
+            "sum-2024-eid-2-all",
+            "xl",
+            "xs"
         ],
         "available": true
     }
