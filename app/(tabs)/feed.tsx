@@ -179,7 +179,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
   
 
   async handleSwipeAction(action: string) {
-    this.props.onSwipe(action);
+    this.props.onSwipe(action , this.state.currentIndex);
   }
 
   handleSwipe = (gestureState: any) => {
@@ -958,14 +958,13 @@ export default class App extends React.Component<any , any> {
 
   async componentWillUnmount() {
     // closes on reload; major bug fix
-    alert(`setting index to 0`)
     this.setState({currentIndex : 0})
     if(this.state.WSFeed !== null && this.state.WSFeed?.open){
       this.state.WSFeed.close();
     }
   }
 
-  handleSwipe = async (action_type : string) => {
+  handleSwipe = async (action_type : string , _ : number) => {
 
     console.log(`products.length = ${this.state.products.length} , index = ${this.state.currentIndex}`)
     console.log(`WSFeed open = ${this.state.WSFeed?.open}`)

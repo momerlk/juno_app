@@ -217,28 +217,40 @@ export default class Home extends React.Component<{},HomeState> {
   }
 
   async componentWillUnmount() {
+    this.setState({currentIndex : 0})
     // closes on reload; major bug fix
     if(this.state.WSFeed !== null && this.state.WSFeed?.open){
       this.state.WSFeed.close();
     }
   }
 
-  handleSwipe = async (action_type : string, index : number) => {
-    console.log(`products.length = ${this.state.products.length} , index = ${index}`)
+  handleSwipe = async (action_type : string , _ : number) => {
+
+    console.log(`products.length = ${this.state.products.length} , index = ${this.state.currentIndex}`)
+    console.log(`WSFeed open = ${this.state.WSFeed?.open}`)
+
     const filterString = await AsyncStorage.getItem('filter');
     const filter = JSON.parse(filterString as string);
-    const { WSFeed, queryProducts, products } = this.state;
+
+    const { WSFeed, queryProducts } = this.state;
+    const products = queryProducts;
+
     if (WSFeed && WSFeed.open) {
-      if (queryProducts.length === 0) {
-        WSFeed.sendAction(action_type, products[index].product_id, api.createQuery(null, filter));
+      if (products.length === 0) {
         return;
       }
       try {
-        WSFeed.sendAction(action_type, queryProducts[index].product_id, api.createQuery(null, filter));
+        WSFeed.sendAction(
+            action_type,
+             products[this.state.currentIndex].product_id, 
+            api.createQuery(null, filter)
+          );
       } catch (e) {
-        console.log(`products.length = ${queryProducts.length}, index = ${index}, error = ${e}`);
+        console.log(`products.length = ${products.length}, index = ${this.state.currentIndex}, error = ${e}`);
       }
     }
+
+    this.setState({currentIndex : this.state.currentIndex + 1})
   };
 
   renderHome(){
@@ -393,7 +405,7 @@ export default class Home extends React.Component<{},HomeState> {
   }
 
   update(products : any){
-    this.setState({queryProducts : products})
+    this.setState({queryProducts : products , currentIndex : 0})
   }
 
   renderSearch(){
