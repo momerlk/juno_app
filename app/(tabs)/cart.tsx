@@ -6,6 +6,7 @@ import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import * as size from "react-native-size-matters";
 import {Logo} from "./_common"
 
+import * as api from "./api"
 
 function toTitle(str : string) : string {
     if (str === undefined){
@@ -52,10 +53,19 @@ function toTitle(str : string) : string {
 
 
 export default function TabTwoScreen() {
-  const [data, setData] = useState<any>([]);
+  const [data, setData] = useState<any>(mockData);
   const [req , setReq] = useState(0);
   const [loading , setLoading] = useState(false);
   fetchFonts();
+  
+  useEffect(() => {
+    (async() => {
+      const cart = await api.getCart();
+      if(cart !== null){
+        setData(cart)
+      }
+    })()
+  }, [])
 
   useEffect(() => {
     
@@ -70,13 +80,16 @@ export default function TabTwoScreen() {
           numColumns={1}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
-          data={mockData}
+          data={data}
           keyExtractor={(item) => item.vendor}
           renderItem={({ item }) => <Cart item={item}/>}
           // TODO : Test this fully
           onRefresh={async () => {
             setLoading(true);
-            // await this.getProducts();
+            const cart = await api.getCart();
+            if(cart !== null){
+              setData(cart)
+            }
             setLoading(false);
           }}
           refreshing={loading}
@@ -97,6 +110,8 @@ export function Cart (props : any) {
   const vendor_data = props.item;
   // TODO : replace with actual shopify permalink
   const [uri, setUri] = useState("https://bonanzasatrangi.com/46417313955/checkouts/531f95efefddbac87d62de1968606d6c?note=This+was+order+was+placed+with+the+help+of+juno.&ref=JUNO")
+
+  
 
   return(
     <View style={{marginTop : 40}}>
