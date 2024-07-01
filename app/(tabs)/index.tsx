@@ -192,14 +192,7 @@ export default class Home extends React.Component<{},HomeState> {
     }
   }
 
-  async componentDidMount(){
-    const token = await AsyncStorage.getItem('token');
-    const wsfeed = new api.WSFeed(token!, (data : any) => {
-      this.setState({ queryProducts: this.state.queryProducts.concat(data) });
-    });
-    this.setState({ WSFeed: wsfeed });
-
-    await fetchFonts();
+  async getProducts(){
     const products = await api.getProducts(7);
     if (products === null){
       this.setState({loading : false})
@@ -208,6 +201,17 @@ export default class Home extends React.Component<{},HomeState> {
     else {
       this.setState({spotlight : products[3] , products : products , loading : false})
     }
+  }
+
+  async componentDidMount(){
+    const token = await AsyncStorage.getItem('token');
+    const wsfeed = new api.WSFeed(token!, (data : any) => {
+      this.setState({ queryProducts: this.state.queryProducts.concat(data) });
+    });
+    this.setState({ WSFeed: wsfeed });
+
+    await fetchFonts();
+    await this.getProducts();
   }
 
   async componentWillUnmount() {
@@ -373,6 +377,13 @@ export default class Home extends React.Component<{},HomeState> {
           data={this.state.products}
           keyExtractor={(item) => item.product_id}
           renderItem={({ item }) => <Card item={item}/>} 
+          // TODO : Test this fully
+          onRefresh={async () => {
+            this.setState({loading : true});
+            await this.getProducts();
+            this.setState({loading : false});
+          }}
+          refreshing={this.state.loading}
         />
         </ScrollView>
       </ScrollView>

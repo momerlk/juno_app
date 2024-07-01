@@ -54,6 +54,7 @@ function toTitle(str : string) : string {
 export default function TabTwoScreen() {
   const [data, setData] = useState<any>([]);
   const [req , setReq] = useState(0);
+  const [loading , setLoading] = useState(false);
   fetchFonts();
 
   useEffect(() => {
@@ -71,7 +72,14 @@ export default function TabTwoScreen() {
           showsHorizontalScrollIndicator={false}
           data={mockData}
           keyExtractor={(item) => item.vendor}
-          renderItem={({ item }) => <Cart item={item}/>} 
+          renderItem={({ item }) => <Cart item={item}/>}
+          // TODO : Test this fully
+          onRefresh={async () => {
+            setLoading(true);
+            // await this.getProducts();
+            setLoading(false);
+          }}
+          refreshing={loading}
         />
     </View>
   );

@@ -95,7 +95,6 @@ function Card(props : any){
               <LinearGradient colors={["transparent" , "rgba(0,0,0,0.7)"]} style={{
                 marginTop : size.verticalScale(height - textHeight) , 
                 height : size.verticalScale(textHeight),
-                // backgroundColor : "rgba(52, 52, 52, 0.3)",
                 borderBottomLeftRadius : 8,
                 borderBottomRightRadius : 8,
                 
@@ -142,7 +141,7 @@ export default class Home extends React.Component<{},HomeState> {
     }
   }
 
-  async componentDidMount(){
+  async getProducts(){
     const products = await api.getLiked();
     if (products === null){
       this.setState({loading : false, products : null})
@@ -151,6 +150,10 @@ export default class Home extends React.Component<{},HomeState> {
     else {
       this.setState({products : products , loading : false})
     }
+  }
+
+  async componentDidMount(){
+    await this.getProducts();
   }
 
   render(){
@@ -211,6 +214,13 @@ export default class Home extends React.Component<{},HomeState> {
           data={this.state.products}
           keyExtractor={(item) => item.product_id}
           renderItem={({ item }) => <Card item={item}/>} 
+          // TODO : Test this fully
+          onRefresh={async () => {
+            this.setState({loading : true});
+            await this.getProducts();
+            this.setState({loading : false});
+          }}
+          refreshing={this.state.loading}
         />
         </ScrollView>
         }
