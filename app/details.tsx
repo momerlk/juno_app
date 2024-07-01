@@ -33,7 +33,9 @@ const ProductDetail: React.FC<any> = () => {
 
   const { 
     title, vendor, description , images , variants , price, image_url , product_url
-  } = params; // TODO : cannot send arrays in params url
+  } = params; // TODO : cannot send arrays in params
+  
+  const images_arr = (images as string).split(",");
 
   // swipe left to go back.
 
@@ -58,7 +60,7 @@ const ProductDetail: React.FC<any> = () => {
   return (
     <>
       <ScrollView style={{...styles.container , backgroundColor : "#121212"}}>
-        <PinchableCarousel images={[image_url]}/>
+        <PinchableCarousel images={images_arr}/>
 
         <View style={{...styles.detailsContainer , backgroundColor : "#121212"}}>
           <Text style={styles.title}>{title}</Text>

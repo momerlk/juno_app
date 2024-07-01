@@ -93,19 +93,21 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width : screenWidth,
     justifyContent: 'center',
     alignItems: 'center',
   },
   carouselContainer: {
+    width : screenWidth,
     justifyContent: 'center',
     alignItems: 'center',
   },
   imageContainer: {
-    width: '100%',
+    width: screenWidth,
     height: '100%',
   },
   image: {
-    width: '100%',
+    width: screenWidth,
     height: '100%',
   },
   pagination: {
