@@ -252,7 +252,7 @@ export async function getFilter(){
     "Content-Type" : "application/json",
   };
 
-  const response = await fetch("http://localhost:8080/filter", requestOptions)
+  const response = await fetch(base_url + "/filter", requestOptions)
   if (!response.ok){
     alert(`failed to get filter data from the internet`)
     return null;

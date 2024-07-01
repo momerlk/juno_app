@@ -653,6 +653,8 @@ function DropDown(props : any){
   )
 }
 
+
+
 function Filter(props : any){
 
   const [category , setCategory] = useState("");
@@ -661,6 +663,11 @@ function Filter(props : any){
   const [color , setColor] = useState("");
   const [lowerBound, setLowerBound] = useState('');
   const [upperBound, setUpperBound] = useState('');
+  const [filterData , setFilter] = useState<any[]>([
+                {"label" : "Afrozeh", "value" : "afrozeh" , "base_url" : "https://www.afrozeh.com"},
+                {"label" : "Nishat Linen", "value" : "nishat_linen" , "base_url" :  "https://nishatlinen.com"},
+                {"label" : "Outfitters", "value" : "outfitters" , "base_url" : "https://outfitters.com.pk/"},
+              ])
 
   const styles = StyleSheet.create({
       container: {
@@ -692,7 +699,17 @@ function Filter(props : any){
 
 
   // TODO : Get dropdown options from backend like brands etc. 
-  
+  useEffect(() => {
+    (async () => {
+      const data = await api.getFilter();
+      if (data !== null){
+        setFilter(data.brands);
+      }
+      
+    })()
+    
+  }, [])
+
   return (
     
      <Modal
@@ -731,38 +748,7 @@ function Filter(props : any){
 
             {/* Brands */}
             <DropDown 
-              data={[
-                {"label" : "Afrozeh", "value" : "afrozeh" , "base_url" : "https://www.afrozeh.com"},
-                {"label" : "Ali Xeeshan", "value" : "ali_xeeshan" , "base_url" :  "https://alixeeshanempire.com"},
-                {"label" : "Alkaram Studio", "value" : "alkaram_studio" , "base_url" :  "https://www.alkaramstudio.com"},
-                {"label" : "Asim Jofa", "value" : "asim_jofa" , "base_url" :  "https://asimjofa.com"},
-                {"label" : "Beechtree", "value" : "beechtree" , "base_url" :  "https://beechtree.pk"},
-                {"label" : "Breakout" , "value" : "breakout" , "base_url" : "https://breakout.com.pk/"},
-
-                {"label" : "Bonanza Satrangi", "value" : "bonanza_satrangi" , "base_url" :  "https://bonanzasatrangi.com"},
-                {"label" : "Chinyere", "value" : "chinyere" , "base_url" :  "https://chinyere.pk"},
-                {"label" : "Cross stitch", "value" : "cross_stitch" , "base_url" :  "https://www.crossstitch.pk"},
-                {"label" : "Eden Robe", "value" : "edenrobe" , "base_url" :  "https://edenrobe.com"},
-                {"label" : "Ethnic", "value" : "ethnic" , "base_url" :  "https://pk.ethnc.com"},
-                {"label" : "Faiza Saqlain", "value" : "faiza_saqlain" , "base_url" :  "https://www.faizasaqlain.pk"},
-                {"label" : "Generation", "value" : "generation" , "base_url" :  "https://generation.com.pk"},
-                {"label" : "Hem Stich", "value" : "hem_stitch" , "base_url" :  "https://www.hemstitch.pk"},
-                {"label" : "Hussain Rehar", "value" : "hussain_rehar" , "base_url" :  "https://www.hussainrehar.com"},
-                {"label" : "Kanwal Malik", "value" : "kanwal_malik" , "base_url" :  "https://www.kanwalmalik.com"},
-                {"label" : "Kayseria", "value" : "kayseria" , "base_url" :  "https://www.kayseria.com"},
-                {"label" : "Limelight", "value" : "limelight" , "base_url" :  "https://www.limelight.pk"},
-                {"label" : "Maria b", "value" : "maria_b" , "base_url" :  "https://www.mariab.pk"},
-                {"label" : "Mushq", "value" : "mushq" , "base_url" :  "https://www.mushq.pk"},
-                {"label" : "Nishat Linen", "value" : "nishat_linen" , "base_url" :  "https://nishatlinen.com"},
-                {"label" : "Sadaf Fawad Khan", "value" : "sadaf_fawad_khan" , "base_url" :  "https://sadaffawadkhan.com"},
-                {"label" : "Sapphire", "value" : "sapphire" , "base_url" :  "https://pk.sapphireonline.pk"},
-                {"label" : "Zaha", "value" : "zaha" , "base_url" :  "https://www.zaha.pk"},
-                {"label" : "Zara Shah Jahan", "value" : "zara_shah_jahan" , "base_url" :  "https://zarashahjahan.com"},
-                {"label" : "Zellbury", "value" : "zellbury" , "base_url" :  "https://zellbury.com"},
-                {"label" : "Outfitters", "value" : "outfitters" , "base_url" : "https://outfitters.com.pk/"},
-              ]} 
-              
-              
+              data={filterData} 
               title="Brands"
               other={{multiple : true}}
               onChange={(t : any) => setBrands(t)}
