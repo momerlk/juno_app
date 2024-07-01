@@ -9,6 +9,7 @@ import {router, useLocalSearchParams} from "expo-router";
 import { ImageBackground, Pressable } from 'react-native';
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import Feather from 'react-native-vector-icons/Feather';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import PinchableCarousel from "./_image"
 
@@ -44,7 +45,12 @@ const ProductDetail: React.FC<any> = () => {
       <View style={{...styles.bottomButtons, backgroundColor : "#121212"}}>
         <Pressable
           onPress={() => {
-            router.navigate(product_url as string);
+            router.navigate({
+              pathname : "/browser",
+              params : {
+                uri : product_url as string,
+              }
+            })
           }}
           style={{
             ...styles.addButton,
@@ -60,6 +66,25 @@ const ProductDetail: React.FC<any> = () => {
   return (
     <>
       <ScrollView style={{...styles.container , backgroundColor : "#121212"}}>
+        <Pressable onPress={() => router.back()} style={{display : "flex" , flexDirection : "row", marginVertical : 23}}>
+                        <View  style={{
+                            left : 10,
+                            top : 10,
+                            marginBottom : 10,
+                            }}>
+                            <Ionicons name="arrow-back" size={32} color="white"/>
+                        </View>
+                        <Text style={{
+                        color : "white", 
+                        fontFamily : "Poppins", 
+                        fontSize : 22 , 
+                        marginLeft : 20,
+                        marginTop : 10,
+                        }}>
+                            Go Back
+                        </Text>
+                </Pressable>
+
         <PinchableCarousel images={images_arr}/>
 
         <View style={{...styles.detailsContainer , backgroundColor : "#121212"}}>

@@ -29,10 +29,11 @@ const PinchableImage: React.FC<PinchableImageProps> = ({ source }) => {
   );
 
   return (
-    <Animated.View style={styles.imageContainer}>
+    <Animated.View style={[styles.imageContainer]}>
       <Animated.Image
         source={source}
-        style={[styles.image, { transform: [{ scale: scale }] }]}
+        
+        style={[styles.image, { transform: [{ scale: scale }]}]}
         resizeMode="contain"
       />
     </Animated.View>
@@ -53,7 +54,6 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images }) => {
     setCurrentIndex(newIndex);
   };
 
-
   return (
     <View style={styles.carouselContainer}>
       <ScrollView
@@ -65,12 +65,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images }) => {
         scrollEventThrottle={16}
       >
         {images.map((uri, index) => (
-          <View key={index} style={{
-                width: screenWidth,
-                height: screenHeight * 0.7,
-                justifyContent: 'center',
-                alignItems: 'center',
-            }}>
+          <View key={index} style={styles.imageWrapper}>
             <PinchableImage source={{ uri }} />
           </View>
         ))}
@@ -93,18 +88,27 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width : screenWidth,
+    width: screenWidth,
     justifyContent: 'center',
     alignItems: 'center',
   },
   carouselContainer: {
-    width : screenWidth,
+    width: screenWidth,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingVertical : 10,
+  },
+  imageWrapper: {
+    width: screenWidth,
+    height: screenHeight * 0.7,
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'hidden',
   },
   imageContainer: {
     width: screenWidth,
     height: '100%',
+    overflow: 'hidden',
   },
   image: {
     width: screenWidth,
@@ -127,7 +131,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const App = (props : any) => {
+const App = (props: { images: string[] }) => {
   return (
     <View style={styles.container}>
       <ImageCarousel images={props.images} />
