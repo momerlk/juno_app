@@ -88,8 +88,8 @@ const ProductDetail: React.FC<any> = () => {
         <PinchableCarousel images={images_arr}/>
 
         <View style={{...styles.detailsContainer , backgroundColor : "#121212"}}>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={{fontSize : 28, marginBottom : 20,color : "white"}}>
+          <Text style={[styles.title , {fontFamily : "Poppins"}]}>{title}</Text>
+          <Text style={{fontSize : 28, marginBottom : 20,color : "white" , fontFamily : "Poppins"}}>
             By {toTitle(vendor as string)}</Text>
 
           {/* <View style={styles.sizeAndColorContainer}>
@@ -106,7 +106,7 @@ const ProductDetail: React.FC<any> = () => {
 
           <View style={{...styles.section}}>
             <Text style={styles.sectionTitle}>Details</Text>
-            <Text style={styles.description}>{description}</Text>
+            <Text style={[styles.description , {fontFamily : "Poppins"}]}>{description}</Text>
           </View>
 
           {/* <View>
