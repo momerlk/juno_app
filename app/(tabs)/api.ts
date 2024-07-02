@@ -3,9 +3,10 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { router } from "expo-router";
 
-const host_url = "localhost:8080"
+const host_url = "192.168.18.16:3001"
 const base_url = `http://${host_url}`
-const feed_url = `$ws://localhost:8080/feed`
+
+// TODO : Fix memory issue
 
 export class WS {
     socket : WebSocket;
@@ -45,7 +46,7 @@ export class WS {
 
 export class WSFeed extends WS {
   constructor(token : string, setProducts : Function){
-    super(`ws://172.24.6.108:8080/feed?token=${token}` , () => { // on open
+    super(`ws://192.168.18.16:8080/feed?token=${token}` , () => { // on open
       this.sendAction("open" , "" , null)
     } , (data : any) => { // on message
       setProducts(data);

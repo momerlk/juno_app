@@ -324,7 +324,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
 
   ItemCard(props: any){
     const item = props.item;
-    const textHeight = props.height/(SCREEN_HEIGHT/380);
+    const textHeight = props.height/(SCREEN_HEIGHT/400);
     return (
       <ImageBackground
               style={{
@@ -335,7 +335,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
               }}
               source={{ uri: ensureURLScheme(item.image_url) }}
             >
-              <LinearGradient colors={["transparent" , "rgba(0,0,0,0.6)"]} style={{
+              <LinearGradient colors={["transparent" , "rgba(0,0,0,0.8)"]} style={{
                 marginTop : props.height - textHeight , 
                 height : textHeight,
                 borderRadius : 20,
@@ -347,13 +347,13 @@ export class SwipeView extends React.Component<AppProps, AppState> {
                  <Text style={{
                   color : "white",
                   marginHorizontal : 10,
-                  fontSize : props.height * 0.035,
+                  fontSize : props.height * 0.038,
                   fontFamily : "Poppins"
                   }}>{shortTitle(item.title as string)}</Text> 
                 
                   
                   <Text style={{
-                    fontSize: props.height * 0.028, fontFamily: "Poppins",
+                    fontSize: props.height * 0.03, fontFamily: "Poppins",
                     color : "white",
                     marginHorizontal : 10,
                   }}>{toTitle(item.vendor as string)}</Text>
@@ -363,34 +363,54 @@ export class SwipeView extends React.Component<AppProps, AppState> {
                   flexDirection: "row",
                   justifyContent: "space-between",
                 }}>
-                  <Text style={{
-                    fontSize: props.height * 0.025, marginVertical: 5,
-                    color : "white",
-                    fontFamily : "Poppins",
-                    marginHorizontal : 10,
-                  }}>Rs. {item.price}</Text>
 
                   {(() => {
                     if (item.discount > 0 && item.compare_price > 0){
                       return (
                         <>
+
+                        <View style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                        }}>
+                          <Text style={{
+                            fontSize: props.height * 0.025, marginVertical: 5,
+                            color : "white",
+                            fontFamily : "Poppins",
+                            marginHorizontal : 10,
+                          }}>Rs. {fmtPrice(item.price)}</Text>
+                          
+                          <Text style={{
+                              fontSize: props.height * 0.025, marginVertical: 5,
+                              fontWeight : "bold",
+                              fontFamily : "Poppins",
+                              color : "white",
+                              marginHorizontal : 10,
+                              textDecorationLine : "line-through",
+                            }}>{fmtPrice(item.compare_price)}</Text>
+                        </View>
+                        
+                        
+                        
                         <Text style={{
-                          fontSize: props.height * 0.025, marginVertical: 5,
-                          color : "white",
+                          fontSize: props.height * 0.03, marginVertical: 5,
+                          fontWeight : "bold",
                           fontFamily : "Poppins",
+                          color : "#FF1D18",
                           marginHorizontal : 10,
                         }}>{item.discount}% off</Text>
-                        <Text style={{
-                          fontSize: props.height * 0.025, marginVertical: 5,
-                          color : "white",
-                          fontFamily : "Poppins",
-                          marginHorizontal : 10,
-                          textDecorationLine : "line-through",
-                        }}>Rs. {item.compare_price}</Text>
                         </>
                       )
                     } else {
-                      return (<></>)
+                      return (
+                        <Text style={{
+                          fontSize: props.height * 0.028, marginVertical: 5,
+                          color : "white",
+                          fontFamily : "Poppins",
+                          marginHorizontal : 10,
+                        }}>Rs. {fmtPrice(item.price)}</Text>
+                      )
                     }
                   })()}
                 </View>
