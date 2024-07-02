@@ -111,7 +111,10 @@ const fetchFonts = () => {
 export function Cart (props : any) { 
   const vendor_data = props.item;
   // TODO : replace with actual shopify permalink
-  const [uri, setUri] = useState("https://bonanzasatrangi.com/46417313955/checkouts/531f95efefddbac87d62de1968606d6c?note=This+was+order+was+placed+with+the+help+of+juno.&ref=JUNO")
+  const [uri, setUri] = useState("")
+
+  const [order, setOrder] = useState<any>({})
+
 
   // TODO : add delete and update functions and connect them to server
 
@@ -126,8 +129,27 @@ export function Cart (props : any) {
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
           data={vendor_data.items}
-          keyExtractor={(item) => item.product_id}
-          renderItem={({ item }) => <Card item={item}/>} 
+          keyExtractor={(item) => {
+            const p_url : string = item.product_url;
+            const urlObject = new URL(p_url);
+            const base_url = `${urlObject.protocol}//${urlObject.host}`;
+            setUri(base_url);
+            return item.product_id;
+          }}
+          renderItem={({ item }) => <Card item={item}
+              onChange={(id : string , quantity : number) => {
+                
+                if (id !== "null" && id !== null){
+                  const product = {
+                    "variant" : id,
+                    "quantity" : quantity,
+                  }
+                  order[item.product_id] = product
+                  setOrder(order)
+                }
+
+              }} 
+          />} 
           style={{zIndex : 2000}}
         />
         <Pressable
@@ -145,10 +167,18 @@ export function Cart (props : any) {
           { backgroundColor: "white" },
         ]}
         onPress={() => {
+          
+          const items = []
+          for (const product of Object.values(order)){
+            items.push(product)
+          }
+
+          const cartItems = items.map((item : any) => `${item.variant}:${item.quantity}`).join(',');
+          const orderUrl = `${uri}/cart/${cartItems}`;
           router.navigate({
             pathname : "/browser",
             params : {
-              uri : uri,
+              uri : orderUrl,
             }
           })
         }}
@@ -166,6 +196,10 @@ function DropDown(props : any){
 
   useEffect(() => {
     let ops = []
+    try {
+    if (props.data === undefined || props.data === null){
+      return
+    }} catch(e){ return }
     for(let i = 0;i < props.data.length;i++){
       ops.push(
         {label : props.data[i]["title"] , value : props.data[i]["id"]}
@@ -187,6 +221,9 @@ function DropDown(props : any){
         value={value}
         items={items}
         onChangeValue={props.onChange}
+        style={{
+          width : size.scale(120),
+        }}
         
         setOpen={setOpen}
         setValue={setValue}
@@ -194,7 +231,7 @@ function DropDown(props : any){
         searchable={props.searchable}
         textStyle={{
           fontFamily: "Poppins",
-          fontSize: size.scale(14),
+          fontSize: size.scale(12),
         }}
         placeholder={props.title}
         placeholderStyle={{
@@ -212,8 +249,8 @@ function Card(props : any){
 
   // TODO : add proper quantity connected to backend
   const [quantity , setQuantity] = useState(1);
-  const [options , setOptions] = useState([{label : "" , value : ""}])
-
+  const [id , setId] = useState("")
+  
 
 
   return (
@@ -265,7 +302,11 @@ function Card(props : any){
         </View>
         
         <DropDown 
-          title="Select Variant"
+          title="Options"
+          onChange={(id : string) => {
+            setId(id) 
+            props.onChange(id , quantity)
+          }}
           data={props.item.variants} 
         />
 
@@ -279,6 +320,7 @@ function Card(props : any){
                 return
               }
               setQuantity(quantity - 1)
+              props.onChange(id , quantity - 1)
             }}
           >
             <Text style={{color : "gray", fontSize : 30, alignSelf : "center"}}>-</Text>
@@ -290,6 +332,7 @@ function Card(props : any){
                 return
               }
               setQuantity(quantity + 1)
+              props.onChange(id , quantity + 1)
             }} 
           >
             <Text style={{color : "gray", fontSize : 30, alignSelf : "center"}}>+</Text>
