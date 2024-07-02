@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Animated, PanResponder, Dimensions, Image, Imag
 import * as Font from 'expo-font';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
-import { Appearance, ColorSchemeName, ActivityIndicator, Modal, PanResponderInstance, GestureResponderEvent, PanResponderGestureState, TouchableWithoutFeedback} from 'react-native';
+import {ActivityIndicator, Modal, PanResponderInstance, GestureResponderEvent, PanResponderGestureState} from 'react-native';
 import * as size from "react-native-size-matters"
 import { AntDesign, Ionicons, Entypo, EvilIcons} from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';

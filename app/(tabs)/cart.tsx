@@ -8,6 +8,8 @@ import {Logo} from "./_common"
 
 import * as api from "./api"
 
+import DropDownPicker from 'react-native-dropdown-picker';
+
 function toTitle(str : string) : string {
     if (str === undefined){
       return ""
@@ -126,17 +128,19 @@ export function Cart (props : any) {
           data={vendor_data.items}
           keyExtractor={(item) => item.product_id}
           renderItem={({ item }) => <Card item={item}/>} 
+          style={{zIndex : 2000}}
         />
         <Pressable
         style={[
           {
-            paddingBottom: 16,
-            paddingVertical: 10,
+            paddingBottom: 14,
+            paddingVertical: 8,
             marginHorizontal : 14,
             marginTop : 20,
             borderRadius: 4,
             alignItems: 'center',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            zIndex : 0,
           },
           { backgroundColor: "white" },
         ]}
@@ -155,12 +159,61 @@ export function Cart (props : any) {
   )
 }
 
+function DropDown(props : any){
+  const [open , setOpen] = useState(false);
+  const [value , setValue] = useState(null);
+  const [items, setItems] = useState(props.data);
+
+  useEffect(() => {
+    let ops = []
+    for(let i = 0;i < props.data.length;i++){
+      ops.push(
+        {label : props.data[i]["title"] , value : props.data[i]["id"]}
+      )
+    }
+    setItems(ops)
+  } , [])
+
+  return (
+    <View style={{
+      marginLeft : 5,
+      marginTop : size.verticalScale(10),
+      marginBottom : 0,
+      zIndex : open ? 3000 : 1,
+    }}>
+   
+      <DropDownPicker
+        open={open}
+        value={value}
+        items={items}
+        onChangeValue={props.onChange}
+        
+        setOpen={setOpen}
+        setValue={setValue}
+        setItems={setItems}
+        searchable={props.searchable}
+        textStyle={{
+          fontFamily: "Poppins",
+          fontSize: size.scale(14),
+        }}
+        placeholder={props.title}
+        placeholderStyle={{
+          fontSize: size.scale(14),
+        }}
+        {...props.other}
+      />
+    </View>
+  )
+}
+
 
 function Card(props : any){
   // TODO : make this navigate to /details on press
 
   // TODO : add proper quantity connected to backend
   const [quantity , setQuantity] = useState(1);
+  const [options , setOptions] = useState([{label : "" , value : ""}])
+
 
 
   return (
@@ -210,6 +263,11 @@ function Card(props : any){
             }}>Rs. {props.item.price}</Text>
           </View>
         </View>
+        
+        <DropDown 
+          title="Select Variant"
+          data={props.item.variants} 
+        />
 
         <View style={{marginTop : size.verticalScale(60),marginHorizontal : 10, display : "flex" , flexDirection : "row"}}>
           <Pressable style={{width : 40, height : 40, borderRadius : 6}}

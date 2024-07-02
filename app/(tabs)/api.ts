@@ -6,7 +6,7 @@ import { router } from "expo-router";
 const host_url = "192.168.18.16:3001"
 const base_url = `http://${host_url}`
 
-// TODO : Fix memory issue
+// TODO : Fix memory issue. these products data take too much memory javascript ran out of memory
 
 export class WS {
     socket : WebSocket;
