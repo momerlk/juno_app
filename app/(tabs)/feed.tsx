@@ -368,20 +368,31 @@ export class SwipeView extends React.Component<AppProps, AppState> {
                     color : "white",
                     fontFamily : "Poppins",
                     marginHorizontal : 10,
-                  }}>Rs. {fmtPrice(item.price)}</Text>
-                  <Text style={{
-                    fontSize: props.height * 0.025, marginVertical: 5,
-                    color : "white",
-                    fontFamily : "Poppins",
-                    marginHorizontal : 10,
-                  }}>{item.discount}% off</Text>
-                  <Text style={{
-                    fontSize: props.height * 0.025, marginVertical: 5,
-                    color : "white",
-                    fontFamily : "Poppins",
-                    marginHorizontal : 10,
-                    textDecorationLine : "line-through",
-                  }}>Rs. {fmtPrice(item.compare_price)}</Text>
+                  }}>Rs. {item.price}</Text>
+
+                  {(() => {
+                    if (item.discount > 0 && item.compare_price > 0){
+                      return (
+                        <>
+                        <Text style={{
+                          fontSize: props.height * 0.025, marginVertical: 5,
+                          color : "white",
+                          fontFamily : "Poppins",
+                          marginHorizontal : 10,
+                        }}>{item.discount}% off</Text>
+                        <Text style={{
+                          fontSize: props.height * 0.025, marginVertical: 5,
+                          color : "white",
+                          fontFamily : "Poppins",
+                          marginHorizontal : 10,
+                          textDecorationLine : "line-through",
+                        }}>Rs. {item.compare_price}</Text>
+                        </>
+                      )
+                    } else {
+                      return (<></>)
+                    }
+                  })()}
                 </View>
 
 

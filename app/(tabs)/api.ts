@@ -3,15 +3,16 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { router } from "expo-router";
 
-const host_url = "192.168.18.16:3001"
+const host_url = "localhost:8080"
 const base_url = `http://${host_url}`
-const feed_url = `$ws://172.24.6.108:8080/feed`
+const feed_url = `$ws://localhost:8080/feed`
 
 export class WS {
     socket : WebSocket;
     open : boolean;
     constructor(url : string, onOpen: Function, onMessage : Function){
         this.socket = new WebSocket(url);
+        
         this.open = false;
         this.socket.onopen = (ev : Event) => {
           this.open = true;
@@ -19,7 +20,7 @@ export class WS {
         }
         this.socket.onerror = (error : any) => {
           alert(`failed to connect to websocket`)
-          console.log(`failed to connect to websocket, error = ${error}`) 
+          console.error(`failed to connect to websocket, error = ${JSON.stringify(error)}`) 
         }
         this.socket.onmessage = (ev : MessageEvent<any>) => {
           onMessage(JSON.parse(ev.data));
@@ -44,7 +45,7 @@ export class WS {
 
 export class WSFeed extends WS {
   constructor(token : string, setProducts : Function){
-    super(`${feed_url}?token=${token}` , () => { // on open
+    super(`ws://172.24.6.108:8080/feed?token=${token}` , () => { // on open
       this.sendAction("open" , "" , null)
     } , (data : any) => { // on message
       setProducts(data);
