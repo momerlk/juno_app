@@ -3,9 +3,9 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { router } from "expo-router";
 
-const base_url = "http://localhost:8080"
-const ws_base_url = "ws://localhost:8080"
-const feed_url = `${ws_base_url}/feed`
+const host_url = "192.168.18.16:3001"
+const base_url = `http://${host_url}`
+const feed_url = `$ws://172.24.6.108:8080/feed`
 
 export class WS {
     socket : WebSocket;

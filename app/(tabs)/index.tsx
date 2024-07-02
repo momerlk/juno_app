@@ -185,7 +185,7 @@ export default class Home extends React.Component<{},HomeState> {
     super(props);
     this.state = {
       spotlight : mockData[0],
-      products : mockData.splice(1,8), 
+      products : mockData, 
       loading : true,
       query : "",
       queryProducts : [],
@@ -483,673 +483,87 @@ export default class Home extends React.Component<{},HomeState> {
 }
 
 
-const mockData =[
+const mockData =[{
+  "product_id": "90d3a4e5-9cd2-4183-bb73-0a532281ce31",
+  "product_url": "https://www.afrozeh.com/products/serenova",
+  "shopify_id": "8212329103594",
+  "handle": "serenova",
+  "title": "Serenova",
+  "vendor": "afrozeh",
+  "vendor_title": "Afrozeh",
+  "category": "",
+  "product_type": "",
+  "image_url": "https://cdn.shopify.com/s/files/1/0052/2030/2897/files/AIZ09441.jpg?v=1700654661",
+  "images": [
+    "https://cdn.shopify.com/s/files/1/0052/2030/2897/files/AIZ09441.jpg?v=1700654661",
+    "https://cdn.shopify.com/s/files/1/0052/2030/2897/files/AIZ09455.jpg?v=1700654660",
+    "https://cdn.shopify.com/s/files/1/0052/2030/2897/files/AIZ09458.jpg?v=1700654661",
+    "https://cdn.shopify.com/s/files/1/0052/2030/2897/files/AIZ09517.jpg?v=1700654661",
+    "https://cdn.shopify.com/s/files/1/0052/2030/2897/files/AIZ09550.jpg?v=1700654661",
+    "https://cdn.shopify.com/s/files/1/0052/2030/2897/files/AIZ09582.jpg?v=1700654661",
+    "https://cdn.shopify.com/s/files/1/0052/2030/2897/files/AIZ09605.jpg?v=1700654660",
+    "https://cdn.shopify.com/s/files/1/0052/2030/2897/files/AIZ09649.jpg?v=1700654662"
+  ],
+  "description": "Serenova showcases sheer stitched three-piece perfection. It’s an open-cut shirt in a green hue with delicate, monotone floral embroidery on plain khadar fabric that exudes timeless charm. Paired with an embroidered border shawl, complemented by the perfect touch of laces on each side, and plain pants, that add a touch of opulence and luxury.\nNote: Pret orders will dispatch by 5th of December",
+  "price": 12720,
+  "compare_price": 15900,
+  "discount": 19,
+  "currency": "PKR",
+  "variants": [
     {
-        "product_id": "33d5c38e-ef26-49ce-8c64-01aaee431adf",
-        "product_url": "https://outfitters.com.pk//products/f0198-303",
-        "shopify_id": "7684938039487",
-        "handle": "f0198-303",
-        "title": "Mandarian Collar Plain Shirt",
-        "vendor": "outfitters",
-        "category": "",
-        "image_url": "https://cdn.shopify.com/s/files/1/2290/7887/files/F0198303001_1.jpg?v=1711016742",
-        "images": [
-            "https://cdn.shopify.com/s/files/1/2290/7887/files/F0198303001_1.jpg?v=1711016742",
-            "https://cdn.shopify.com/s/files/1/2290/7887/files/F0198303001_3.jpg?v=1711016742",
-            "https://cdn.shopify.com/s/files/1/2290/7887/files/F0198303001_2.jpg?v=1711016742",
-            "https://cdn.shopify.com/s/files/1/2290/7887/files/F0198303001.jpg?v=1714456685",
-            "https://cdn.shopify.com/s/files/1/2290/7887/files/F0198303001_2_ba469b50-47e8-4740-8820-b3d5585ee7f9.jpg?v=1714456685",
-            "https://cdn.shopify.com/s/files/1/2290/7887/files/F0198303622_2.jpg?v=1714456685",
-            "https://cdn.shopify.com/s/files/1/2290/7887/files/F0198303622_5.jpg?v=1714456685",
-            "https://cdn.shopify.com/s/files/1/2290/7887/files/F0198303622_4.jpg?v=1714456685",
-            "https://cdn.shopify.com/s/files/1/2290/7887/files/F0198303622.jpg?v=1714456730",
-            "https://cdn.shopify.com/s/files/1/2290/7887/files/F0198303622_2_e2579b7a-ff68-40e8-b6af-1ab980f2e5de.jpg?v=1714456730"
-        ],
-        "description": "Fit RegularThe name says it all the right size slightly snugs the body leaving enough room for comfort in the sleeves and waist. Does not taper down and offers a relaxed silhouette for your everyday looks Composition & Care  \n50% Cotton 50% linen\nMachine wash up to 30C/86F, gentle cycle \nDo not bleach\nIron up to 110C/230F\nDo not iron directly on prints/embroidery/embellishments\nDo not dry clean\nDo not tumble dry\n",
-        "price": 1390,
-        "currency": "PKR",
-        "options": [
-            {
-                "name": "Color",
-                "position": 1,
-                "values": [
-                    "White",
-                    "Indigo Blue"
-                ]
-            },
-            {
-                "name": "Size",
-                "position": 2,
-                "values": [
-                    "06-12M",
-                    "12-18M",
-                    "18-24M",
-                    "02-03Y",
-                    "03-04Y",
-                    "04-05Y"
-                ]
-            },
-            {
-                "name": "Season",
-                "position": 3,
-                "values": [
-                    "SS-24"
-                ]
-            }
-        ],
-        "tags": [
-            "2023-2024",
-            "2024",
-            "all-baby-boys",
-            "B09-SS24",
-            "bb-new",
-            "Boys",
-            "Boys Toddler",
-            "Junior SS-24",
-            "Juniors",
-            "JuniorSpecialPrices",
-            "Kids",
-            "mss24",
-            "PKR 2090 - PKR 2990",
-            "Plains",
-            "Regular",
-            "Shirts",
-            "SS-24",
-            "st24",
-            "st24-Boys",
-            "Summer",
-            "Summer-24",
-            "TB-003-SimplifiedSizechart",
-            "TB-Shirts-Sale",
-            "TB-Shirts-SS-24",
-            "TBSpecialPrice",
-            "ToddlerBoysSize-chart",
-            "Top",
-            "White"
-        ],
-        "available": true
+      "id": "44260308812010",
+      "price": 12720,
+      "title": "Stitched / S",
+      "compare_price": 15900,
+      "option1": "Stitched",
+      "option2": "S",
+      "option3": ""
     },
     {
-        "product_id": "5f8d9dce-22db-4290-9f49-aef59b796a2a",
-        "product_url": "https://breakout.com.pk//products/4csmd620-blu",
-        "shopify_id": "7445186740278",
-        "handle": "4csmd620-blu",
-        "title": "Stretch Skinny Fit Denim",
-        "vendor": "breakout",
-        "category": "",
-        "image_url": "https://cdn.shopify.com/s/files/1/0202/5884/8822/files/4CSMD620-BLU_1.jpg?v=1714808864",
-        "images": [
-            "https://cdn.shopify.com/s/files/1/0202/5884/8822/files/4CSMD620-BLU_1.jpg?v=1714808864",
-            "https://cdn.shopify.com/s/files/1/0202/5884/8822/files/4CSMD620-BLU_2.jpg?v=1714808864",
-            "https://cdn.shopify.com/s/files/1/0202/5884/8822/files/4CSMD620-BLU_3.jpg?v=1714808865"
-        ],
-        "description": "98% Cotton 2% Lycra",
-        "price": 3149,
-        "currency": "PKR",
-        "options": [
-            {
-                "name": "Size",
-                "position": 1,
-                "values": [
-                    "30",
-                    "32",
-                    "34",
-                    "36",
-                    "38"
-                ]
-            },
-            {
-                "name": "COLOR",
-                "position": 2,
-                "values": [
-                    "BLUE"
-                ]
-            }
-        ],
-        "tags": [
-            "24-SUM",
-            "98% Cotton 2% Lycra",
-            "BOTTOM",
-            "DENIM",
-            "FLAT30",
-            "FS",
-            "Garments",
-            "MEN",
-            "SALE"
-        ],
-        "available": true
+      "id": "44305551884522",
+      "price": 12720,
+      "title": "Stitched / M",
+      "compare_price": 15900,
+      "option1": "Stitched",
+      "option2": "M",
+      "option3": ""
     },
     {
-        "product_id": "d4375d2f-6118-4f54-af6d-4b66e81183d7",
-        "product_url": "https://bonanzasatrangi.com/products/ss6242p16-pink",
-        "shopify_id": "8211080052899",
-        "handle": "ss6242p16-pink",
-        "title": "Pink Yarn Dyed 2 Piece (Ss6242P16)",
-        "vendor": "bonanza_satrangi",
-        "category": "",
-        "image_url": "https://cdn.shopify.com/s/files/1/0464/1731/3955/files/SS6242P16_1.jpg?v=1707194738",
-        "images": [
-            "https://cdn.shopify.com/s/files/1/0464/1731/3955/files/SS6242P16_1.jpg?v=1707194738",
-            "https://cdn.shopify.com/s/files/1/0464/1731/3955/files/SS6242P16_2.jpg?v=1707194738",
-            "https://cdn.shopify.com/s/files/1/0464/1731/3955/files/SS6242P16_3.jpg?v=1707194738",
-            "https://cdn.shopify.com/s/files/1/0464/1731/3955/files/SS6242P16_4.jpg?v=1707194738",
-            "https://cdn.shopify.com/s/files/1/0464/1731/3955/files/SS6242P16_5.jpg?v=1707194738"
-        ],
-        "description": "Stitched 2-Piece Suit\nShirt:Yarn Dyed Lurex Doria Shirt, Band Collar Embellishement On Placket.\nTrouser: Yarn Dyed Cotton Trouser.\nModel Height: 5'7 And She Is Wearing Size 8",
-        "price": 3952,
-        "currency": "PKR",
-        "options": [
-            {
-                "name": "size",
-                "position": 1,
-                "values": [
-                    "8",
-                    "10",
-                    "12",
-                    "14",
-                    "16"
-                ]
-            },
-            {
-                "name": "Color",
-                "position": 2,
-                "values": [
-                    "PINK"
-                ]
-            },
-            {
-                "name": "Design",
-                "position": 3,
-                "values": [
-                    "SS6242P16"
-                ]
-            }
-        ],
-        "tags": [
-            "10",
-            "12",
-            "14",
-            "16",
-            "2-Piece",
-            "2Piece",
-            "6",
-            "8",
-            "Collection: Summers",
-            "Design-23",
-            "designcode_SS6242P16-PINK",
-            "Exclusive Pret Sale",
-            "Female",
-            "First10",
-            "New Arrivals",
-            "NewArrivals",
-            "Piece-2023",
-            "Pink",
-            "PKR 5500 - PKR 6999",
-            "Pret",
-            "Printed",
-            "Ready To Wear",
-            "sizechart_link:https://cdn.shopify.com/s/files/1/0464/1731/3955/files/SS6242P16.jpg",
-            "Stitched",
-            "Summer 2024",
-            "SUMMER COLLECTION 2024",
-            "Summers Pret",
-            "Women",
-            "Women Ready to Wear",
-            "Yarn Dyed"
-        ],
-        "available": true
-    },
-    {
-        "product_id": "aa880275-6213-45f8-94c5-dd8079f5f5fa",
-        "product_url": "https://www.alkaramstudio.com/products/2-pc-embroidered-khaddar-suit-with-khaddar-trouser-nc-01-22-orange",
-        "shopify_id": "7324079849652",
-        "handle": "2-pc-embroidered-khaddar-suit-with-khaddar-trouser-nc-01-22-orange",
-        "title": "2 Pc Embroidered Khaddar Suit With Khaddar Trouser",
-        "vendor": "alkaram_studio",
-        "category": "",
-        "image_url": "https://cdn.shopify.com/s/files/1/0623/6481/1444/products/nc-01-22-orange-1_t71hwkvg2ibokdtg_7e3c736a-6815-40ad-a8da-6125e57fc6b6.jpg?v=1718501751",
-        "images": [
-            "https://cdn.shopify.com/s/files/1/0623/6481/1444/products/nc-01-22-orange-1_t71hwkvg2ibokdtg_7e3c736a-6815-40ad-a8da-6125e57fc6b6.jpg?v=1718501751",
-            "https://cdn.shopify.com/s/files/1/0623/6481/1444/products/nc-01-22-orange-2_8jpaevhkxcke4rtm_c2624dce-7d46-4e8f-8b88-170855c62e83.jpg?v=1718501754",
-            "https://cdn.shopify.com/s/files/1/0623/6481/1444/products/nc-01-22-orange-3_sappkqbj0bvmsbjh_5cde9d10-fbf3-4fbd-b5cb-4a1f758ed25e.jpg?v=1718501757",
-            "https://cdn.shopify.com/s/files/1/0623/6481/1444/products/nc-01-22-orange-4_i6qh4qdfo7f7vsuz_a0f67ae4-64ab-4dfc-855f-2d087ccddb36.jpg?v=1718501760",
-            "https://cdn.shopify.com/s/files/1/0623/6481/1444/products/nc-01-22-orange-5_b7m4admacpc665rt_8620ab28-6109-4ca7-9341-a9116798f66e.jpg?v=1718501763"
-        ],
-        "description": "\"Unstitched 2-PieceEmbroidered Khaddar Suit With Khaddar TrouserColor: Orange Collection: Neon Capsule'22Shirt:Embroidered Khaddar Shirt 3.13 MetersFabric: KhaddarTrouser: Dyed Khaddar Trouser Fabric: Khaddar",
-        "price": 3660,
-        "currency": "PKR",
-        "options": [
-            {
-                "name": "Color",
-                "position": 1,
-                "values": [
-                    "Orange"
-                ]
-            },
-            {
-                "name": "Size",
-                "position": 2,
-                "values": [
-                    "5.63"
-                ]
-            },
-            {
-                "name": "Fabric",
-                "position": 3,
-                "values": [
-                    "Khaddar"
-                ]
-            }
-        ],
-        "tags": [
-            "2 Piece",
-            "6100",
-            "Capsule",
-            "Care",
-            "FS",
-            "Neon",
-            "Neon Capsule-22",
-            "New In",
-            "Orange",
-            "Pret",
-            "Sale 2022",
-            "Shirt Trouser",
-            "show-quickview",
-            "Unstitched",
-            "Uploaded29-Dec-2022",
-            "Woman",
-            "Woman Unstitched"
-        ],
-        "available": true
-    },
-    {
-        "product_id": "30922afd-8644-4b97-8e2c-f27746fa5861",
-        "product_url": "https://pk.sapphireonline.pk/products/u3pe-lx24v3-4-t-1",
-        "shopify_id": "7735292035146",
-        "handle": "u3pe-lx24v3-4-t-1",
-        "title": "Printed Cambric Culottes",
-        "vendor": "sapphire",
-        "category": "",
-        "image_url": "https://cdn.shopify.com/s/files/1/1592/0041/files/U3PELX24V34T_1.jpg?v=1719583564",
-        "images": [
-            "https://cdn.shopify.com/s/files/1/1592/0041/files/U3PELX24V34T_1.jpg?v=1719583564",
-            "https://cdn.shopify.com/s/files/1/1592/0041/files/U3PELX24V34T_2.jpg?v=1719583564"
-        ],
-        "description": "Complete your Eid look in our light blue printed cambric bootcut.\nCulottesColour: Light BlueFabric: Cambric\nSIZE & FITModel height: 5 Feet 6 InchesModel Wears: XS\n\n\n\n\nSize\nXS\nS\nM\nL\nXL\n\n\nLength\n35.125\n36\n36.875\n37.75\n37.75\n\n\nFront Rise\n11.5\n12\n13\n14\n15\n\n\nBack Rise\n14.5\n15\n16\n17\n18\n\n\nWaist Relaxed\n13\n14\n15\n16\n17\n\n\nWaist Extended\n19\n20\n21\n22\n23\n\n\nBottom Half\n11.25\n12\n12.75\n13.5\n14.25\n\n\n",
-        "price": 995,
-        "currency": "PKR",
-        "options": [
-            {
-                "name": "Size",
-                "position": 1,
-                "values": [
-                    "XS",
-                    "S",
-                    "M",
-                    "L",
-                    "XL"
-                ]
-            }
-        ],
-        "tags": [
-            "1 Piece",
-            "1000 - 3000",
-            "15-Percent-Tax",
-            "1PC",
-            "50% OFF",
-            "50-restocked-july-sale-24",
-            "all-woman-unstitched",
-            "Bari Eid",
-            "Blue",
-            "Bottoms",
-            "brands in pakistan",
-            "Cambric",
-            "clothes",
-            "Eid",
-            "Eid 2",
-            "Eid Collection",
-            "Eid Edition",
-            "Eid II",
-            "Eid ul Adha",
-            "Eid ul Azha",
-            "everything-June-sale-under-2000",
-            "everything-June-sale-under-3000",
-            "everything-June-sale-under-5000",
-            "fashion",
-            "home-edition",
-            "June-sale-2024",
-            "kapde",
-            "kapdon ke design",
-            "Ladies",
-            "Ladies Pret",
-            "Ladies Ready To Wear",
-            "Ladies Stitched",
-            "ladies suit design",
-            "Light Blue",
-            "matching-separates",
-            "new dress design",
-            "New in stitched 2024",
-            "New-all-9th-May-24",
-            "Office Wear",
-            "One Piece",
-            "pakistani dresses",
-            "Pret",
-            "Printed",
-            "Printed Boot Cut",
-            "Printed Bottoms",
-            "Ready to wear",
-            "Ready to wear dresses",
-            "Readymade",
-            "Readymade clothing",
-            "RTW",
-            "RTW-09th-May-24",
-            "salwar kameez design",
-            "Signature",
-            "Single Piece",
-            "size-chart",
-            "stiched",
-            "Stitch for you",
-            "STITCH-FOR-YOU-RTW-09th-May-24",
-            "Stitched",
-            "Stitched for you",
-            "Stitched-For-You-09th-May-24",
-            "stitched-for-you-eid-2-24",
-            "stitched-uns-fall-winter-23",
-            "suit design",
-            "Summer",
-            "Summer 24",
-            "Summer Clothing",
-            "Summer Pret",
-            "Summer Ready to Wear Clothing",
-            "Summer RTW",
-            "Summers",
-            "Trouser",
-            "Trousers",
-            "U3PE-LX24V3-4 T",
-            "U3PELX24V34T",
-            "U3PELX24V34T-size-chart",
-            "UAE_FREE_SHIPPING",
-            "Unstitched-To-Stitched-June-sale-2024",
-            "woman-all-products",
-            "woman-culottes-trousers",
-            "Women",
-            "Women-all-products",
-            "womens",
-            "Womens Pret",
-            "Womens Ready To Wear",
-            "Womens Suit"
-        ],
-        "available": true
-    },
-    {
-        "product_id": "adbf0e5e-a4cb-49d0-82b3-152a42f6346f",
-        "product_url": "https://www.crossstitch.pk/products/alaina-1",
-        "shopify_id": "6978112487489",
-        "handle": "alaina-1",
-        "title": "Alaina 1 Clutch",
-        "vendor": "cross_stitch",
-        "category": "",
-        "image_url": "https://cdn.shopify.com/s/files/1/0178/4492/8612/files/4P2A5465.jpg?v=1694173773",
-        "images": [
-            "https://cdn.shopify.com/s/files/1/0178/4492/8612/files/4P2A5465.jpg?v=1694173773",
-            "https://cdn.shopify.com/s/files/1/0178/4492/8612/files/4P2A5468.jpg?v=1694173773",
-            "https://cdn.shopify.com/s/files/1/0178/4492/8612/files/4P2A5472.jpg?v=1694173773"
-        ],
-        "description": "Crafted in sleek satin, our clutch bag is adorned with layers of crystals and is also topped with a ball crystal clasp Color: Silver Material: Satin Silk Style: Hard-cased clutch Size: height 3.5 Inches width 7.4 InchesAccessories: Long Chain",
-        "price": 6500,
-        "currency": "PKR",
-        "options": [
-            {
-                "name": "Color",
-                "position": 1,
-                "values": [
-                    "SILVER"
-                ]
-            }
-        ],
-        "tags": [
-            "0123ACCBAGCLU0104",
-            "ACCESSORIES",
-            "BAGS",
-            "CLUTCH",
-            "COLLECTION: SS-23 ACC CLUTCH EDIT-1",
-            "DCS: ACCBAGCLU",
-            "EOS",
-            "PRO TYP: CLUTCH",
-            "promo-go",
-            "SEASON: SS-23",
-            "SEPT 2023"
-        ],
-        "available": true
-    },
-    {
-        "product_id": "27b4d6e9-8e01-433d-86ec-960aab3fe897",
-        "product_url": "https://generation.com.pk/products/s24t6025-pink",
-        "shopify_id": "8305018274017",
-        "handle": "s24t6025-pink",
-        "title": "Timeless Romance Gota Galore Suit",
-        "vendor": "generation",
-        "category": "",
-        "image_url": "https://cdn.shopify.com/s/files/1/0650/8249/1105/files/S24T6025_Pink.jpg?v=1711105839",
-        "images": [
-            "https://cdn.shopify.com/s/files/1/0650/8249/1105/files/S24T6025_Pink.jpg?v=1711105839",
-            "https://cdn.shopify.com/s/files/1/0650/8249/1105/files/S24T6025_Pink_1.jpg?v=1711105838",
-            "https://cdn.shopify.com/s/files/1/0650/8249/1105/files/S24T6025_Pink_2.jpg?v=1711105839",
-            "https://cdn.shopify.com/s/files/1/0650/8249/1105/files/S24T6025_Pink_3.jpg?v=1711105838",
-            "https://cdn.shopify.com/s/files/1/0650/8249/1105/files/S24T6025_Pink_4.jpg?v=1711105838"
-        ],
-        "description": "Printed panelled short kurta with gota embelishments, paired with printed classic fit shalwar, adorned with gota and yarn dyed striped dupatta.MODEL DETAILS:Model is wearing size 8 and height is 5' 7''FABRICShirt: LawnDupatta: Yarn dyedLower: LawnLENGTHSleeve Length: FullShirt Length: Medium",
-        "price": 10498,
-        "currency": "PKR",
-        "options": [
-            {
-                "name": "Size",
-                "position": 1,
-                "values": [
-                    "8",
-                    "10",
-                    "12",
-                    "14",
-                    "16"
-                ]
-            },
-            {
-                "name": "Colour",
-                "position": 2,
-                "values": [
-                    "Pink"
-                ]
-            }
-        ],
-        "tags": [
-            "Category_3-Piece",
-            "Category_Suits",
-            "cl-Hand Crafted",
-            "Colour_Pink",
-            "Eid-Blockbusters-24",
-            "Embroidered 3 Piece",
-            "Fabric_Lawn",
-            "Hand Crafted",
-            "Hand Crafted 3 Piece",
-            "Length_Medium",
-            "New-In",
-            "PRICE_UNDER 12000",
-            "Shirt Dupatta Shalwar 3 Piece",
-            "Size_ 8",
-            "Size_10",
-            "Size_12",
-            "Size_14",
-            "Size_16",
-            "Suits",
-            "Suits-3-Piece",
-            "Type_Embroidered"
-        ],
-        "available": true
-    },
-    {
-        "product_id": "4f742269-9dbb-4915-81f7-9582f30d3def",
-        "product_url": "https://pk.sapphireonline.pk/products/westtop03338-1",
-        "shopify_id": "7466213867594",
-        "handle": "westtop03338-1",
-        "title": "Striped Loose Fit Shirt",
-        "vendor": "sapphire",
-        "category": "",
-        "image_url": "https://cdn.shopify.com/s/files/1/1592/0041/files/WESTTOP03338_4.jpg?v=1706784173",
-        "images": [
-            "https://cdn.shopify.com/s/files/1/1592/0041/files/WESTTOP03338_4.jpg?v=1706784173",
-            "https://cdn.shopify.com/s/files/1/1592/0041/files/WESTTOP03338_7.jpg?v=1706784173",
-            "https://cdn.shopify.com/s/files/1/1592/0041/files/WESTTOP03338_1.jpg?v=1706784173",
-            "https://cdn.shopify.com/s/files/1/1592/0041/files/WESTTOP03338_2.jpg?v=1706784173",
-            "https://cdn.shopify.com/s/files/1/1592/0041/files/WESTTOP03338_3.jpg?v=1706784173",
-            "https://cdn.shopify.com/s/files/1/1592/0041/files/WESTTOP03338_5.jpg?v=1706784173"
-        ],
-        "description": "Printed shirt in cotton satin fabric. Full sleeves and front patch pocket.\nDetails:  Colour: Blue & White Fabric: 100% Cotton\nSize & Fit Model Height: 5 Feet 4 Inches Model Wears: S\n\n\n\n\nSize\nXS\nS\nM\nL\nXL\n\n\nLength\n70\n72\n74\n76\n78\n\n\nChest\n56\n58\n60\n62\n64\n\n\nBottom Opening\n58\n60\n62\n64\n66\n\n\nShoulder\n56\n58\n60\n62\n64\n\n\n",
-        "price": 2593,
-        "currency": "PKR",
-        "options": [
-            {
-                "name": "Size",
-                "position": 1,
-                "values": [
-                    "XS",
-                    "S",
-                    "M",
-                    "L",
-                    "XL"
-                ]
-            }
-        ],
-        "tags": [
-            "100% Cotton",
-            "15-Percent-Tax",
-            "3000 - 6000",
-            "35% OFF",
-            "35-restocked-july-sale-24",
-            "Blue",
-            "Bold Elegance-Women-Western-01st-Feb-24",
-            "Button Down Shirt",
-            "Button through shirt",
-            "Cotton",
-            "everything-June-sale-under-3000",
-            "everything-June-sale-under-5000",
-            "Formal",
-            "Formal Story",
-            "home-edition",
-            "June-sale-2024",
-            "New-all-1st-Feb-24",
-            "new-in",
-            "new-in-west-sept-2020",
-            "Office wear",
-            "Printed",
-            "Printed Button Down Shirt",
-            "printed Shirt",
-            "Restocking-April-sale-2024",
-            "Sapphire West",
-            "Shirt",
-            "Shirts",
-            "size-chart",
-            "Spring Summer",
-            "Spring Summer 24",
-            "spring-bold-elegance-24",
-            "Striped Loose-Fit Shirt",
-            "Summer",
-            "Summer Clothing",
-            "Summers",
-            "Top",
-            "Tops",
-            "Tops for Women",
-            "UAE_FREE_SHIPPING",
-            "West",
-            "West Formals",
-            "West Shirt",
-            "West Top",
-            "west-spring-24",
-            "Western",
-            "Western Shirt",
-            "Western Wear",
-            "WESTTOP03338",
-            "WESTTOP03338-size-chart",
-            "woman-all-products",
-            "Women's West",
-            "women-tops",
-            "Women-Western-01st-Feb-24",
-            "Women-Western-June-sale-2024"
-        ],
-        "available": true
-    },
-    {
-        "product_id": "22a5f31e-9306-4a87-bb3a-33e67c98b0be",
-        "product_url": "https://outfitters.com.pk//products/f0043-204",
-        "shopify_id": "7809574600895",
-        "handle": "f0043-204",
-        "title": "Belted Button Through Maxi Shirt Dress",
-        "vendor": "outfitters",
-        "category": "",
-        "image_url": "https://cdn.shopify.com/s/files/1/2290/7887/files/F0043204619_3_copy.jpg?v=1716437875",
-        "images": [
-            "https://cdn.shopify.com/s/files/1/2290/7887/files/F0043204619_3_copy.jpg?v=1716437875",
-            "https://cdn.shopify.com/s/files/1/2290/7887/files/F0043204619_4_copy2.jpg?v=1717478668",
-            "https://cdn.shopify.com/s/files/1/2290/7887/files/F0043204619_4_copy.jpg?v=1717478668",
-            "https://cdn.shopify.com/s/files/1/2290/7887/files/F0043204005_2.jpg?v=1717478668",
-            "https://cdn.shopify.com/s/files/1/2290/7887/files/F0043204005_5.jpg?v=1717478668",
-            "https://cdn.shopify.com/s/files/1/2290/7887/files/F0043204005_4.jpg?v=1717478668"
-        ],
-        "description": "Fit Relaxed\nComfort all the way comfortably loose fit with drop shoulders that does not hug the body. Stands in the middle of an oversized and regular fit, making movement easy\n Composition & Care \n\n50% CTN 50% LINEN\nMachine wash up to 30C/86F, gentle cycle\nDo not bleach\nIron up to 110C/230F\nDo not iron directly on prints/embroidery/embellishments\nDo not dry clean\nDo not tumble dry\n",
-        "price": 7490,
-        "currency": "PKR",
-        "options": [
-            {
-                "name": "Color",
-                "position": 1,
-                "values": [
-                    "Navy Blue",
-                    "Vanilla Ice"
-                ]
-            },
-            {
-                "name": "Size",
-                "position": 2,
-                "values": [
-                    "XS",
-                    "S",
-                    "M",
-                    "L"
-                ]
-            },
-            {
-                "name": "Season",
-                "position": 3,
-                "values": [
-                    "SS-24"
-                ]
-            }
-        ],
-        "tags": [
-            "2023-2024",
-            "2024",
-            "B13-SS24",
-            "Casual",
-            "Dresses",
-            "JumpSuits",
-            "L",
-            "M",
-            "PKR 7090 - PKR 7990",
-            "Relaxed",
-            "S",
-            "SS-24",
-            "Suits",
-            "Summer",
-            "Summer-24",
-            "TN",
-            "Top",
-            "Vanilla Ice",
-            "W-relx-maxidress-SimplifiedSizechart",
-            "W-Suits-SS-24",
-            "Women",
-            "women-size-chart",
-            "WomenSS-24",
-            "XS"
-        ],
-        "available": true
+      "id": "44305551917290",
+      "price": 12720,
+      "title": "Stitched / L",
+      "compare_price": 15900,
+      "option1": "Stitched",
+      "option2": "L",
+      "option3": ""
     }
-]
+  ],
+  "options": [
+    {
+      "name": "Type",
+      "position": 1,
+      "values": [
+        "Stitched"
+      ]
+    },
+    {
+      "name": "Size",
+      "position": 2,
+      "values": [
+        "S",
+        "M",
+        "L"
+      ]
+    }
+  ],
+  "tags": [
+    "custom_flow",
+    "ELARA LUXURY PRET",
+    "Hide_Custom_Flow",
+    "rtw-custom-flow",
+    "Sale-1-July",
+    "Serenova",
+    "show_fabric_color_metafield"
+  ],
+  "available": true
+}]

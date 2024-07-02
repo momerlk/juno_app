@@ -244,411 +244,89 @@ function Card(props : any){
 
 
 
-const mockData = [
+const mockData = [{
+  "product_id": "90d3a4e5-9cd2-4183-bb73-0a532281ce31",
+  "product_url": "https://www.afrozeh.com/products/serenova",
+  "shopify_id": "8212329103594",
+  "handle": "serenova",
+  "title": "Serenova",
+  "vendor": "afrozeh",
+  "vendor_title": "Afrozeh",
+  "category": "",
+  "product_type": "",
+  "image_url": "https://cdn.shopify.com/s/files/1/0052/2030/2897/files/AIZ09441.jpg?v=1700654661",
+  "images": [
+    "https://cdn.shopify.com/s/files/1/0052/2030/2897/files/AIZ09441.jpg?v=1700654661",
+    "https://cdn.shopify.com/s/files/1/0052/2030/2897/files/AIZ09455.jpg?v=1700654660",
+    "https://cdn.shopify.com/s/files/1/0052/2030/2897/files/AIZ09458.jpg?v=1700654661",
+    "https://cdn.shopify.com/s/files/1/0052/2030/2897/files/AIZ09517.jpg?v=1700654661",
+    "https://cdn.shopify.com/s/files/1/0052/2030/2897/files/AIZ09550.jpg?v=1700654661",
+    "https://cdn.shopify.com/s/files/1/0052/2030/2897/files/AIZ09582.jpg?v=1700654661",
+    "https://cdn.shopify.com/s/files/1/0052/2030/2897/files/AIZ09605.jpg?v=1700654660",
+    "https://cdn.shopify.com/s/files/1/0052/2030/2897/files/AIZ09649.jpg?v=1700654662"
+  ],
+  "description": "Serenova showcases sheer stitched three-piece perfection. It’s an open-cut shirt in a green hue with delicate, monotone floral embroidery on plain khadar fabric that exudes timeless charm. Paired with an embroidered border shawl, complemented by the perfect touch of laces on each side, and plain pants, that add a touch of opulence and luxury.\nNote: Pret orders will dispatch by 5th of December",
+  "price": 12720,
+  "compare_price": 15900,
+  "discount": 19,
+  "currency": "PKR",
+  "variants": [
     {
-        "vendor": "limelight",
-        "items": [
-            {
-                "_id": "665d100edb4387ba28b8288f",
-                "product_id": "c16f7322-519a-4857-ac8f-6d8b6fdf33c1",
-                "product_url": "https://www.limelight.pk/products/p8642tp-xsm-frz",
-                "shopify_id": 7611632549976,
-                "handle": "p8642tp-xsm-frz",
-                "title": "Lawn Kurti Embroidered (Pret)",
-                "vendor": "limelight",
-                "vendor_title": "Limelight",
-                "category": "",
-                "product_type": "Eastern Top-Old",
-                "image_url": "https://cdn.shopify.com/s/files/1/2635/3244/files/DSC01789_cc559bb9-a107-4f4c-80e6-edb996397ff1.jpg?v=1711007094",
-                "description": "\nKurti\nDyed embroidered shirt\nFabric: Lawn \n\nOther Details\nWeight: 146 g\nModel is wearing size \"S\"\n",
-                "price": "2699",
-                "currency": "PKR",
-                "options": [
-                    {
-                        "name": "Size",
-                        "position": 1,
-                        "values": [
-                            "Extra Small",
-                            "Small",
-                            "Medium",
-                            "Large"
-                        ]
-                    }
-                ],
-                "tags": [
-                    "Eastern Tops",
-                    "Embroidered Short Kurti",
-                    "Ritem | i211502-250-999",
-                    "Ritem | i5712er-fre-gdn",
-                    "Ritem | s0688sp-036-wht",
-                    "sbp",
-                    "Short Kurti",
-                    "summer",
-                    "Summer 24",
-                    "video",
-                    "women"
-                ],
-                "available": true
-            },
-            {
-                "_id": "665d1014db4387ba28b831b6",
-                "product_id": "88991256-571d-44db-b526-a40623932464",
-                "product_url": "https://www.limelight.pk/products/i6928nk-fre-wht",
-                "shopify_id": 7367370932312,
-                "handle": "i6928nk-fre-wht",
-                "title": "Classic Multi Strand Necklace",
-                "vendor": "limelight",
-                "vendor_title": "Limelight",
-                "category": "",
-                "product_type": "JWLRY",
-                "image_url": "https://cdn.shopify.com/s/files/1/2635/3244/files/DSC_8442.jpg?v=1688468665",
-                "description": "\nMulti-strand type necklace\nOne side of necklace is rope chain\nOne side of necklace embellished with pearls\nClasp closure \nColor: White \nMaterial: Metal \nWeight: 56 g\n\n",
-                "price": "699",
-                "currency": "PKR",
-                "options": [
-                    {
-                        "name": "Title",
-                        "position": 1,
-                        "values": [
-                            "Default Title"
-                        ]
-                    }
-                ],
-                "tags": [
-                    "accessories",
-                    "accessories sale",
-                    "JEWELLERY",
-                    "Jewelry",
-                    "Necklaces",
-                    "new on sale",
-                    "old",
-                    "sale",
-                    "sale15",
-                    "Summer 23",
-                    "women",
-                    "Women Accessories",
-                    "women accessories sale",
-                    "women sale"
-                ],
-                "available": true
-            }
-        ]
+      "id": "44260308812010",
+      "price": 12720,
+      "title": "Stitched / S",
+      "compare_price": 15900,
+      "option1": "Stitched",
+      "option2": "S",
+      "option3": ""
     },
     {
-        "vendor": "sapphire",
-        "items": [
-            {
-                "_id": "665d1039db4387ba28b852f6",
-                "product_id": "a47790b6-2c44-4b0f-a2ac-3df0fefe97ea",
-                "product_url": "https://pk.sapphireonline.pk/products/000002451gk1-1",
-                "shopify_id": 7639011459146,
-                "handle": "000002451gk1-1",
-                "title": "Printed Cambric Top",
-                "vendor": "sapphire",
-                "vendor_title": "Sapphire",
-                "category": "",
-                "product_type": "Girls Top",
-                "image_url": "https://cdn.shopify.com/s/files/1/1592/0041/files/000002451GK1_1.jpg?v=1715247831",
-                "description": "Dress your little one in our white cambric front open loose top featuring a stylish front knot. Loose Top Front open Top with fabric knot at front, Printed Back, Printed Sleeves Colour: White Fabric: CambricSIZE & FITModel Height: 3 Feet 3 InchesModel Wears Size: 5/6 Years\n\n\n\n\nSize\n2/3\n3/4\n4/5\n5/6\n6/7\n7/8\n8/9\n9/10\n11/12\n\n\nLength\n12.5\n13.5\n14.5\n15.5\n15.5\n16\n16\n17\n17\n\n\nChest\n12\n13\n14\n15\n15.5\n16\n16.5\n17\n17.5\n\n\nSleeve Length\n6.75\n7.25\n7.75\n8.25\n8.5\n8.75\n9\n9.25\n9.5\n\n\n",
-                "price": "1490",
-                "currency": "PKR",
-                "options": [
-                    {
-                        "name": "Size",
-                        "position": 1,
-                        "values": [
-                            "2/3Y",
-                            "3/4Y",
-                            "4/5Y",
-                            "5/6Y",
-                            "6/7Y",
-                            "7/8Y",
-                            "8/9Y",
-                            "9/10Y",
-                            "11/12Y"
-                        ]
-                    }
-                ],
-                "tags": [
-                    "000002451GK1",
-                    "000002451GK1-size-chart",
-                    "1 Piece",
-                    "1000 - 3000",
-                    "15-Percent-Tax",
-                    "1PC",
-                    "245-1GK-1",
-                    "Animal kingdom & Florescent",
-                    "Cambric",
-                    "Casual",
-                    "clothes",
-                    "Girl",
-                    "Girls",
-                    "Girls all products",
-                    "Girls East Wear",
-                    "Girls Eastern",
-                    "Girls Kurta",
-                    "Girls Printed",
-                    "Girls Shirt",
-                    "girls-fusion-23",
-                    "girls-fusion-tops-23",
-                    "Kameez",
-                    "kapde",
-                    "Kids",
-                    "Kids Branded Clothes",
-                    "Kids Desi",
-                    "Kids East",
-                    "Kids Eastern Wear",
-                    "Kids Ethnic",
-                    "Kids Fusion",
-                    "Kids Girls",
-                    "Kids Kameez",
-                    "Kids Kurta",
-                    "Kids Loose Top",
-                    "Kids Shirt",
-                    "Kids Traditional",
-                    "Kids-2nd-May-24",
-                    "Kurta",
-                    "Loose Top",
-                    "New in Kids East 2024",
-                    "New-all-2nd-May-24",
-                    "new-in-june-2022",
-                    "new-in-kids-2021",
-                    "One Piece",
-                    "pakistani",
-                    "pakistani dresses",
-                    "Pakistani Kids Clothes",
-                    "Printed",
-                    "salwar kameez design",
-                    "Sapphire Kids",
-                    "Shirt",
-                    "Single Piece",
-                    "size-chart",
-                    "Stitched",
-                    "Stitched Kids Clothes",
-                    "Summer",
-                    "Summer 24",
-                    "Summer Clothing",
-                    "Summer II Fusion 24 V-5",
-                    "Summer Kids",
-                    "Summer Kids Clothing",
-                    "Summers",
-                    "UAE_FREE_SHIPPING",
-                    "White"
-                ],
-                "available": true
-            }
-        ]
+      "id": "44305551884522",
+      "price": 12720,
+      "title": "Stitched / M",
+      "compare_price": 15900,
+      "option1": "Stitched",
+      "option2": "M",
+      "option3": ""
     },
     {
-        "vendor": "sadaf_fawad_khan",
-        "items": [
-            {
-                "_id": "665d102fdb4387ba28b84b30",
-                "product_id": "8b849f14-edd8-4ef9-bb94-25fbb1e81f7f",
-                "product_url": "https://sadaffawadkhan.com/products/long-maxi",
-                "shopify_id": 643793387566,
-                "handle": "long-maxi",
-                "title": "Flower Child",
-                "vendor": "sadaf_fawad_khan",
-                "vendor_title": "Sadaf Fawad Khan",
-                "category": "",
-                "product_type": "Formal",
-                "image_url": "https://cdn.shopify.com/s/files/1/3006/7522/products/b_2.jpg?v=1528886891",
-                "description": "Glamorous long blue maxi dress with gold pants.\n\nFabric : Tissue \n\nColour: Mint\nIncludes: Shirt, Pants and Dupatta\n\n",
-                "price": "216450",
-                "currency": "PKR",
-                "options": [
-                    {
-                        "name": "Size",
-                        "position": 1,
-                        "values": [
-                            "S",
-                            "M",
-                            "L",
-                            "XS",
-                            "XL"
-                        ]
-                    }
-                ],
-                "tags": [
-                    "#Dress",
-                    "#Embroidery",
-                    "#eveningdress",
-                    "#Eveningwear",
-                    "#Fashion",
-                    "#fashiondesigner",
-                    "#formalmadetoorder",
-                    "#Formals",
-                    "#Glamour",
-                    "#onlinefashion",
-                    "#sadaffawadkhan",
-                    "#Semiformal",
-                    "#sfkdesigns",
-                    "#sfkfashion",
-                    "#sfkformals",
-                    "#srastyle",
-                    "#Style"
-                ],
-                "available": true
-            }
-        ]
-    },
-    {
-        "vendor": "alkaram_studio",
-        "items": [
-            {
-                "_id": "665d0f97db4387ba28b7e085",
-                "product_id": "1036cd11-d2ef-48a7-8e13-4184b1534818",
-                "product_url": "https://www.alkaramstudio.com/products/sling-bag-lhb-013-green",
-                "shopify_id": 7495665189044,
-                "handle": "sling-bag-lhb-013-green",
-                "title": "Sling Bag",
-                "vendor": "alkaram_studio",
-                "vendor_title": "Alkaram Studio",
-                "category": "",
-                "product_type": "Handbag",
-                "image_url": "https://cdn.shopify.com/s/files/1/0623/6481/1444/products/LHB-013_1.jpg?v=1704711869",
-                "description": "Color: Green\nDiscover convenience and style in our crossbody sling bag featuring vibrant printed straps! ",
-                "price": "2990",
-                "currency": "PKR",
-                "options": [
-                    {
-                        "name": "Title",
-                        "position": 1,
-                        "values": [
-                            "Default Title"
-                        ]
-                    },
-                    {
-                        "name": "Color",
-                        "position": 2,
-                        "values": [
-                            "Green"
-                        ]
-                    },
-                    {
-                        "name": "Material",
-                        "position": 3,
-                        "values": [
-                            "Fabric"
-                        ]
-                    }
-                ],
-                "tags": [
-                    "'-New In",
-                    "Bags",
-                    "Beauty & Accessories",
-                    "Cross Body Bags",
-                    "Footwear & Handbag",
-                    "Handbags",
-                    "show-quickview",
-                    "Uploaded-08-Jan-24"
-                ],
-                "available": true
-            },
-            {
-                "_id": "665d0f98db4387ba28b7e236",
-                "product_id": "e902cbdd-3127-43b0-9d38-ec8a5b3e332a",
-                "product_url": "https://www.alkaramstudio.com/products/3-pc-embroidered-lawn-suit-with-yarn-dyed-dupatta-m-17-24-purple",
-                "shopify_id": 7512715100340,
-                "handle": "3-pc-embroidered-lawn-suit-with-yarn-dyed-dupatta-m-17-24-purple",
-                "title": "3 Pc Embroidered Lawn Suit With Yarn Dyed Dupatta",
-                "vendor": "alkaram_studio",
-                "vendor_title": "Alkaram Studio",
-                "category": "",
-                "product_type": "Suit",
-                "image_url": "https://cdn.shopify.com/s/files/1/0623/6481/1444/products/M-17-24-Purple-1.jpg?v=1707477293",
-                "description": "Unstitched 3-Piece\nEmbroidered Lawn Suit With Yarn Dyed Dupatta \nColor: Purple  \nShirt::\nEmbroidered Lawn Shirt 3.13 Meters \nOrganza Border for Front \nOrganza Border for Sleeve 1.8 Meters \nFabric: Lawn  \nDupatta::\nYarn Dyed Dupatta 2.50 Meters \nFabric: Yarn Dyed  \nTrouser: :\nDyed Cambric Trouser 1.80 Meters  \nFabric:  Cambric  \nCare Instructions: \n\nDry Clean Only\"\" \n\n\n\"",
-                "price": "7990",
-                "currency": "PKR",
-                "options": [
-                    {
-                        "name": "Color",
-                        "position": 1,
-                        "values": [
-                            "Purple"
-                        ]
-                    },
-                    {
-                        "name": "Fabric",
-                        "position": 2,
-                        "values": [
-                            "Lawn"
-                        ]
-                    }
-                ],
-                "tags": [
-                    "3 Piece Fabrics",
-                    "Eid Edit New",
-                    "Embroidered",
-                    "Luxury",
-                    "Meraki",
-                    "New In",
-                    "show-quickview",
-                    "Unstitched",
-                    "Uploaded-09-feb-24",
-                    "Woman",
-                    "Woman Eid Edit",
-                    "Woman Unstitched"
-                ],
-                "available": true
-            }
-        ]
-    },
-    {
-        "vendor": "edenrobe",
-        "items": [
-            {
-                "_id": "665d0fcedb4387ba28b7fd8b",
-                "product_id": "be576ee2-85cc-4b13-86d4-79a3700350a0",
-                "product_url": "https://edenrobe.com/products/girls-royal-blue-frock-egtf24s-200056",
-                "shopify_id": 9170775507217,
-                "handle": "girls-royal-blue-frock-egtf24s-200056",
-                "title": "Girl'S Royal Blue Frock   Egtf24S 200056",
-                "vendor": "edenrobe",
-                "vendor_title": "Edenrobe",
-                "category": "",
-                "product_type": "Girls Frocks",
-                "image_url": "https://cdn.shopify.com/s/files/1/0841/3796/7889/products/24_G_GirlsFrocks_EGTF24S-200056_1.jpg?v=1710149519",
-                "description": "\nGirl's Frock\nRegular Fit\nDobby Fabric\n",
-                "price": "5618",
-                "currency": "PKR",
-                "options": [
-                    {
-                        "name": "Size",
-                        "position": 1,
-                        "values": [
-                            "02-3y",
-                            "04y",
-                            "05y",
-                            "06y",
-                            "07-8y",
-                            "09-10y",
-                            "11-12y",
-                            "13-14y"
-                        ]
-                    },
-                    {
-                        "name": "Color",
-                        "position": 2,
-                        "values": [
-                            "Blue"
-                        ]
-                    }
-                ],
-                "tags": [
-                    "25_discount",
-                    "Fall_Season",
-                    "New",
-                    "Regular_fit",
-                    "Spring_Season",
-                    "Summer_Season",
-                    "Upto_50_discount"
-                ],
-                "available": true
-            }
-        ]
+      "id": "44305551917290",
+      "price": 12720,
+      "title": "Stitched / L",
+      "compare_price": 15900,
+      "option1": "Stitched",
+      "option2": "L",
+      "option3": ""
     }
-]
+  ],
+  "options": [
+    {
+      "name": "Type",
+      "position": 1,
+      "values": [
+        "Stitched"
+      ]
+    },
+    {
+      "name": "Size",
+      "position": 2,
+      "values": [
+        "S",
+        "M",
+        "L"
+      ]
+    }
+  ],
+  "tags": [
+    "custom_flow",
+    "ELARA LUXURY PRET",
+    "Hide_Custom_Flow",
+    "rtw-custom-flow",
+    "Sale-1-July",
+    "Serenova",
+    "show_fabric_color_metafield"
+  ],
+  "available": true
+}]
 
 
