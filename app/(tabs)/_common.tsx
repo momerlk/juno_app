@@ -1,35 +1,55 @@
+import { router } from "expo-router";
 import React from "react"
-import {Text , Image} from "react-native"
+import {Text , Image , Pressable , View} from "react-native"
+import {Ionicons} from "@expo/vector-icons"
 
 export function Logo(){
   const topMargin = 42;
     return (
     <>
-        <Text style={{
-          color : "white",
+        <Image  source={require("../assets/juno_text.png")} style={{
           position : "absolute",
           marginTop : topMargin,
-          marginHorizontal : 52,
-          fontSize : 25,
-          fontFamily : "Poppins"
+          left : 20,
+          height : 60, 
+          width : 100, 
+          resizeMode : "cover", 
+          alignSelf : "center", 
         }} 
-      >
-        JUNO
-      </Text>
+          />
 
+      
 
-        <Image 
-          source={require("../assets/juno_icon.png")} 
-          style={{
-            position : "absolute",
-            left :10, 
-            height : 40, 
-            width : 40, 
-            resizeMode : "cover", 
-            alignSelf : "center", 
-            marginTop : topMargin,
-          }} 
-        />
     </>
     )
+}
+
+interface BackProps {
+  text : string;
+}
+export function Back(props : BackProps ){
+  return (
+    <>
+    <Pressable onPress={() => router.back()} style={{display : "flex" , flexDirection : "row", marginVertical : 23 , paddingTop : 15}}>
+      <View  
+        style={{
+          left : 10,
+          top : 10,
+          marginBottom : 10,
+          }} >
+          <Ionicons name="arrow-back" size={32} color="white"/>
+      </View>
+      <Text 
+        style={{
+          color : "white", 
+          fontFamily : "Poppins", 
+          fontSize : 22 , 
+          marginLeft : 20,
+          marginTop : 10,
+        }} >
+          {props.text}
+      </Text>
+    </Pressable>
+    </>
+  )
 }

@@ -3,6 +3,8 @@ import React, {useState, useEffect} from "react"
 import {View, ActivityIndicator, Text, Image, Pressable} from "react-native"
 import {router, useLocalSearchParams} from "expo-router"
 
+import { Back } from "./(tabs)/_common"
+
 import {Ionicons} from "@expo/vector-icons"
 
 export default function Browser(){
@@ -29,25 +31,8 @@ export default function Browser(){
     } else {
         return (
             <View style={{flex : 1, backgroundColor : "#121212"}}>
-                <Pressable onPress={() => router.back()} style={{display : "flex" , flexDirection : "row", marginVertical : 23}}>
-                        <View  style={{
-                            left : 10,
-                            top : 10,
-                            marginBottom : 10,
-                            }}>
-                            <Ionicons name="arrow-back" size={32} color="white"/>
-                        </View>
-                        <Text style={{
-                        color : "white", 
-                        fontFamily : "Poppins", 
-                        fontSize : 22 , 
-                        marginLeft : 20,
-                        marginTop : 10,
-                        }}>
-                            Go Back
-                        </Text>
-                </Pressable>
-
+                
+                <Back text="Go Back"/>
                 <WebView 
                     source={{uri : uri}} 
                     startInLoadingState={true}

@@ -18,6 +18,7 @@ import {Feather, Ionicons} from "@expo/vector-icons"
 
 import {router} from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Back } from "./(tabs)/_common";
 
 
 
@@ -175,24 +176,7 @@ export default class Home extends React.Component<{},HomeState> {
         
 
         <View style={{marginVertical : size.verticalScale(10)}}></View>
-        <Pressable onPress={() => router.back()} style={{display : "flex" , flexDirection : "row", marginVertical : 8}}>
-                <View  style={{
-                    left : 10,
-                    top : 10,
-                    marginBottom : 10,
-                    }}>
-                    <Ionicons name="arrow-back" size={32} color="white"/>
-                </View>
-                <Text style={{
-                  color : "white", 
-                  fontFamily : "Poppins", 
-                  fontSize : 22 , 
-                  marginLeft : 20,
-                  marginTop : 10,
-                  }}>
-                    Liked Products
-                </Text>
-        </Pressable>
+        <Back text="Liked Products"/>
         
         {this.state.products === null ? <Text style={{
           color : "white" , fontSize : 20,

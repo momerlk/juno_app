@@ -335,7 +335,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
               }}
               source={{ uri: ensureURLScheme(item.image_url) }}
             >
-              <LinearGradient colors={["transparent" , "rgba(0,0,0,0.8)"]} style={{
+              <LinearGradient colors={["transparent" , "rgba(0,0,0,0.4)"]} style={{
                 marginTop : props.height - textHeight , 
                 height : textHeight,
                 borderRadius : 20,
@@ -1094,8 +1094,8 @@ export default class App extends React.Component<any , any> {
     return (
       <>
         <SwipeView
-          paddingTop={30}
-          height={(SCREEN_HEIGHT * 0.95) - tabBarHeight}
+          paddingTop={60}
+          height={(SCREEN_HEIGHT * 0.9) - tabBarHeight}
           cards={this.state.products.length === 0 ? this.state.mock : this.state.products}
           onSwipe={this.handleSwipe}
           onFilter={this.handleFilter}

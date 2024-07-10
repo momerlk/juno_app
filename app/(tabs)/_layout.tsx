@@ -7,7 +7,7 @@ import Foundation from '@expo/vector-icons/Foundation';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
-import { Dimensions } from 'react-native';
+import { Dimensions, Platform } from 'react-native';
 
 import {StyleSheet} from "react-native";
 
@@ -18,11 +18,27 @@ let factor = screenHeight/screenWidth;
 if (factor < 1){
   factor = 2;
 }
-const paddingTop = size.verticalScale(15/factor);
-const paddingBottom = size.verticalScale(20/factor);
-const vPadding = paddingTop + paddingBottom;
-export const tabBarHeight = size.verticalScale((80/factor) + vPadding);
+let paddingTop = 15;
+let paddingBottom = 20;
+let vPadding = paddingTop + paddingBottom;
+let heightBoost = 0;
 
+if (Platform.OS === "android"){
+  paddingTop = size.verticalScale(15/factor);
+  paddingBottom = size.verticalScale(20/factor);
+  vPadding = paddingTop + paddingBottom;
+
+  heightBoost = -10;
+}
+if (Platform.OS === "ios"){
+  paddingTop = size.verticalScale(15/factor);
+  paddingBottom = size.verticalScale(20/factor);
+  vPadding = paddingTop + paddingBottom;
+
+  heightBoost = 10;
+}
+
+export const tabBarHeight = size.verticalScale((80/factor) + vPadding + heightBoost);
 export default function TabLayout() {
   
 
