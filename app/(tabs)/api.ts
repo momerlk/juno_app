@@ -5,71 +5,135 @@ import { router } from "expo-router";
 
 const host_url = "192.168.18.16:3001"
 const base_url = `http://${host_url}`
+const ws_base_url = "ws://192.168.18.16:8080"
 
 // TODO : Fix memory issue. these products data take too much memory javascript ran out of memory
 
 export class WS {
-    socket : WebSocket;
+    socket : WebSocket | null;
     open : boolean;
     constructor(url : string, onOpen: Function, onMessage : Function){
+      this.socket = null;
+      console.log(`new websocket object created`)
+      try {
         this.socket = new WebSocket(url);
-        
+      } catch(e) {
         this.open = false;
-        this.socket.onopen = (ev : Event) => {
-          this.open = true;
-          onOpen();
-        }
-        this.socket.onerror = (error : any) => {
-          alert(`failed to connect to websocket`)
-          console.error(`failed to connect to websocket, error = ${JSON.stringify(error)}`) 
-        }
-        this.socket.onmessage = (ev : MessageEvent<any>) => {
-          onMessage(JSON.parse(ev.data));
-        }
-        this.socket.onclose = (ev : CloseEvent) => {
+        onOpen(this.open);
+        return;
+      }
+      
+      this.open = false;
+      this!.socket.onopen = (ev : Event) => {
+        this.open = true;
+        onOpen(this.open);
+      }
+      this!.socket.onerror = (error : any) => {
+        if (this.open === true){
           this.open = false;
         }
+        console.error(`WS : failed to connect to websocket, error = ${JSON.stringify(error)}`) 
+      }
+      this!.socket.onmessage = (ev : MessageEvent<any>) => {
+        try {
+          onMessage(JSON.parse(ev.data));
+        } catch(e) {
+          console.error(`websocket failed to process data , error = ${e} , data = ${JSON.stringify(ev.data)}`)
+        }
+      }
+      this!.socket.onclose = (ev : CloseEvent) => {
+        this.open = false;
+      }
     }
 
     sendJSON(data : any){
-      this.socket.send(JSON.stringify(data));
+      if(this.socket !== null && this.open === true){
+        this.socket.send(JSON.stringify(data));
+      }
     }
 
     send(message : any){
-      this.socket.send(message)
+      if(this.socket !== null && this.open === true){
+        this.socket.send(message);
+      }
     }
 
     close(){
-      this.socket.close();
+      if(this.socket !== null && this.open === true){
+        this.open = false;
+        this.socket.close();
+      }
     }
 }
 
 export class WSFeed extends WS {
+  token : string;
+  setProducts : Function;
+  calledOpen : boolean;
   constructor(token : string, setProducts : Function){
-    super(`ws://192.168.18.16:8080/feed?token=${token}` , () => { // on open
+    super(`${ws_base_url}/feed?token=${token}` , (open : boolean) => { // on open
+      if (this.calledOpen === true) { return }
       this.sendAction("open" , "" , null)
-    } , (data : any) => { // on message
-      setProducts(data);
-    })
+      this.calledOpen = true;
+    } , (data : any) => this.onMessage(data))
+
+    this.calledOpen = false;
+    
+    this.token = token;
+    this.setProducts = setProducts;
   }
 
-  sendAction(action_type : string , product_id : string , query : any | null){
-    if(query === null){
-      this.sendJSON({
-        user_id : "",
-        action_type : action_type,
-        action_timestamp : "",
-        product_id : product_id,
-      })
-      return;
-    }
-    this.sendJSON({
+  onMessage(data : any){
+    this.setProducts(data);
+  }
+
+  async sendAction(action_type : string , product_id : string , 
+    query : { filter: any; text?: undefined; } | { text: any; filter?: undefined; } | { text: any; filter: any; } | null){
+    
+    
+    let data : any = {
       user_id : "",
       action_type : action_type,
       action_timestamp : "",
       product_id : product_id,
       query : query,
-    })
+    }
+
+    if(query === null){
+      data = {
+        user_id : "",
+        action_type : action_type,
+        action_timestamp : "",
+        product_id : product_id,
+      }
+    }
+    
+    if(this.open === false){
+      console.error(`resolving to http`)
+
+      // TODO : Post action to database
+
+      let products = null;
+      if (query !== null){
+        products = await queryProducts(query.text , query.filter)
+      } else {
+        products = await getProducts(5); 
+      }
+       
+      if (products === null){
+        alert(`failed to connect to server`)
+        return;
+      }
+      if (products.length === 0){
+        alert(`failed to connect to server`)
+        return;
+      }
+      this.onMessage(products)
+
+    } else {
+      this.sendJSON(data)
+    }
+
   }
 }
 

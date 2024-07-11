@@ -73,7 +73,7 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="feed"
+        name="discover"
         options={{
           title: '',
           tabBarIcon: ({ color, focused }) => {

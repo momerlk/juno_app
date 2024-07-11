@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import React from "react"
-import {Text , Image , Pressable , View} from "react-native"
+import {Text , Image , Pressable , View, ActivityIndicator} from "react-native"
 import {Ionicons} from "@expo/vector-icons"
 
 export function Logo(){
@@ -30,7 +30,9 @@ interface BackProps {
 export function Back(props : BackProps ){
   return (
     <>
-    <Pressable onPress={() => router.back()} style={{display : "flex" , flexDirection : "row", marginVertical : 23 , paddingTop : 15}}>
+    <Pressable onPress={() => router.back()} style={{
+      display : "flex" , flexDirection : "row", marginBottom : 7, marginTop : 15 , paddingTop : 20
+      }}>
       <View  
         style={{
           left : 10,
@@ -52,4 +54,81 @@ export function Back(props : BackProps ){
     </Pressable>
     </>
   )
+}
+
+export function Loading(){
+  return (
+    <View style={{flex : 1,backgroundColor : "black", paddingTop : 40, paddingLeft : 20}}>
+            
+            <ActivityIndicator style={{
+                position: 'absolute',
+                left: '50%',
+                top: '50%',
+                transform: [{ translateX: -50 }, { translateY: -50 }],
+            }} size={60} color="white"/>
+        </View>
+  )
+}
+
+export function toTitle(str : string) : string {
+  if (str === undefined){
+    return ""
+  }
+  str = str.replaceAll("'" , "")
+  str = str.replaceAll("_" , " ");
+  str = str.toLowerCase()
+  const words = str.split(" ");
+  for (let i = 0; i < words.length; i++) {
+    try {
+      words[i] = words[i][0].toUpperCase() + words[i].substr(1);
+    } catch(e){
+      return ""
+    }
+  }
+
+  return words.join(" "); 
+}
+
+export function shortTitle(str : string) : string {
+  if (str === undefined){
+    return ""
+  }
+  
+  const strTitle = toTitle(str);
+  str = (strTitle == "") ? str : strTitle;
+
+  const words = str.split(" ");
+  if(words.length < 3){
+    return str;
+  }
+
+  let three_words = [];
+
+  for(let i = 0;i < 3;i++){
+    if (words[i][0] === "("){
+      continue;
+    }
+    three_words.push(words[i])
+  }
+  let res = three_words.join(" ") + " ..." 
+  if (res.length > 22){
+    res = res.substring(0,22);
+  }
+  return res
+}
+
+export function fmtPrice(priceN : number){
+  const price = priceN.toString();
+  let l = price.length;
+  let pos = (l) - 3;
+  if (pos > 0) {
+    const firstPart = price.slice(0, pos);
+    const secondPart = price.slice(pos);
+
+    // Concatenate the first part, substring, and second part
+    const newString = firstPart + "," + secondPart;
+    return newString;
+  } else {
+    return price
+  }
 }

@@ -12,21 +12,9 @@ import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import PinchableCarousel from "./_image"
-import { Back } from './(tabs)/_common';
+import { Back , toTitle} from './(tabs)/_common';
 
 
-function toTitle(str : string) : string {
-  if(str === undefined){
-    return "";
-  }
-  str = str.replaceAll("_" , " ");
-  const words = str.split(" ");
-  for (let i = 0; i < words.length; i++) {
-      words[i] = words[i][0].toUpperCase() + words[i].substr(1);
-  }
-
-  return words.join(" "); 
-}
 
 // TODO : take params from router navigation
 
