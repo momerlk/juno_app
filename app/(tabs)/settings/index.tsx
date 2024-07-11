@@ -7,6 +7,7 @@ import {
   Text,
   Pressable,
   Switch,
+  TouchableOpacity,
   Image,
 } from 'react-native';
 import {router} from "expo-router"
@@ -63,7 +64,7 @@ export default function SettingsPage() {
         route="/liked"
         replace={false}
       />
-      
+
       {/* <Action 
         icon={(<MaterialIcons name="bookmark-border" size={23} color="#d3d3d3" style={{marginTop : 4}}/>)}
         name="Orders and Purchases"
@@ -95,7 +96,7 @@ export default function SettingsPage() {
 
 function Action(props : any){
   return (
-    <Pressable style={{
+    <TouchableOpacity style={{
                   display: "flex",
                   flexDirection: "row",
                   justifyContent: "space-between",
@@ -128,7 +129,7 @@ function Action(props : any){
           color : "gray",
           fontFamily : "Poppins",
         }}>{">"}</Text>
-      </Pressable> 
+      </TouchableOpacity> 
   )
 }
 

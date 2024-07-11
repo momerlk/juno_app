@@ -52,7 +52,16 @@ export default function ProfilePage(){
   return (
       <ScrollView style={{ flex: 1, backgroundColor: '#121212' }}>
         <Back text="Settings"/>
-        <View style={{marginTop : 50}}></View>
+
+        <Text style={{
+          color : "white" , 
+          fontFamily : "Poppins", 
+          fontWeight : "bold",
+          fontSize: 25,
+          marginHorizontal : 30,
+          marginVertical : 30,
+        }}>Edit Your Information</Text>
+        
 
         <EditableField 
           name="Username" 
