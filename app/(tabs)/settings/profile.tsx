@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, ImageBackground, FlatList, Image, View, Text, ScrollView, Pressable, Button} from 'react-native';
+import { StyleSheet, ImageBackground, FlatList, Image, View, Text, ScrollView, Pressable, TouchableOpacity} from 'react-native';
 import * as Font from "expo-font";
 import {router} from "expo-router";
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
@@ -7,7 +7,7 @@ import * as size from "react-native-size-matters";
 import { BACKGROUND_COLOR } from '@birdwingo/react-native-instagram-stories/src/core/constants';
 import { EvilIcons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, Feather } from '@expo/vector-icons';
 
 import {Back} from "../_common"
 
@@ -35,15 +35,22 @@ function EditableField(props : EditableProps){
         }}>
         {props.name}
       </Text>
-      <Text style={{
-          fontSize : 20, 
-          color : "white", 
-          alignSelf : "center", 
-          fontFamily : "Montserrat", 
-          fontWeight :"bold"
-        }}>
-        {props.value.length > 10 ? props.value.substring(0,9) + " ..." : props.value}
-      </Text>
+      <View style={{display : "flex" , flexDirection : "row"}}>
+        <Text style={{
+            fontSize : 20, 
+            color : "white", 
+            alignSelf : "center", 
+            fontFamily : "Montserrat", 
+            fontWeight :"semibold",
+            marginHorizontal : 20,
+          }}>
+          {props.value.length > 10 ? props.value.substring(0,9) + " ..." : props.value}
+        </Text>
+
+        <TouchableOpacity onPress={() => alert(`editing`)}>
+          <Feather size={25} name="edit-3" color="white"/>
+        </TouchableOpacity>
+      </View>
     </View>
   )
 }
@@ -69,9 +76,9 @@ export default function ProfilePage(){
           <Back text="Settings"/>
           <View style={{marginTop : 50}}></View>
 
-          <EditableField name="Username" value={data.username} onChange={() => {}}/>
+          <EditableField name="Username" value={"omeralimalik"} onChange={() => {}}/>
             
-          <EditableField name="Email" value={data.email} onChange={() => {}}/>
+          <EditableField name="Email" value={"omeralimalik96@gmail.com"} onChange={() => {}}/>
 
           <EditableField name="Phone" value={"+92 300 0856955"} onChange={() => {}}/>
 
