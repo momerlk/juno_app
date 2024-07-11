@@ -3,6 +3,8 @@ import React from "react"
 import {Text , Image , Pressable , View, ActivityIndicator, TouchableOpacity} from "react-native"
 import {Ionicons} from "@expo/vector-icons"
 
+import * as size from "react-native-size-matters"
+
 export function Logo(){
   const topMargin = 42;
     return (
@@ -136,11 +138,11 @@ export function fmtPrice(priceN : number){
 export function PrimaryButton(props : any){
   return (
     <TouchableOpacity
+        {...props}
         style={[
           {
-            paddingBottom: 14,
-            paddingVertical: 8,
-            marginHorizontal : 14,
+            paddingVertical: 10,
+            paddingHorizontal : 14,
             marginTop : 20,
             borderRadius: 4,
             alignItems: 'center',
@@ -148,8 +150,9 @@ export function PrimaryButton(props : any){
             zIndex : 0,
           },
           { backgroundColor: "white" },
+          props.style,
         ]}
-        {...props}
+        
       >
         <Text style={{ fontSize: 18, color: "black", fontFamily : "Poppins" }}>{props.text}</Text>
         {props.children}
@@ -157,26 +160,29 @@ export function PrimaryButton(props : any){
   )
 }
 
-
 export function SecondaryButton(props : any){
   return (
     <TouchableOpacity
+        {...props}
         style={[
           {
-            paddingBottom: 14,
-            paddingVertical: 8,
-            marginHorizontal : 14,
+            paddingVertical: 10,
+            paddingHorizontal : size.scale(40),
             marginTop : 20,
             borderRadius: 4,
             alignItems: 'center',
             justifyContent: 'center',
             zIndex : 0,
+
+            borderColor : "white",
+            borderWidth : 2,
           },
-          { backgroundColor: "white" },
+          { backgroundColor: "black" },
+          props.style,
         ]}
-        {...props}
+        
       >
-        <Text style={{ fontSize: 18, color: "black", fontFamily : "Poppins" }}>{props.text}</Text>
+        <Text style={{ fontSize: 18, color: "white", fontFamily : "Poppins" }}>{props.text}</Text>
         {props.children}
       </TouchableOpacity>
   )
