@@ -112,20 +112,24 @@ export class WSFeed extends WS {
       console.error(`resolving to http`)
 
       // TODO : Post action to database
+      let res = await postAction(data)
+      if (res === false){
+        alert(`failed to register swipe, check your internet or report bug`)
+      }
 
       let products = null;
       if (query !== null){
         products = await queryProducts(query.text , query.filter)
       } else {
-        products = await getProducts(5); 
+        products = await getProducts(3); 
       }
        
       if (products === null){
-        alert(`failed to connect to server`)
+        alert(`failed to connect to server, check your internet or report bug`)
         return;
       }
       if (products.length === 0){
-        alert(`failed to connect to server`)
+        alert(`failed to connect to server, check your internet or report bug`)
         return;
       }
       this.onMessage(products)
@@ -352,4 +356,30 @@ export async function getCart(){
 
   const data = await response.json();
   return data;
+}
+
+export async function postAction(action : any){
+  let token = null
+  try {
+    token = await AsyncStorage.getItem("token");
+    if (token === null){
+      return false;
+    }
+  } catch(e){
+    return false;
+  }
+
+  const response = await fetch(`${base_url}/feed/action`, {
+    method : "POST",
+    headers : {
+        "Authorization" : token,
+        "Content-Type" : "application/json",
+      },
+      body : JSON.stringify(action)
+  })
+  if (!response.ok){
+    return false;
+  }
+
+  return true;
 }

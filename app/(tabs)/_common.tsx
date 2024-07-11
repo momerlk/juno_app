@@ -111,8 +111,8 @@ export function shortTitle(str : string) : string {
     three_words.push(words[i])
   }
   let res = three_words.join(" ") + " ..." 
-  if (res.length > 22){
-    res = res.substring(0,22);
+  if (res.length > 20){
+    res = res.substring(0,19);
   }
   return res
 }
