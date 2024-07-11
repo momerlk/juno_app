@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import React from "react"
-import {Text , Image , Pressable , View, ActivityIndicator} from "react-native"
+import {Text , Image , Pressable , View, ActivityIndicator, TouchableOpacity} from "react-native"
 import {Ionicons} from "@expo/vector-icons"
 
 export function Logo(){
@@ -131,4 +131,53 @@ export function fmtPrice(priceN : number){
   } else {
     return price
   }
+}
+
+export function PrimaryButton(props : any){
+  return (
+    <TouchableOpacity
+        style={[
+          {
+            paddingBottom: 14,
+            paddingVertical: 8,
+            marginHorizontal : 14,
+            marginTop : 20,
+            borderRadius: 4,
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex : 0,
+          },
+          { backgroundColor: "white" },
+        ]}
+        {...props}
+      >
+        <Text style={{ fontSize: 18, color: "black", fontFamily : "Poppins" }}>{props.text}</Text>
+        {props.children}
+      </TouchableOpacity>
+  )
+}
+
+
+export function SecondaryButton(props : any){
+  return (
+    <TouchableOpacity
+        style={[
+          {
+            paddingBottom: 14,
+            paddingVertical: 8,
+            marginHorizontal : 14,
+            marginTop : 20,
+            borderRadius: 4,
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex : 0,
+          },
+          { backgroundColor: "white" },
+        ]}
+        {...props}
+      >
+        <Text style={{ fontSize: 18, color: "black", fontFamily : "Poppins" }}>{props.text}</Text>
+        {props.children}
+      </TouchableOpacity>
+  )
 }

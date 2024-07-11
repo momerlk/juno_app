@@ -31,7 +31,7 @@ function EditableField(props : EditableProps){
           fontSize : 23, 
           color : "white", 
           alignSelf : "center", 
-          fontFamily : "Montserrat", 
+          fontFamily : "Poppins", 
         }}>
         {props.name}
       </Text>
@@ -40,7 +40,7 @@ function EditableField(props : EditableProps){
             fontSize : 20, 
             color : "white", 
             alignSelf : "center", 
-            fontFamily : "Montserrat", 
+            fontFamily : "Poppins", 
             fontWeight :"semibold",
             marginHorizontal : 20,
           }}>
