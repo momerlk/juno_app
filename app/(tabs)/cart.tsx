@@ -4,7 +4,7 @@ import * as Font from "expo-font";
 import {router} from "expo-router";
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import * as size from "react-native-size-matters";
-import {Logo} from "./_common"
+import {Logo, Loading} from "./_common"
 
 import * as api from "./api"
 
@@ -57,7 +57,7 @@ function toTitle(str : string) : string {
 export default function CartPage() {
   const [data, setData] = useState<any>(mockData);
   const [req , setReq] = useState(0);
-  const [loading , setLoading] = useState(false);
+  const [loading , setLoading] = useState(true);
   fetchFonts();
   
   useEffect(() => {
@@ -65,13 +65,14 @@ export default function CartPage() {
       const cart = await api.getCart();
       if(cart !== null){
         setData(cart)
+        setLoading(false)
       }
     })()
   }, [])
 
-  useEffect(() => {
-    
-  }, []); // Empty dependency array to run only once when the component mounts
+  if(loading === true){
+    return <Loading />
+  }
 
   return (
     <View style={{flex : 1, backgroundColor : "#121212"}}>

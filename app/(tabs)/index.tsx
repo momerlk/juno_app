@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, Text, View, Animated, PanResponder, Dimensions, Image, ImageBackground, Pressable, TextInput, Touchable} from 'react-native';
+import { StyleSheet, Text, View, Animated, PanResponder, Dimensions, Image, ImageBackground, Pressable, TextInput, ScrollView} from 'react-native';
 import * as Font from 'expo-font';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
@@ -9,7 +9,7 @@ import { AntDesign, Ionicons, Entypo, EvilIcons , Feather} from '@expo/vector-ic
 import { LinearGradient } from 'expo-linear-gradient';
 import DropDownPicker from 'react-native-dropdown-picker';
 
-import {shortTitle , toTitle , fmtPrice, Logo} from "./_common"
+import {shortTitle , toTitle , fmtPrice, Logo, PrimaryButton, SecondaryButton} from "./_common"
 
 
 import * as api from "./api";
@@ -680,7 +680,7 @@ function DropDown(props : any){
   return (
     <View style={{
       marginHorizontal : size.scale(20), 
-      marginVertical : size.verticalScale(15),
+      marginVertical : size.verticalScale(5),
       zIndex : open ? 3000 : 1,
     }}>
    
@@ -701,12 +701,12 @@ function DropDown(props : any){
         searchable={props.searchable}
         textStyle={{
           fontFamily: "Poppins",
-          fontSize: size.scale(14),
+          fontSize: size.scale(13.2),
         }}
         placeholder={props.title}
         placeholderStyle={{
           fontWeight: "semibold",
-          fontSize: size.scale(15),
+          fontSize: size.scale(13.2),
         }}
         {...props.other}
       />
@@ -784,19 +784,18 @@ function Filter(props : any){
       >
         <View 
           style={{
-            backgroundColor : "#121212",
+            backgroundColor : "black",
             flex : 1,
-            marginBottom: size.verticalScale(140),
-            marginTop : size.verticalScale(70),
+            marginTop: SCREEN_HEIGHT * 0.2,
+            marginBottom : (SCREEN_HEIGHT * 0.2) + tabBarHeight,
             marginHorizontal : 20,
             borderRadius : 8,
+            paddingVertical : 30,
           }}
         >
-            <Text style={{color : "white", fontSize : 30, alignSelf : "center", fontFamily : "Poppins", marginTop: 20,}}>
-              FILTER
-            </Text>
             {/*TODO : Get dropdown data from backend
             TODO : Send this filter data to server  */}
+            <ScrollView style={{maxHeight : size.verticalScale(300)}}>
             <DropDown 
               data={[
                 {label: 'Clothes', value: 'clothes'},
@@ -854,26 +853,11 @@ function Filter(props : any){
                     style={styles.input}
                 />
             </View>
+            </ScrollView>
 
-            <TouchableOpacity
-              style={[
-                {
-                  paddingBottom: 12,
-                  paddingTop : 12,
-                  marginHorizontal : 14,
-                  marginTop : 20,
-                  borderRadius: 4,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  alignSelf : "center",
-                  width : size.scale(160),
-                  position : "absolute",
-                  bottom : 40,
-                },
-                { backgroundColor: "white" },
-              ]}
+            <PrimaryButton
               onPress={() => {
-                props.setModalVisible(false);
+                alert(`brands = ${JSON.stringify(brands)} , lowerBound = ${lowerBound} , upperBound = ${upperBound}`)
                 let filter : any = {};
                 if (brands !== "") {
                   filter["vendor"] = {"$in" : brands}
@@ -889,15 +873,29 @@ function Filter(props : any){
                 }
                 if (priceSet === true){filter["price"] = price }
                 props.onConfirm(filter)
+                props.setModalVisible(false);
 
               }} 
-            >
-              <Text 
-                  style={{ fontSize: 18, color: "black", fontFamily : "Poppins" }} 
-                >
-                Confirm
-              </Text>
-            </TouchableOpacity>
+              text="Confirm"
+              style={{
+                marginHorizontal : 20,
+                paddingVertical : 8,
+                fontSize : 17,
+              }}
+            />
+
+            <SecondaryButton
+              onPress={() => {
+                props.setModalVisible(false)
+              }} 
+              text="Clear"
+              style={{
+                marginHorizontal : 20,
+                paddingVertical : 8,
+                fontSize : 17,
+              }}
+            />
+            
             </View>
       </Modal>
    
