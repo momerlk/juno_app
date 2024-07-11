@@ -229,17 +229,11 @@ export default class Home extends React.Component<{},HomeState> {
           display : "flex", 
           flex : 1, 
           flexDirection : "row-reverse", 
-          marginTop : size.verticalScale(30), 
+          marginTop : size.verticalScale(30),
+          paddingVertical : 28, 
           marginHorizontal : 30,
           }}>
-          
-          <Pressable onPress={() => router.navigate("/(tabs)/cart")} style={{margin: 10,}}>
-            <Ionicons name="cart-outline" size={28} color="white" />
-          </Pressable>
 
-          <Pressable onPress={() => router.navigate("/liked")} style={{margin : 10}}>
-            <Feather name="heart" size={25} color="white" /> 
-          </Pressable>
           
         </View>
 
@@ -259,83 +253,41 @@ export default class Home extends React.Component<{},HomeState> {
         />
 
         {/* TODO : Navigate to feed instead of showing details. */}
-        <Pressable onPress={() => {
-          router.navigate({
-            pathname: "/details",
-            params: this.state.spotlight
-          })}
-        }>
-        <ImageBackground
-              style={{
-                height : size.verticalScale(370), 
-                marginHorizontal : size.moderateScale(30),
-                marginVertical : size.verticalScale(10),
-              }}
-              imageStyle={{
-                borderRadius : 20,
-              }}
-              source={{ uri: this.state.spotlight.image_url }}
-            >
-                {/* Implement background color detection and make that the background of the feed screen */}
-              <LinearGradient colors={["transparent" , "rgba(0,0,0,0.7)"]} style={{
-                marginTop : size.verticalScale(270) , 
-                height : size.verticalScale(100),
-                // backgroundColor : "rgba(52, 52, 52, 0.3)",
-                borderBottomLeftRadius : 20,
-                borderBottomRightRadius : 20,
-                
-              }}
-                >
-                  <View style={{marginTop : size.verticalScale(20),}}>
-                <Text style={{
-                  color : "white",
-                  marginHorizontal : 10,
-                  fontSize : 17,
-                  fontFamily : "Poppins"
-                  }}>{shortTitle(this.state.spotlight.title as string)}</Text> 
-                <View style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  marginHorizontal: 10,
-                }}>
-                  
-                  <Text style={{
-                    fontSize: 20, fontFamily: "Poppins",
-                    color : "white"
-                  }}>{toTitle(this.state.spotlight.vendor as string)}</Text>
-                  <Text style={{
-                    fontSize: 18, marginVertical: 5,
-                    color : "white",
-                    fontFamily : "Poppins",
-                  }}>Rs. {(() => {
-                    let l = 0
-                    try {
-                      l = this.state.spotlight.price.length;
-                    } catch (e){
-                      return "N/A"
-                    }
-                      let pos = (l) - 3;
-                      if (pos > 0) {
-                        const firstPart = this.state.spotlight.price.slice(0, pos);
-                        const secondPart = this.state.spotlight.price.slice(pos);
 
-                        // Concatenate the first part, substring, and second part
-                        const newString = firstPart + "," + secondPart;
-                        return newString;
-                      } else {
-                        return this.state.spotlight.price
-                      }
-                    })()}</Text>
-                </View>
-                </View>
-              </LinearGradient>
-            </ImageBackground>
-          </Pressable>
-        
+        {/* Discover brands */}
+
+        <View style={{marginVertical : size.verticalScale(10)}}></View>
+
+        <Text style={{color : "white", fontFamily : "Poppins", fontSize : 18 , marginLeft : 20}}>Discover Brands</Text>
+
+        <ScrollView
+          horizontal
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+          directionalLockEnabled={true}
+          alwaysBounceVertical={false}
+          contentContainerStyle={{flexGrow: 1,}}
+        >
+        <FlatList
+          contentContainerStyle={{alignSelf: 'flex-start',marginLeft : 4}}
+          numColumns={4}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+          directionalLockEnabled={true}
+          data={[this.state.spotlight]}
+          keyExtractor={(item) => item.product_id}
+          renderItem={({ item }) => <Card item={item}/>} 
+          // TODO : Test this fully
+          onRefresh={async () => {
+            this.setState({loading : true});
+            await this.getProducts();
+            this.setState({loading : false});
+          }}
+          refreshing={this.state.loading}
+        />
+        </ScrollView>
           
-
-
+        {/* Discover products */}
         <View style={{marginVertical : size.verticalScale(10)}}></View>
 
         <Text style={{color : "white", fontFamily : "Poppins", fontSize : 18 , marginLeft : 20}}>For You</Text>
@@ -418,6 +370,9 @@ export default class Home extends React.Component<{},HomeState> {
             }
           }}
           loading={false}
+
+          topNav={false}
+          bottomNav={true}
         />
       </View>
     )

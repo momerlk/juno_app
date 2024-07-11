@@ -5,11 +5,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
 import {ActivityIndicator, Modal, PanResponderInstance, GestureResponderEvent, PanResponderGestureState, TouchableOpacity} from 'react-native';
 import * as size from "react-native-size-matters"
-import { AntDesign, Ionicons, Entypo, EvilIcons} from '@expo/vector-icons';
+import { AntDesign, Ionicons, Entypo, EvilIcons , Feather} from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import DropDownPicker from 'react-native-dropdown-picker';
 
-import {shortTitle , toTitle , fmtPrice} from "./_common"
+import {shortTitle , toTitle , fmtPrice, Logo} from "./_common"
 
 
 import * as api from "./api";
@@ -48,6 +48,8 @@ interface AppProps {
   onFilter : Function;
   loading : boolean;
   paddingTop : number;
+  topNav : boolean;
+  bottomNav : boolean;
 }
 
 // Function to ensure URLs have the correct scheme
@@ -540,9 +542,21 @@ export class SwipeView extends React.Component<AppProps, AppState> {
         paddingBottom : (SCREEN_HEIGHT - this.props.height) - size.verticalScale(130)
         }}
       >
+        
         <View style={{ flex: 1 }}>
           {this.renderProducts()}
         </View>
+        
+        {this.props.topNav === true ?
+        <>
+          <View style={{position : "absolute" , top : size.verticalScale(50), display : "flex" , flexDirection : "row"}}>
+            <Logo />
+          </View> 
+          <TouchableOpacity onPress={() => router.navigate("/liked")} style={{margin : 10, position : "absolute",top: size.verticalScale(25),right : 10,}}>
+            <Feather name="heart" size={35} color="white" /> 
+          </TouchableOpacity>
+        </>
+        : <></>}
 
 
         <Filter 
@@ -560,6 +574,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
           setModalVisible={(v: boolean) => this.setState({shareVisible : v})}
         />
 
+        {this.props.bottomNav === true ? 
 
         <View style={{
           display : "flex", flexDirection : "row", 
@@ -645,6 +660,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
               <Entypo name="paper-plane" size={size.scale(26)} color="black" />
             </Pressable>
         </View>
+      : <></>}
       </View>
     );
     }
@@ -1081,13 +1097,16 @@ export default class App extends React.Component<any , any> {
     return (
       <>
         <SwipeView
-          paddingTop={60}
-          height={(SCREEN_HEIGHT * 0.9) - tabBarHeight}
+          paddingTop={size.verticalScale(70)}
+          height={(SCREEN_HEIGHT * 0.885) - tabBarHeight}
           cards={this.state.products.length === 0 ? this.state.mock : this.state.products}
           onSwipe={this.handleSwipe}
           onUndo={() => this.setState({currentIndex : this.state.currentIndex - 1})}
           onFilter={this.handleFilter}
           loading={false}
+
+          topNav={true}
+          bottomNav={true}
         />
       </>
     );
