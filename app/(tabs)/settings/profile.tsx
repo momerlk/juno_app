@@ -9,9 +9,83 @@ import { EvilIcons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { AntDesign, Feather } from '@expo/vector-icons';
 
-import {Back, PrimaryButton, SecondaryButton} from "../_common"
+import {Back, PrimaryButton, SecondaryButton, Loading} from "../_common"
 
 import * as api from "../api"
+
+
+
+export default function ProfilePage(){
+
+  const [data , setData] = useState<any>({
+      id : "",
+      avatar: "",
+      name: "",
+      number: "",
+      username: "",
+      email: "",
+      password: ""
+  })
+  const [loading , setLoading] = useState(true);
+
+  const [username , setUsername] = useState("")
+
+  // TODO : connect to backend
+  const updateData = (fieldName : string, value : any) => {
+    data.username = "value"
+    setData(data);
+  }
+
+  useEffect(() => {
+      (async () => {
+      const resp = await api.getDetails();
+      setData(resp);
+      setUsername(resp.username);
+      setLoading(false);
+      })()
+  } , [])
+
+  if(loading === true){
+    return <Loading />
+  }
+
+  return (
+      <ScrollView style={{ flex: 1, backgroundColor: '#121212' }}>
+        <Back text="Settings"/>
+        <View style={{marginTop : 50}}></View>
+
+        <EditableField 
+          name="Username" 
+          value={username} 
+          editable={true}
+
+          onChange={(v:string) => {}} 
+          onSubmit={async (v:string) => {
+            // TODO : add validation from backend
+            setUsername(v);
+          }}
+        />
+          
+        <EditableField 
+          name="Email" 
+          value={data.email} 
+          editable={false}
+          onChange={(v:string) => {}} 
+          onSubmit={(v:string) => updateData("email" , v)}
+        />
+
+        <EditableField 
+          name="Phone" 
+          value={data.number} 
+          editable={false}
+          onChange={(v:string) => {}} 
+          onSubmit={(v:string) => updateData("number" , v)}
+        />
+
+      </ScrollView>
+  )
+}
+
 
 interface EditableProps {
   name : string;
@@ -139,70 +213,5 @@ function EditableField(props : EditableProps){
 
 
     </View>
-  )
-}
-
-export default function ProfilePage(){
-
-  const [data , setData] = useState<any>({
-      id : "",
-      avatar: "",
-      name: "",
-      number: "",
-      username: "",
-      email: "",
-      password: ""
-  })
-
-  const [username , setUsername] = useState("")
-
-  // TODO : connect to backend
-  const updateData = (fieldName : string, value : any) => {
-    data.username = "value"
-    setData(data);
-  }
-
-  useEffect(() => {
-      (async () => {
-      const resp = await api.getDetails();
-      setData(resp);
-      setUsername(resp.username);
-      })()
-  } , [])
-
-  return (
-      <ScrollView style={{ flex: 1, backgroundColor: '#121212' }}>
-        <Back text="Settings"/>
-        <View style={{marginTop : 50}}></View>
-
-        <EditableField 
-          name="Username" 
-          value={username} 
-          editable={true}
-
-          onChange={(v:string) => {}} 
-          onSubmit={async (v:string) => {
-            // TODO : add validation from backend
-            setUsername(v);
-          }}
-        />
-          
-        <EditableField 
-          name="Email" 
-          value={data.email} 
-          editable={false}
-          onChange={(v:string) => {}} 
-          onSubmit={(v:string) => updateData("email" , v)}
-        />
-
-        <EditableField 
-          name="Phone" 
-          value={data.number} 
-          editable={false}
-          onChange={(v:string) => {}} 
-          onSubmit={(v:string) => updateData("number" , v)}
-        />
-
-      </ScrollView>
   )
 }

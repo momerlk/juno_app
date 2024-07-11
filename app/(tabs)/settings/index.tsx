@@ -63,12 +63,14 @@ export default function SettingsPage() {
         route="/liked"
         replace={false}
       />
-      <Action 
+      
+      {/* <Action 
         icon={(<MaterialIcons name="bookmark-border" size={23} color="#d3d3d3" style={{marginTop : 4}}/>)}
         name="Orders and Purchases"
         route="/settings/orders"
         replace={false}
-      />
+      /> */}
+
       <Action 
         icon={(<MaterialIcons name="help-center" size={26} color="#d3d3d3" style={{marginTop : 4}}/>)}
         name="Help"
