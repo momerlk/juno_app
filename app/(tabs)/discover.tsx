@@ -278,12 +278,12 @@ export default class Home extends React.Component<{},HomeState> {
           keyExtractor={(item) => item.product_id}
           renderItem={({ item }) => <Card item={item}/>} 
           // TODO : Test this fully
-          onRefresh={async () => {
-            this.setState({loading : true});
-            await this.getProducts();
-            this.setState({loading : false});
-          }}
-          refreshing={this.state.loading}
+          // onRefresh={async () => {
+          //   this.setState({loading : true});
+          //   await this.getProducts();
+          //   this.setState({loading : false});
+          // }}
+          // refreshing={this.state.loading}
         />
         </ScrollView>
           

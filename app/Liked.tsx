@@ -13,14 +13,39 @@ import * as Font from "expo-font";
 import * as api from "./(tabs)/api";
 
 import {Feather, Ionicons} from "@expo/vector-icons"
-
-
-
 import {router} from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Back } from "./(tabs)/_common";
 
+import { Image as FastImage } from "expo-image"
 
+const blurhash =
+  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
+
+
+export class FastImageBackground extends React.Component<any , any> {
+  render() {
+    const { children , style = {}, imageStyle, ...props } = this.props
+
+    return (
+      <View style={style}>
+        <FastImage
+          {...props}
+          style={[
+            StyleSheet.absoluteFill,
+            {
+              width: style.width,
+              height: style.height,
+            },
+            imageStyle,
+          ]}
+          placeholder={{ blurhash }}
+        />
+        {children}
+      </View>
+    )
+  }
+}
 
 
 // TODO : Add backend data gettting logic
@@ -81,7 +106,7 @@ function Card(props : any){
         params: props.item
       })
     }}>
-      <ImageBackground
+      <FastImageBackground
               style={{
                 height : size.verticalScale(height), 
                 minWidth : size.verticalScale(width),
@@ -91,6 +116,7 @@ function Card(props : any){
               imageStyle={{
                 borderRadius : 8,
               }}
+               
               source={{ uri: props.item.image_url }}
             >
               <LinearGradient colors={["transparent" , "rgba(0,0,0,0.7)"]} style={{
@@ -122,7 +148,7 @@ function Card(props : any){
                 </View>
                 </View>
               </LinearGradient>
-            </ImageBackground>
+            </FastImageBackground>
     </Pressable>
   )
 }
@@ -131,6 +157,21 @@ function Card(props : any){
 interface HomeState {
   products : any[] | null;
   loading : boolean;
+}
+
+function half(arr : Array<any>){
+  const n = arr.length;
+  let n1 = 0; // n of first array
+  // even
+  if ((n%2) == 0){
+    n1 = n/2;
+  } else {
+    n1 = n1/2;
+  }
+
+  const data1 = arr.slice(0,n1);
+  const data2 = arr.slice(n1,n);
+  return {first : data1, second : data2}
 }
 
 export default class Home extends React.Component<{},HomeState> {
@@ -163,8 +204,8 @@ export default class Home extends React.Component<{},HomeState> {
             
             <ActivityIndicator style={{
                 position: 'absolute',
-                left: '50%',
-                top: '50%',
+                left: '55%',
+                top: '60%',
                 transform: [{ translateX: -50 }, { translateY: -50 }],
             }} size={60} color="white"/>
         </View>
@@ -183,19 +224,14 @@ export default class Home extends React.Component<{},HomeState> {
           margin : 50,
           fontFamily : "Poppins"
         }}>No Liked Products.</Text> : 
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          directionalLockEnabled={true}
-          alwaysBounceVertical={false}
-          contentContainerStyle={{flexGrow: 1,}}
-        >
+        <>
         <FlatList
           contentContainerStyle={{alignSelf: 'flex-start',marginLeft : 4}}
-          numColumns={4}
+          horizontal={true}
+          
           showsVerticalScrollIndicator={false}
-          showsHorizontalScrollIndicator={false}
-          data={this.state.products}
+          showsHorizontalScrollIndicator={true}
+          data={half(this.state.products).first.reverse()}
           keyExtractor={(item) => item.product_id}
           renderItem={({ item }) => <Card item={item}/>} 
           // TODO : Test this fully
@@ -206,7 +242,18 @@ export default class Home extends React.Component<{},HomeState> {
           }}
           refreshing={this.state.loading}
         />
-        </ScrollView>
+
+        <FlatList
+          contentContainerStyle={{alignSelf: 'flex-start',marginLeft : 4,marginTop : 10,}}
+          horizontal={true}
+          
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={true}
+          data={half(this.state.products).second.reverse()}
+          keyExtractor={(item) => item.product_id}
+          renderItem={({ item }) => <Card item={item}/>} 
+        />
+        </>
         }
 
       </ScrollView>

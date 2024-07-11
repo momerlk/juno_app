@@ -1,17 +1,25 @@
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, Text, View, Animated, PanResponder, Dimensions, Image, ImageBackground, Pressable, TextInput, ScrollView} from 'react-native';
 import * as Font from 'expo-font';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
-import {ActivityIndicator,Platform, FlatList, Modal, PanResponderInstance, GestureResponderEvent, PanResponderGestureState, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet, 
+  Text, View, Animated, PanResponder, Dimensions, 
+  Image, ImageBackground, Pressable, TextInput, ScrollView, 
+  ActivityIndicator,Platform, FlatList, Modal, 
+  PanResponderInstance, GestureResponderEvent, 
+  PanResponderGestureState, TouchableOpacity,
+} from 'react-native';
 import * as size from "react-native-size-matters"
 import { AntDesign, Ionicons, Entypo, EvilIcons , Feather} from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import DropDownPicker from 'react-native-dropdown-picker';
 
 
 
-import {shortTitle , toTitle , fmtPrice, Logo, PrimaryButton, SecondaryButton} from "./_common"
+import {
+  shortTitle , toTitle , fmtPrice, Logo, 
+  PrimaryButton, SecondaryButton,
+} from "./_common"
 
 
 import * as api from "./api";
@@ -679,6 +687,9 @@ function DropDown(props : any){
   const [value , setValue] = useState([]);
   const [items, setItems] = useState(props.data);
 
+  const [lower, setLower] = useState("")
+  const [upper , setUpper] = useState("")
+
   let marginTop = 0;
   let marginBottom = 0;
   if (Platform.OS === "ios") {
@@ -693,6 +704,22 @@ function DropDown(props : any){
     marginTop = SCREEN_HEIGHT * 0.22;
     marginBottom = (SCREEN_HEIGHT * 0.22) + tabBarHeight;
   }
+
+  const styles = StyleSheet.create({
+      input: {
+          marginRight : size.scale(10),
+          height : 50,
+          width : size.scale(100),
+          paddingLeft : 10,
+          fontSize : 15,
+          fontFamily : "Poppins",
+          backgroundColor : "black",
+          borderWidth : 1,
+          borderColor : "white",
+          color : "white",
+          borderRadius : 10,
+      },
+  });
 
   return (
     <View style={{
@@ -721,16 +748,50 @@ function DropDown(props : any){
           paddingVertical : 30,
         }}>
         <ScrollView >
-
+          {/* TODO : Fix this input */}
+          {props.type === "price" ? 
+          <>
+          <Text style={{marginVertical : 10, fontSize : 26, fontFamily : "Poppins", color : "white", textAlign: "center"}}>
+              Price
+          </Text>
+          <View style={{
+            marginHorizontal : size.scale(12),
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-around',
+          }}>
+              <TextInput
+                  placeholder="Price Min"
+                  placeholderTextColor={"white"}
+                  value={lower}
+                  
+                  onChangeText={text => setLower(text)}
+                  keyboardType="numeric"
+                  style={styles.input}
+              />
+              <TextInput
+                  placeholder="Price Max"
+                  placeholderTextColor={"white"}
+                  value={upper}
+                  onChangeText={text => setUpper(text)}
+                  keyboardType="numeric"
+                  
+                  style={styles.input}
+              />
+          </View> 
+          </>
+          : <></>}
           {items.map((item : any) => {
             const [selected , setSelected] = useState(false);
             return <TouchableOpacity 
+              key={item.value}
               style={{
                 backgroundColor : "#222222",
                 paddingVertical : 10,
                 paddingHorizontal : 8,
                 borderRadius : 5,
                 marginVertical : 5,
+                zIndex : 6000,
               }} 
               onPress={() => {
                 let newValue = null
@@ -774,7 +835,12 @@ function DropDown(props : any){
         </ScrollView>
         <PrimaryButton 
           text="Confirm" 
-          onPress={() => setOpen(false)}
+          onPress={() => {
+            setOpen(false);
+            if (props.type === "price"){
+              props.onChange(lower, upper);
+            }
+          }}
           style={{
             paddingVertical : 5,
             fontSize : 5,
@@ -791,7 +857,9 @@ function DropDown(props : any){
           paddingVertical : size.verticalScale(10),
           borderRadius : 10,
         }} 
-        onPress={() => setOpen(true)}
+        onPress={() => {
+          setOpen(true);
+        }}
       >
         <View style={{
           display : "flex" , 
@@ -844,32 +912,6 @@ function Filter(props : any){
     marginTop = SCREEN_HEIGHT * 0.15;
     marginBottom = (SCREEN_HEIGHT * 0.15) + tabBarHeight;
   }
-
-  const styles = StyleSheet.create({
-      container: {
-        marginHorizontal : size.scale(12),
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-around',
-        padding: 16,
-        borderRadius: 8,
-        marginBottom: 16,
-
-      },
-      input: {
-          marginRight : size.scale(10),
-          height : 50,
-          width : size.scale(100),
-          paddingLeft : 10,
-          fontSize : 15,
-          fontFamily : "Poppins",
-          backgroundColor : "black",
-          borderWidth : 1,
-          borderColor : "white",
-          color : "white",
-          borderRadius : 10,
-      },
-  });
 
 
   // TODO : Get dropdown options from backend like brands etc. 
@@ -925,7 +967,7 @@ function Filter(props : any){
                 {label: 'Clothes', value: 'clothes'},
               ], 
               other : {multiple : true} , 
-              searchable : false,
+              type : "standard",
               onChange : (t : any) => setCategory(t),
             },
             {
@@ -933,8 +975,16 @@ function Filter(props : any){
               title : "Brands", 
               data : filterData.brands, 
               other : {multiple : true} , 
-              searchable : true,
+              type : "searchable",
               onChange : (t : any) => setBrands(t),
+            },
+            {
+              id : 3,
+              title : "Price", 
+              data : [], 
+              other : {} ,
+              type : "price", 
+              onChange : (lower:any,upper:any) => {setLowerBound(lower);setUpperBound(upper)},
             },
           ]}
           renderItem={({ item }) => <DropDown 
@@ -942,34 +992,14 @@ function Filter(props : any){
               title={item.title}
               other={item.other}
               onChange={item.onChange}
-              searchable={item.searchable}
+              type={item.type}
+              onPress={() => {}}
             /> } 
           // TODO : Test this fully
         />
             {/*TODO : Get dropdown data from backend
             TODO : Send this filter data to server  */}
-           
-
- 
-            <View style={styles.container}>
-                <TextInput
-                    placeholder="Price Min"
-                    placeholderTextColor={"white"}
-                    value={lowerBound}
-                    onChangeText={text => setLowerBound(text)}
-                    keyboardType="numeric"
-                    style={styles.input}
-                />
-                <TextInput
-                    placeholder="Price Max"
-                    placeholderTextColor={"white"}
-                    value={upperBound}
-                    onChangeText={text => setUpperBound(text)}
-                    keyboardType="numeric"
-                    
-                    style={styles.input}
-                />
-            </View>
+          
 
             <PrimaryButton
               onPress={async () => {
