@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -17,7 +17,24 @@ import {
 import * as size from "react-native-size-matters"
 import {Logo} from "../_common"
 
-export default function Example() {
+import * as api from "../api"
+
+export default function SettingsPage() {
+  const [data , setData] = useState({
+    id : "",
+    avatar: "",
+    name: "",
+    number: "",
+    username: "",
+    email: "",
+    password: ""
+  })
+  useEffect(() => {
+    (async () => {
+      const resp = await api.getDetails();
+      setData(resp);
+    })()
+  } , [])
   // TODO : Get User details from backend
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#121212' }}>
@@ -25,13 +42,13 @@ export default function Example() {
       <View style={{marginTop : 100}}></View>
 
       <Text style={{fontSize : 25, color : "white", alignSelf : "center", fontFamily : "Montserrat"}}>
-        {"Omer Malik"}
+        {data.name}
       </Text> 
       <Text style={{fontSize : 18, color : "gray", alignSelf : "center", marginTop : 20, fontFamily : "Poppins"}}>
-        {"omeralimalik96@gmail.com"}
+        {data.email}
       </Text>
       <Text style={{fontSize : 18, color : "gray", alignSelf : "center", marginBottom : 20, fontFamily : "Poppins"}}>
-        {"+92 300 0856955"}
+        {data.number}
       </Text>
 
       <Action 

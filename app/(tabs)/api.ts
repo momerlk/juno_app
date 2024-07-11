@@ -358,6 +358,32 @@ export async function getCart(){
   return data;
 }
 
+export async function getDetails(){
+  let token = null
+  try {
+    token = await AsyncStorage.getItem("token");
+    if (token === null){
+      return null;
+    }
+  } catch(e){
+    return null;
+  }
+
+  const response = await fetch(`${base_url}/details` , {
+    method : "GET",
+    headers : {
+      "Authorization" : token,
+      "Content-Type" : "application/json",
+    },
+  })
+  if (!response.ok){
+    return null;
+  }
+
+  const data = await response.json();
+  return data;
+}
+
 export async function postAction(action : any){
   let token = null
   try {
@@ -383,3 +409,4 @@ export async function postAction(action : any){
 
   return true;
 }
+
