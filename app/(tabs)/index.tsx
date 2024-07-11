@@ -3,11 +3,13 @@ import { StyleSheet, Text, View, Animated, PanResponder, Dimensions, Image, Imag
 import * as Font from 'expo-font';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
-import {ActivityIndicator, Modal, PanResponderInstance, GestureResponderEvent, PanResponderGestureState, TouchableOpacity} from 'react-native';
+import {ActivityIndicator,Platform, FlatList, Modal, PanResponderInstance, GestureResponderEvent, PanResponderGestureState, TouchableOpacity} from 'react-native';
 import * as size from "react-native-size-matters"
 import { AntDesign, Ionicons, Entypo, EvilIcons , Feather} from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import DropDownPicker from 'react-native-dropdown-picker';
+
+
 
 import {shortTitle , toTitle , fmtPrice, Logo, PrimaryButton, SecondaryButton} from "./_common"
 
@@ -581,7 +583,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
           bottom : size.verticalScale(10),
           justifyContent : "space-evenly",
           }}>
-          <Pressable style={{
+          <TouchableOpacity style={{
               marginHorizontal: 15,
               width: size.scale(45),
               height: size.scale(47),
@@ -600,10 +602,10 @@ export class SwipeView extends React.Component<AppProps, AppState> {
             }} 
             >
                 <Ionicons name="refresh" size={size.scale(26)} color="black" />
-            </Pressable>
+            </TouchableOpacity>
 
 
-            <Pressable style={{
+            <TouchableOpacity style={{
               marginHorizontal: 20,
               width: size.scale(55),
               height: size.scale(55),
@@ -634,10 +636,10 @@ export class SwipeView extends React.Component<AppProps, AppState> {
             }} 
             >
                 <Ionicons name="filter-sharp" size={size.scale(30)} color="black" />
-            </Pressable>
+            </TouchableOpacity>
 
 
-          <Pressable style={{
+          <TouchableOpacity style={{
               marginHorizontal: 15,
               width: size.scale(45),
               height: size.scale(45),
@@ -658,7 +660,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
             }} 
             >
               <Entypo name="paper-plane" size={size.scale(26)} color="black" />
-            </Pressable>
+            </TouchableOpacity>
         </View>
       : <></>}
       </View>
@@ -674,42 +676,143 @@ interface ModalProps {
 
 function DropDown(props : any){
   const [open , setOpen] = useState(false);
-  const [value , setValue] = useState(null);
+  const [value , setValue] = useState([]);
   const [items, setItems] = useState(props.data);
+
+  let marginTop = 0;
+  let marginBottom = 0;
+  if (Platform.OS === "ios") {
+    marginTop = SCREEN_HEIGHT * 0.1;
+    marginBottom = (SCREEN_HEIGHT * 0.4) + tabBarHeight;
+  }
+  else if (Platform.OS === "android"){
+    marginTop = SCREEN_HEIGHT * 0.22;
+    marginBottom = (SCREEN_HEIGHT * 0.22) + tabBarHeight;
+  }
+  else {
+    marginTop = SCREEN_HEIGHT * 0.22;
+    marginBottom = (SCREEN_HEIGHT * 0.22) + tabBarHeight;
+  }
 
   return (
     <View style={{
-      marginHorizontal : size.scale(25), 
-      marginVertical : size.verticalScale(5),
-      zIndex : open ? 3000 : 1,
+      marginHorizontal : size.scale(20),
+        marginBottom: 16,
     }}>
-   
-      <DropDownPicker
-        open={open}
-        value={value}
-        items={items}
-        onChangeValue={props.onChange}
 
-        autoScroll={true}
-        scrollViewProps={{}}
-        maxHeight={size.verticalScale(250)}
+      <Modal
+        animationType="none"
+        transparent={true}
+        visible={open}
+        onRequestClose={() => {
+         setOpen(!open);
+        }}
+           
+      >
+        <View style={{
+          zIndex : open ? 4000 : 1,
+          backgroundColor : "#121212",
+          flex : 1,
+          marginTop: marginTop,
+          marginBottom : marginBottom,
+          marginHorizontal : size.scale(35),
+          paddingHorizontal : 20,
+          borderRadius : 8,
+          paddingVertical : 30,
+        }}>
+        <ScrollView >
 
-        
-        setOpen={setOpen}
-        setValue={setValue}
-        setItems={setItems}
-        searchable={props.searchable}
-        textStyle={{
-          fontFamily: "Poppins",
-          fontSize: size.scale(13.2),
-        }}
-        placeholder={props.title}
-        placeholderStyle={{
-          fontWeight: "semibold",
-          fontSize: size.scale(13.2),
-        }}
-        {...props.other}
-      />
+          {items.map((item : any) => {
+            const [selected , setSelected] = useState(false);
+            return <TouchableOpacity 
+              style={{
+                backgroundColor : "#222222",
+                paddingVertical : 10,
+                paddingHorizontal : 8,
+                borderRadius : 5,
+                marginVertical : 5,
+              }} 
+              onPress={() => {
+                let newValue = null
+                if(selected === false){
+                  newValue = value.concat(item.value);
+                  setSelected(true);
+                } else {
+                  newValue = value.filter(v => v !== item.value);
+                  setSelected(false);
+                }
+                setValue(newValue);
+                props.onChange(newValue);
+              }}
+            >
+              <View style={{
+                display : "flex" , 
+                flexDirection : "row" , 
+                justifyContent : "space-between" , 
+                
+              }}>
+
+                <Text style={{
+                    fontSize : 17, 
+                    color : "white", 
+                    alignSelf : "center", 
+                    fontFamily : "Poppins", 
+                  }}>
+                  {item.label}
+                </Text>
+
+                {selected ? 
+                <AntDesign name="check" size={20} color="white" style={{marginTop : 3}}/> 
+                : <></>}
+              </View>
+          </TouchableOpacity>
+          })}
+
+          <View style={{paddingVertical : 20,}}/>
+
+          
+        </ScrollView>
+        <PrimaryButton 
+          text="Confirm" 
+          onPress={() => setOpen(false)}
+          style={{
+            paddingVertical : 5,
+            fontSize : 5,
+          }} 
+        />
+        </View>
+      </Modal>
+
+      <TouchableOpacity 
+        style={{
+          backgroundColor : "white", 
+          width : size.scale(250),
+          paddingHorizontal : 10,
+          paddingVertical : size.verticalScale(10),
+          borderRadius : 10,
+        }} 
+        onPress={() => setOpen(true)}
+      >
+        <View style={{
+          display : "flex" , 
+          flexDirection : "row" , 
+          
+        }}>
+          <View style={{
+            height : 22, 
+            width : 22, 
+            borderRadius : 50, 
+            marginTop : 3,
+            marginRight : 7,
+            backgroundColor : "black"
+          }}>
+            {value.length !== 0 ? 
+            <AntDesign name="check" size={14} color="white" style={{margin : 4}}/> 
+            : <></>}
+          </View>
+          <Text style={{fontFamily : "Poppins",fontSize : 18}}>{props.title}</Text>
+        </View>
+      </TouchableOpacity>
     </View>
   )
 }
@@ -720,41 +823,51 @@ function Filter(props : any){
 
   const [category , setCategory] = useState("");
   const [brands , setBrands] = useState("");
-  const [price , setPrice] = useState(""); 
   const [color , setColor] = useState("");
   const [lowerBound, setLowerBound] = useState('');
   const [upperBound, setUpperBound] = useState('');
   const [filterData , setFilter] = useState<any>({brands : [
-                {"label" : "Afrozeh", "value" : "afrozeh" , "base_url" : "https://www.afrozeh.com"},
-                {"label" : "Nishat Linen", "value" : "nishat_linen" , "base_url" :  "https://nishatlinen.com"},
-                {"label" : "Outfitters", "value" : "outfitters" , "base_url" : "https://outfitters.com.pk/"},
-              ]})
+    {"label" : "Can't load brands", "value" : "none"},
+  ]})
+
+  let marginTop = 0;
+  let marginBottom = 0;
+  if (Platform.OS === "ios") {
+    marginTop = SCREEN_HEIGHT * 0.1;
+    marginBottom = (SCREEN_HEIGHT * 0.3) + tabBarHeight;
+  }
+  else if (Platform.OS === "android"){
+    marginTop = SCREEN_HEIGHT * 0.12;
+    marginBottom = (SCREEN_HEIGHT * 0.15) + tabBarHeight;
+  }
+  else {
+    marginTop = SCREEN_HEIGHT * 0.15;
+    marginBottom = (SCREEN_HEIGHT * 0.15) + tabBarHeight;
+  }
 
   const styles = StyleSheet.create({
       container: {
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-around',
-          padding: 16,
-          borderRadius: 8,
-          marginBottom: 16,
-          shadowColor: '#000',
-          shadowOffset: {
-              width: 0,
-              height: 2,
-          },
-          shadowOpacity: 0.25,
-          shadowRadius: 3.84,
-          elevation: 5,
+        marginHorizontal : size.scale(12),
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        padding: 16,
+        borderRadius: 8,
+        marginBottom: 16,
+
       },
       input: {
-          marginRight : 2,
-          height : 40,
-          width : 140,
+          marginRight : size.scale(10),
+          height : 50,
+          width : size.scale(100),
           paddingLeft : 10,
-          fontSize : 14,
+          fontSize : 15,
           fontFamily : "Poppins",
-          backgroundColor : "white",
+          backgroundColor : "black",
+          borderWidth : 1,
+          borderColor : "white",
+          color : "white",
+          borderRadius : 10,
       },
   });
 
@@ -782,70 +895,74 @@ function Filter(props : any){
         }}
            
       >
-        <View 
+        <View style={{
+          ...StyleSheet.absoluteFillObject,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent black background
+        }}/>
+        <View
           style={{
             backgroundColor : "black",
             flex : 1,
-            marginTop: SCREEN_HEIGHT * 0.2,
-            marginBottom : (SCREEN_HEIGHT * 0.2) + tabBarHeight,
+            marginTop: marginTop,
+            marginBottom : marginBottom,
             marginHorizontal : size.scale(25),
             borderRadius : 8,
             paddingVertical : 30,
           }}
         >
+
+        {/* TODO : Get filter items from backend */}
+        <FlatList
+          contentContainerStyle={{alignSelf: 'flex-start',marginLeft : 4}}
+          numColumns={1}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+          data={[
+            {
+              id : 1,
+              title : "Category", 
+              data : [
+                {label: 'Clothes', value: 'clothes'},
+              ], 
+              other : {multiple : true} , 
+              searchable : false,
+              onChange : (t : any) => setCategory(t),
+            },
+            {
+              id : 2,
+              title : "Brands", 
+              data : filterData.brands, 
+              other : {multiple : true} , 
+              searchable : true,
+              onChange : (t : any) => setBrands(t),
+            },
+          ]}
+          renderItem={({ item }) => <DropDown 
+              data={item.data} 
+              title={item.title}
+              other={item.other}
+              onChange={item.onChange}
+              searchable={item.searchable}
+            /> } 
+          // TODO : Test this fully
+        />
             {/*TODO : Get dropdown data from backend
             TODO : Send this filter data to server  */}
-            <ScrollView style={{maxHeight : size.verticalScale(300)}}>
-            <DropDown 
-              data={[
-                {label: 'Clothes', value: 'clothes'},
-              ]} 
-              title="Category"
-              other={{multiple : true}}
-              onChange={(t : any) => setCategory(t)}
-              searchable={false}
-            />     
+           
 
-            {/* Brands */}
-            <DropDown 
-              data={filterData.brands} 
-              title="Brands"
-              other={{multiple : true}}
-              onChange={(t : any) => setBrands(t)}
-              searchable={true}
-            />
-
-            {/* <DropDown 
-              data={[
-                {label: 'Blue', value: 'blue'},
-                {label: 'Red', value: 'red'},
-                {label: 'Black', value: 'black'},
-                {label: 'Green', value: 'green'},
-              ]} 
-              title="Color"
-              other={{multiple : true}}
-              onChange={(t : any) => setColor(t)}
-              searchable={false}
-            />   */}
-
-            <Text
-              style={{
-                fontSize : 20,
-                fontFamily : "Poppins",
-                color : "white",
-                marginHorizontal : 23,
-              }} 
-            >Price Range Rs.</Text>
+ 
             <View style={styles.container}>
                 <TextInput
-                    placeholder="Min"
+                    placeholder="Price Min"
+                    placeholderTextColor={"white"}
                     value={lowerBound}
                     onChangeText={text => setLowerBound(text)}
                     keyboardType="numeric"
                     style={styles.input}
                 />
                 <TextInput
-                    placeholder="Max"
+                    placeholder="Price Max"
+                    placeholderTextColor={"white"}
                     value={upperBound}
                     onChangeText={text => setUpperBound(text)}
                     keyboardType="numeric"
@@ -853,11 +970,11 @@ function Filter(props : any){
                     style={styles.input}
                 />
             </View>
-            </ScrollView>
 
             <PrimaryButton
-              onPress={() => {
-                alert(`brands = ${JSON.stringify(brands)} , lowerBound = ${lowerBound} , upperBound = ${upperBound}`)
+              onPress={async () => {
+                props.setModalVisible(false);
+                
                 let filter : any = {};
                 if (brands !== "") {
                   filter["vendor"] = {"$in" : brands}
@@ -872,28 +989,63 @@ function Filter(props : any){
                   price["$lte"] = parseInt(upperBound);priceSet = true;
                 }
                 if (priceSet === true){filter["price"] = price }
+
+                const filterString = await AsyncStorage.getItem("filter");
+                let oldFilter = null;
+                if (filterString !== null){
+                  oldFilter = await JSON.parse(filterString);
+                }
+                if(oldFilter !== null){
+                  if (deepEqual(oldFilter , filter) === true){
+                    return;
+                  }
+                }
+
                 props.onConfirm(filter)
-                props.setModalVisible(false);
+                
 
               }} 
               text="Confirm"
               style={{
                 marginHorizontal : size.scale(35),
-                paddingVertical : 9,
-                fontSize : 9,
+                paddingVertical : 6,
+                fontSize : 4,
                 fontWeight : "bold",
               }}
             />
 
             <SecondaryButton
-              onPress={() => {
-                props.setModalVisible(false)
+              onPress={async () => {
+
+                props.setModalVisible(false);
+                
+                setLowerBound("")
+                setUpperBound("")
+                setBrands("")
+                setCategory("")
+
+                const filterString = await AsyncStorage.getItem("filter");
+                let oldFilter = null;
+                if (filterString !== null){
+                  oldFilter = await JSON.parse(filterString);
+                } else {
+                  return;
+                }
+                if(oldFilter !== null){
+                  if (deepEqual(oldFilter , {}) === true){
+                    return;
+                  }
+                }
+                // TODO : clear all items
+                await AsyncStorage.setItem("filter" , "")
+                props.onConfirm({})
+                
               }} 
               text="Clear Filters"
               style={{
                 marginHorizontal : size.scale(35),
-                paddingVertical : 9,
-                fontSize : 9,
+                paddingVertical : 6,
+                fontSize : 4,
                 fontWeight : "bold",
               }}
             />
@@ -953,6 +1105,7 @@ function Sharing(props : ModalProps){
 
 import { tabBarHeight } from './_layout';
 import { Loading } from './_common';
+import { deepEqual } from 'expo-router/build/fork/getPathFromState';
 
 
 
@@ -992,7 +1145,7 @@ export default class App extends React.Component<any , any> {
         }
         this.setState({loading : false , products : products})
       }
-    } , 5 * 1000)
+    } , 1 * 1000) // TODO : replace with 5 seconds
   }
 
   async componentWillUnmount() {
@@ -1079,9 +1232,10 @@ export default class App extends React.Component<any , any> {
     } catch(e){}
     try {
       await AsyncStorage.setItem('filter', JSON.stringify(data));
-      this.setState({ products: [], currentIndex : 0});
+      this.setState({loading : true, products: [], currentIndex : 0});
       const { WSFeed } = this.state;
-      WSFeed?.sendAction('open', '', api.createQuery(null, data));
+      await WSFeed?.sendAction('open', '', api.createQuery(null, data));
+      this.setState({loading : false})
       console.log('on filter called');
     } catch (e) {
       alert(`failed to set filter, error = ${e}`);

@@ -60,7 +60,7 @@ const ProductDetail: React.FC<any> = () => {
         <PinchableCarousel images={images_arr}/>
 
         <View style={{...styles.detailsContainer , backgroundColor : "#121212"}}>
-          <Text style={[styles.title , {fontFamily : "Poppins"}]}>{title}</Text>
+          <Text style={[styles.title , {fontFamily : "Poppins"}]}>{toTitle(title as string)}</Text>
           <Text style={{fontSize : 28, marginBottom : 20,color : "white" , fontFamily : "Poppins"}}>
             By {toTitle(vendor as string)}</Text>
 
@@ -101,11 +101,10 @@ export default ProductDetail;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: scale(0),
   },
   imageBackground: {
     height: verticalScale(500),
-    width: '100%',
+    width: '110%',
   },
   topBar: {
     marginTop: scale(40),

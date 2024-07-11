@@ -34,7 +34,7 @@ const PinchableImage: React.FC<PinchableImageProps> = ({ source }) => {
         source={source}
         
         style={[styles.image, { transform: [{ scale: scale }]}]}
-        resizeMode="contain"
+        resizeMode="cover"
       />
     </Animated.View>
   );
@@ -89,8 +89,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: screenWidth,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   carouselContainer: {
     width: screenWidth,
@@ -111,7 +109,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   image: {
-    width: screenWidth,
+    width: screenWidth + 20,
     height: '100%',
   },
   pagination: {
@@ -125,6 +123,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: 'gray',
     margin: 5,
+    padding : 4,
   },
   activeDot: {
     backgroundColor: 'white',
