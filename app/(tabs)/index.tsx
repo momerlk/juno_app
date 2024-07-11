@@ -679,7 +679,7 @@ function DropDown(props : any){
 
   return (
     <View style={{
-      marginHorizontal : size.scale(20), 
+      marginHorizontal : size.scale(25), 
       marginVertical : size.verticalScale(5),
       zIndex : open ? 3000 : 1,
     }}>
@@ -788,7 +788,7 @@ function Filter(props : any){
             flex : 1,
             marginTop: SCREEN_HEIGHT * 0.2,
             marginBottom : (SCREEN_HEIGHT * 0.2) + tabBarHeight,
-            marginHorizontal : 20,
+            marginHorizontal : size.scale(25),
             borderRadius : 8,
             paddingVertical : 30,
           }}
@@ -838,14 +838,14 @@ function Filter(props : any){
             >Price Range Rs.</Text>
             <View style={styles.container}>
                 <TextInput
-                    placeholder="Lower Bound"
+                    placeholder="Min"
                     value={lowerBound}
                     onChangeText={text => setLowerBound(text)}
                     keyboardType="numeric"
                     style={styles.input}
                 />
                 <TextInput
-                    placeholder="Upper Bound"
+                    placeholder="Max"
                     value={upperBound}
                     onChangeText={text => setUpperBound(text)}
                     keyboardType="numeric"
@@ -878,9 +878,10 @@ function Filter(props : any){
               }} 
               text="Confirm"
               style={{
-                marginHorizontal : 20,
-                paddingVertical : 8,
-                fontSize : 17,
+                marginHorizontal : size.scale(35),
+                paddingVertical : 9,
+                fontSize : 9,
+                fontWeight : "bold",
               }}
             />
 
@@ -888,11 +889,12 @@ function Filter(props : any){
               onPress={() => {
                 props.setModalVisible(false)
               }} 
-              text="Clear"
+              text="Clear Filters"
               style={{
-                marginHorizontal : 20,
-                paddingVertical : 8,
-                fontSize : 17,
+                marginHorizontal : size.scale(35),
+                paddingVertical : 9,
+                fontSize : 9,
+                fontWeight : "bold",
               }}
             />
             
