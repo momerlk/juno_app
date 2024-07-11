@@ -41,7 +41,7 @@ export default function SettingsPage() {
      <Logo />
       <View style={{marginTop : 100}}></View>
 
-      <Text style={{fontSize : 25, color : "white", alignSelf : "center", fontFamily : "Montserrat"}}>
+      <Text style={{fontSize : 25, color : "white", alignSelf : "center", fontFamily : "Montserrat", fontWeight :"bold"}}>
         {data.name}
       </Text> 
       <Text style={{fontSize : 18, color : "gray", alignSelf : "center", marginTop : 20, fontFamily : "Poppins"}}>
@@ -55,31 +55,37 @@ export default function SettingsPage() {
         icon={(<FontAwesome name="user" size={23} color="white" style={{marginTop : 4}}/>)}
         name="Profile Details"
         route="/settings/profile"
+        replace={false}
       />
       <Action 
         icon={(<FontAwesome6 name="heart" size={23} color="#d3d3d3" style={{marginTop : 4}}/>)}
         name="Liked"
-        route="/settings/test"
+        route="/liked"
+        replace={false}
       />
       <Action 
         icon={(<MaterialIcons name="bookmark-border" size={23} color="#d3d3d3" style={{marginTop : 4}}/>)}
         name="Orders and Purchases"
-        route="/settings/test"
+        route="/settings/orders"
+        replace={false}
       />
       <Action 
         icon={(<MaterialIcons name="help-center" size={26} color="#d3d3d3" style={{marginTop : 4}}/>)}
         name="Help"
-        route="/settings/test"
+        route="/settings/help"
+        replace={false}
       />
       <Action 
         icon={(<Feather name="info" size={23} color="#d3d3d3" style={{marginTop : 4}}/>)}
         name="About"
         route="/settings/about"
+        replace={false}
       />
       <Action 
         icon={(<Feather name="info" size={23} color="#d3d3d3" style={{marginTop : 4}}/>)}
         name="Log Out"
         route="/sign-in"
+        replace={true}
       />
     </ScrollView>
   );
@@ -97,7 +103,13 @@ function Action(props : any){
                   borderBottomWidth : StyleSheet.hairlineWidth,
                   borderColor : "#2D2D2D",
                 }}
-      onPress={() => router.navigate(props.route)}             
+      onPress={() => {
+        if (props.replace === false){
+          router.navigate(props.route)
+        } else {
+          router.replace(props.route)
+        }
+      }}             
     >
 
         <View style={{display : "flex", flexDirection : "row",marginTop: 7,}}>
