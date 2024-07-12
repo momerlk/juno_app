@@ -11,13 +11,13 @@ import {
 } from "react-native";
 import * as size from "react-native-size-matters";
 import * as Font from "expo-font";
-import * as api from "./(tabs)/api";
+import * as api from "./api";
 
 
 import {Feather, Ionicons} from "@expo/vector-icons"
 import {router} from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Back , FastImageBackground, asyncTimeout, fmtPrice, toTitle, shortTitle} from "./(tabs)/_common";
+import { Back , FastImageBackground, asyncTimeout, fmtPrice, toTitle, shortTitle} from "./_common";
 
 
 const SCREEN_WIDTH = Dimensions.get("screen").width;

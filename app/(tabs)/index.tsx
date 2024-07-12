@@ -14,7 +14,7 @@ import * as size from "react-native-size-matters"
 import { AntDesign, Ionicons, Entypo, EvilIcons , Feather} from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { FastImageBackground  } from './_common';
+import { FastImageBackground  } from '../_common';
 import {Image as FastImage} from "expo-image"
 
 
@@ -24,10 +24,10 @@ import {
   DropDown,
   Filter,
   Sharing,
-} from "./_common"
+} from "../_common"
 
 
-import * as api from "./api";
+import * as api from "../api";
 
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -194,6 +194,12 @@ export class SwipeView extends React.Component<AppProps, AppState> {
 
   async componentDidMount() {
     await fetchFonts();
+
+    // if user first time user redirect them to welcome
+    const firstTime = await AsyncStorage.getItem("first_time")
+    if (firstTime === null ||  firstTime !== "no"){
+      router.replace("/welcome")
+    }
   }
 
   
@@ -703,7 +709,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
 
 
 import { tabBarHeight } from './_layout';
-import { Loading } from './_common';
+import { Loading } from '../_common';
 
 
 

@@ -178,6 +178,7 @@ export async function signIn(email : string, password : string){
         alert('signed in successfully');
         await AsyncStorage.setItem("authenticated" , "true")
         await AsyncStorage.setItem("token" ,  data.token)
+        await AsyncStorage.setItem("first_time", "no"); 
         return true;
     } else {
         alert('failed to login, error: ' + data.message);

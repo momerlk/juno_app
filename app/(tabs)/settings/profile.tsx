@@ -9,9 +9,9 @@ import { EvilIcons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { AntDesign, Feather } from '@expo/vector-icons';
 
-import {Back, PrimaryButton, SecondaryButton, Loading} from "../_common"
+import {Back, PrimaryButton, SecondaryButton, Loading} from "../../_common"
 
-import * as api from "../api"
+import * as api from "../../api"
 
 
 

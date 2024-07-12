@@ -15,9 +15,9 @@ import {
   Ionicons,
 } from '@expo/vector-icons';
 import * as size from "react-native-size-matters"
-import {Back} from "../_common"
+import {Back} from "../../_common"
 
-import * as api from "../api"
+import * as api from "../../api"
 
 const aboutText = "Juno is dedicated to making online shopping easier and more personalized.\n\n\nOur platform allows users to connect with brands, receive tailored recommendations, and discover new products effortlessly.\n\n\nWith a focus on privacy and security, Juno is a trusted space for women to sell homemade products and small businesses to thrive.\n\n\nJoin Juno today and experience the future of e-commerce!"
 

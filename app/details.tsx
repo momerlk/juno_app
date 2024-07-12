@@ -11,7 +11,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import PinchableCarousel from "./_image"
-import { Back , toTitle, fmtPrice, DropDown as DropDownPicker, PrimaryButton, SecondaryButton} from './(tabs)/_common';
+import { Back , toTitle, fmtPrice, DropDown as DropDownPicker, PrimaryButton, SecondaryButton} from './_common';
 
 import * as size from "react-native-size-matters"
 

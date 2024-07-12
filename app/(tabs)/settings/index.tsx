@@ -16,9 +16,9 @@ import {
   Ionicons,
 } from '@expo/vector-icons';
 import * as size from "react-native-size-matters"
-import {Logo} from "../_common"
+import {Logo} from "../../_common"
 
-import * as api from "../api"
+import * as api from "../../api"
 
 export default function SettingsPage() {
   const [data , setData] = useState({

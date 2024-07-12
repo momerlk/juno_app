@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Juno : Shop Women's Fashion",
+    "name": "juno",
     "slug": "juno",
     "version": "0.0.1",
     "orientation": "portrait",
@@ -14,7 +14,10 @@
     },
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.thejunoshop.app"
+      "bundleIdentifier": "com.thejunoshop.app",
+      "infoPlist": {
+        "CFBundleDisplayName": "Juno : Shop Women's Fashion"
+      }
     },
     "android": {
       "adaptiveIcon": {

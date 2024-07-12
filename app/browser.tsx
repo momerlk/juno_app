@@ -3,7 +3,7 @@ import React, {useState, useEffect} from "react"
 import {View, ActivityIndicator, Text, Image, Pressable} from "react-native"
 import {router, useLocalSearchParams} from "expo-router"
 
-import { Back } from "./(tabs)/_common"
+import { Back } from "./_common"
 
 import {Ionicons} from "@expo/vector-icons"
 

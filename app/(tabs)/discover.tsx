@@ -11,11 +11,11 @@ import {
 } from "react-native";
 import * as size from "react-native-size-matters";
 import * as Font from "expo-font";
-import * as api from "./api"
+import * as api from "../api"
 
 import {SwipeView} from "."
 import {Feather, Ionicons} from "@expo/vector-icons"
-import {Search} from "./_search"
+import {Search} from "../_search"
 
 (Text as any).defaultProps = (Text as any).defaultProps || {};
 (Text as any).defaultProps.allowFontScaling = false;
@@ -30,7 +30,7 @@ const fetchFonts = () => {
 };
 
 import {router} from "expo-router";
-import {Logo , Back , toTitle , fmtPrice , shortTitle} from "./_common"
+import {Logo , Back , toTitle , fmtPrice , shortTitle} from "../_common"
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const styles = StyleSheet.create({

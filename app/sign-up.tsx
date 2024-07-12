@@ -8,7 +8,7 @@ import Checkbox from "expo-checkbox";
 import {router} from "expo-router"
 
 import * as Font from "expo-font";
-import * as api from "./(tabs)/api"
+import * as api from "./api"
 
 const fetchFonts = () => {
   return Font.loadAsync({

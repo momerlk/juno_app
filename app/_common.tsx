@@ -8,7 +8,7 @@ import {Text , Image , Pressable ,
 } from "react-native"
 import {Ionicons, AntDesign} from "@expo/vector-icons"
 
-import { tabBarHeight } from "./_layout";
+import { tabBarHeight } from "./(tabs)/_layout";
 import * as size from "react-native-size-matters"
 import * as api from "./api"
 
@@ -50,7 +50,7 @@ export function Logo(){
   const topMargin = 42;
     return (
     <>
-        <Image  source={require("../assets/juno_text.png")} style={{
+        <Image  source={require("./assets/juno_text.png")} style={{
           position : "absolute",
           marginTop : topMargin,
           left : 20,

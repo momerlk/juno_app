@@ -1,5 +1,5 @@
 import { Link } from "expo-router";
-import {Back} from "../_common"
+import {Back} from "../../_common"
 
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';

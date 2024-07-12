@@ -4,11 +4,11 @@ import { StyleSheet,
 import * as Font from "expo-font";
 import {router} from "expo-router";
 import * as size from "react-native-size-matters";
-import {Logo, Loading, fmtPrice} from "./_common"
+import {Logo, Loading, fmtPrice} from "../_common"
 
-import * as api from "./api"
+import * as api from "../api"
 
-import {DropDown as DropDownPicker, toTitle, shortTitle} from './_common';
+import {DropDown as DropDownPicker, toTitle, shortTitle} from '../_common';
 
 const SCREEN_WIDTH = Dimensions.get("screen").width;
 const SCREEN_HEIGHT = Dimensions.get("screen").height;
