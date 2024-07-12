@@ -14,6 +14,8 @@ import * as size from "react-native-size-matters"
 import { AntDesign, Ionicons, Entypo, EvilIcons , Feather} from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
+import { FastImageBackground  } from './_common';
+import {Image as FastImage} from "expo-image"
 
 
 import {
@@ -148,7 +150,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
               this.setState({likeOpacity : 1, dislikeOpacity : 0, superLikeOpacity : 0})
               this.direction = newDirection;
             }
-          } else if (dx < -100) {
+          } else if (dx < -80) {
             const newDirection = 'left';
             if (this.direction !== newDirection){
               this.setState({likeOpacity : 0, dislikeOpacity : 1, superLikeOpacity : 0})
@@ -203,7 +205,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
       Animated.spring(this.position, {
         toValue: { x: SCREEN_WIDTH + 100, y: gestureState.dy },
         useNativeDriver: true,
-        speed: 25, // Adjust speed for faster animation
+        speed: 40, // Adjust speed for faster animation
         bounciness: 0, // Remove bounciness for quicker completion
       }).start(() => {
         this.position.setValue({ x: 0, y: 0 });
@@ -221,7 +223,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
       Animated.spring(this.position, {
         toValue: { x: -SCREEN_WIDTH - 100, y: gestureState.dy },
         useNativeDriver: true,
-        speed: 25, // Adjust speed for faster animation
+        speed: 40, // Adjust speed for faster animation
         bounciness: 0, // Remove bounciness for quicker completion
       }).start(() => {
         this.position.setValue({ x: 0, y: 0 });
@@ -287,7 +289,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
     const item = props.item;
     const textHeight = props.height/(SCREEN_HEIGHT/400);
     return (
-      <ImageBackground
+      <FastImageBackground
               style={{
                 height : props.height, 
               }}
@@ -381,7 +383,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
                 {/* </View> */}
                 </View>
               </LinearGradient>
-            </ImageBackground>
+            </FastImageBackground>
     )
   }
 
@@ -399,7 +401,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
           <Animated.View
             {...this.PanResponder.panHandlers}
 
-            key={item.product_id}
+            key={item.product_id + "view"}
             style={[
               {
                 transform: [
@@ -434,11 +436,16 @@ export class SwipeView extends React.Component<AppProps, AppState> {
                 borderRadius : 20,
               }}
                 >
-                  <EvilIcons name="heart" size={140} color="white" style={{
-                    position : "absolute",
+                  <FastImage 
+                    source={require("../assets/icons/heart.png")}
+                    style={{
+                      height : 160,
+                      width : 160,
+                      position : "absolute",
                     top : (this.props.height * 0.5) - 100,
                     left : (SCREEN_WIDTH * 0.6) - 120,
-                  }}/>
+                    }} 
+                  />
                
               </LinearGradient>
             </Animated.View>
@@ -460,17 +467,20 @@ export class SwipeView extends React.Component<AppProps, AppState> {
                 borderRadius : 20,
               }}
                 >
-                  {/* Find a good cross icon */}
-                  <AntDesign name="dislike2" size={100} color="white" style={{
-                    position : "absolute",
+                  <FastImage 
+                    source={require("../assets/icons/cross.png")}
+                    style={{
+                      height : 160,
+                      width : 160,
+                      position : "absolute",
                     top : (this.props.height * 0.5) - 100,
-                    left : (SCREEN_WIDTH * 0.6) - 100,
-                  }}/>
+                    left : (SCREEN_WIDTH * 0.6) - 120,
+                    }} 
+                  />
                
               </LinearGradient>
             </Animated.View>
 
-            {/* TODO : Make linear gradient appear properly */}
             <Animated.View
               style={{
                 opacity: this.state.superLikeOpacity,
@@ -488,16 +498,21 @@ export class SwipeView extends React.Component<AppProps, AppState> {
                     borderRadius : 20,
                   }}
                 >
-                  <AntDesign name="shoppingcart" size={100} color="white" style={{
-                    position : "absolute",
-                    top : (SCREEN_HEIGHT * 0.5) - 100,
-                    left : (SCREEN_WIDTH * 0.6) - 100,
-                  }}/>
+                  <FastImage 
+                    source={require("../assets/icons/cart.png")}
+                    style={{
+                      height : 160,
+                      width : 160,
+                      position : "absolute",
+                    top : (this.props.height * 0.5) - 80,
+                    left : (SCREEN_WIDTH * 0.55) - 120,
+                    }} 
+                  />
                
               </LinearGradient>
             </Animated.View>   
 
-            <this.ItemCard item={item} height={this.props.height}/>
+            <this.ItemCard key={item.product_id} item={item} height={this.props.height}/>
           </Animated.View>
         );
       } else {
@@ -512,7 +527,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
         }
         return (
           <Animated.View
-            key={item.product_id}
+            key={item.product_id + "view"}
             style={[
               {
                 // this next card opacity causes it to go black for a second as it is re rendered
@@ -525,7 +540,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
               },
             ]}
           >
-            <this.ItemCard item={item} height={this.props.height}/>
+            <this.ItemCard key={item.product_id} item={item} height={this.props.height}/>
           </Animated.View>
         );
       }
@@ -905,8 +920,8 @@ function Filter(props : any){
     marginBottom = (SCREEN_HEIGHT * 0.3) + tabBarHeight;
   }
   else if (Platform.OS === "android"){
-    marginTop = SCREEN_HEIGHT * 0.12;
-    marginBottom = (SCREEN_HEIGHT * 0.15) + tabBarHeight;
+    marginTop = SCREEN_HEIGHT * 0.2;
+    marginBottom = (SCREEN_HEIGHT * 0.2) + tabBarHeight;
   }
   else {
     marginTop = SCREEN_HEIGHT * 0.15;
@@ -1037,7 +1052,7 @@ function Filter(props : any){
               }} 
               text="Confirm"
               style={{
-                marginHorizontal : size.scale(35),
+                marginHorizontal : size.scale(25),
                 paddingVertical : 6,
                 fontSize : 4,
                 fontWeight : "bold",
@@ -1073,7 +1088,7 @@ function Filter(props : any){
               }} 
               text="Clear Filters"
               style={{
-                marginHorizontal : size.scale(35),
+                marginHorizontal : size.scale(25),
                 paddingVertical : 6,
                 fontSize : 4,
                 fontWeight : "bold",

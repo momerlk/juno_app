@@ -15,37 +15,9 @@ import * as api from "./(tabs)/api";
 import {Feather, Ionicons} from "@expo/vector-icons"
 import {router} from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Back } from "./(tabs)/_common";
-
-import { Image as FastImage } from "expo-image"
-
-const blurhash =
-  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
+import { Back , FastImageBackground} from "./(tabs)/_common";
 
 
-export class FastImageBackground extends React.Component<any , any> {
-  render() {
-    const { children , style = {}, imageStyle, ...props } = this.props
-
-    return (
-      <View style={style}>
-        <FastImage
-          {...props}
-          style={[
-            StyleSheet.absoluteFill,
-            {
-              width: style.width,
-              height: style.height,
-            },
-            imageStyle,
-          ]}
-          placeholder={{ blurhash }}
-        />
-        {children}
-      </View>
-    )
-  }
-}
 
 
 // TODO : Add backend data gettting logic

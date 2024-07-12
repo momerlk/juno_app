@@ -1,9 +1,43 @@
 import { router } from "expo-router";
 import React from "react"
-import {Text , Image , Pressable , View, ActivityIndicator, TouchableOpacity} from "react-native"
+import {Text , Image , Pressable , 
+  View, ActivityIndicator, TouchableOpacity,
+  StyleSheet
+} from "react-native"
 import {Ionicons} from "@expo/vector-icons"
 
 import * as size from "react-native-size-matters"
+
+import { Image as FastImage } from "expo-image"
+
+const blurhash =
+  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
+
+
+export class FastImageBackground extends React.Component<any , any> {
+  render() {
+    const { children , style = {}, imageStyle, ...props } = this.props
+
+    return (
+      <View style={style}>
+        <FastImage
+          {...props}
+          style={[
+            StyleSheet.absoluteFill,
+            {
+              width: style.width,
+              height: style.height,
+            },
+            imageStyle,
+          ]}
+          placeholder={{ blurhash }}
+        />
+        {children}
+      </View>
+    )
+  }
+}
+
 
 export function Logo(){
   const topMargin = 42;

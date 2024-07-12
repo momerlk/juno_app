@@ -31,7 +31,9 @@ export default function HelpPage() {
       <Text style={styles.text}>Your data is safe with us, and explicit content is strictly prohibited.</Text>
 
       <Text style={styles.subheading}>Need Help?</Text>
-      <Text style={styles.text}>Visit our FAQ section on our website or contact our founder on +92 300 0856955</Text>
+      <Text style={styles.text}>Visit our FAQ section on our website or contact our founder on {"\n"} +92 300 0856955</Text>
+
+      <View style={{ paddingVertical : 100 }}/>
     </ScrollView>
     </>
   );
@@ -45,14 +47,14 @@ const styles = StyleSheet.create({
     paddingBottom : 100,
   },
   heading: {
-    fontSize: 24,
+    fontSize: 26,
     fontFamily : "Poppins",
     color: 'white',
     fontWeight: 'bold',
     marginBottom: 20,
   },
   subheading: {
-    fontSize: 20,
+    fontSize: 23,
     fontFamily : "Poppins",
     color: 'white',
     fontWeight: 'bold',
@@ -60,7 +62,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   text: {
-    fontSize: 18,
+    fontSize: 20,
     color: 'white',
     marginBottom: 10,
   },

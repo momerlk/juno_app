@@ -36,9 +36,10 @@ export default function SettingsPage() {
         }}>
         About Juno
         </Text>
-      <Text style={{marginHorizontal : 20, color : "white", fontSize : 20,fontFamily : "Poppins"}}>
+      <Text style={{marginHorizontal : 20, color : "white", fontSize : 20,}}>
         {aboutText}
       </Text>
+      <View style={{ paddingVertical : 100 }}/>
     </ScrollView>
   );
 }
