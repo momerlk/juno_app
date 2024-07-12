@@ -22,6 +22,8 @@ import {
   shortTitle , toTitle , fmtPrice, Logo, 
   PrimaryButton, SecondaryButton,
   DropDown,
+  Filter,
+  Sharing,
 } from "./_common"
 
 
@@ -275,7 +277,9 @@ export class SwipeView extends React.Component<AppProps, AppState> {
       // console.log(`double tap detected`)
       router.navigate({
         pathname: "/details",
-        params: this.props.cards[this.state.currentIndex]
+        params: {
+          data : JSON.stringify(this.props.cards[this.state.currentIndex])
+        },
       })
     } else {
       // Single tap detected, wait to confirm if it is a double tap
@@ -679,7 +683,9 @@ export class SwipeView extends React.Component<AppProps, AppState> {
                 // TODO : shows details for now change this
                 router.navigate({
                   pathname: "/details",
-                  params: this.props.cards[this.state.currentIndex]
+                  params: {
+                    data : JSON.stringify(this.props.cards[this.state.currentIndex])
+                  },
                 })
             }} 
             >
@@ -693,297 +699,11 @@ export class SwipeView extends React.Component<AppProps, AppState> {
   }
 }
 
-interface ModalProps {
-  setModalVisible : Function;
-  modalVisible : boolean;
-}
-
-
-
-function Filter(props : any){
-
-  const [category , setCategory] = useState("");
-  const [brands , setBrands] = useState("");
-  const [color , setColor] = useState("");
-  const [lowerBound, setLowerBound] = useState('');
-  const [upperBound, setUpperBound] = useState('');
-  const [filterData , setFilter] = useState<any>({brands : [
-    {"label" : "Can't load brands", "value" : "none"},
-  ]})
-
-  let marginTop = 0;
-  let marginBottom = 0;
-  if (Platform.OS === "ios") {
-    marginTop = SCREEN_HEIGHT * 0.2;
-    marginBottom = (SCREEN_HEIGHT * 0.2) + tabBarHeight;
-  }
-  else if (Platform.OS === "android"){
-    marginTop = SCREEN_HEIGHT * 0.2;
-    marginBottom = (SCREEN_HEIGHT * 0.2) + tabBarHeight;
-  }
-  else {
-    marginTop = SCREEN_HEIGHT * 0.2;
-    marginBottom = (SCREEN_HEIGHT * 0.2) + tabBarHeight;
-  }
-
-  const [priceRange , setPriceRange] = useState({
-    min : [{label : "0", value : "0"},], 
-    max : [{label : "No Limit", value : "100000000"}]
-  })
-  // TODO : Get dropdown options from backend like brands etc. 
-  useEffect(() => {
-    (async () => {
-      const data = await api.getFilter();
-      if (data !== null){
-        setFilter(data);
-      }
-      
-    })()
-
-    
-    for(let i = 1;i < 20;i++){
-      let value = (i) * 1000
-      priceRange.min.push({
-        label : `${value-500}`, value : `${value-1}`
-      });
-      priceRange.max.push({
-        label : `${value+500}`, value : `${value+1}`
-      });
-    }
-    setPriceRange(priceRange);
-
-    // const discountRange = {min : [
-    //   {label : "0", value : "0"},
-    // ], max : []}
-    // for(let i = 1;i < 15;i++){
-    //   let value = (i/2) * 10
-    //   priceRange.min.push({
-    //     label : `${value-1}`, value : `${value-1}`
-    //   });
-    //   priceRange.min.push({
-    //     label : `${value+1}`, value : `${value+1}`
-    //   });
-    // }
-
-    
-
-
-  }, [])
-
-  return (
-    
-     <Modal
-        animationType="none"
-        transparent={true}
-        visible={props.modalVisible}
-        onRequestClose={() => {
-          props.setModalVisible(!props.modalVisible);
-        }}
-           
-      >
-        <View style={{
-          ...StyleSheet.absoluteFillObject,
-          backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent black background
-        }}/>
-        <View
-          style={{
-            backgroundColor : "black",
-            flex : 1,
-            marginTop: marginTop,
-            marginBottom : marginBottom,
-            marginHorizontal : size.scale(25),
-            borderRadius : 8,
-            paddingVertical : 30,
-          }}
-        >
-
-        {/* TODO : Get filter items from backend */}
-        <FlatList
-          contentContainerStyle={{alignSelf: 'flex-start',marginLeft : 4}}
-          numColumns={1}
-          showsVerticalScrollIndicator={false}
-          showsHorizontalScrollIndicator={false}
-          data={[
-            {
-              id : 1,
-              title : "Category", 
-              data : [
-                {label: 'Clothes', value: 'clothes'},
-              ], 
-              range : {min : [1] , max : [1]},
-              multiple : true, 
-              type : "standard",
-              onChange : (t : any) => setCategory(t),
-            },
-            {
-              id : 2,
-              title : "Brands", 
-              data : filterData.brands, 
-              multiple : true,
-              type : "searchable",
-              range : {min : [1] , max : [1]},
-              onChange : (t : any) => setBrands(t),
-            },
-            {
-              id : 3,
-              title : "Price", 
-              data : [],
-              range : priceRange, 
-              multiple : false,
-              type : "range", 
-              onChange : (lower:any,upper:any) => {setLowerBound(lower);setUpperBound(upper)},
-            },
-          ]}
-          renderItem={({ item }) => <DropDown 
-              data={item.data} 
-              title={item.title}
-              onChange={item.onChange}
-              type={item.type}
-              range={item.range}
-              multiple={item.multiple}
-              onPress={() => {}}
-            /> } 
-          // TODO : Test this fully
-        />
-            {/*TODO : Get dropdown data from backend
-            TODO : Send this filter data to server  */}
-          
-
-            <PrimaryButton
-              onPress={async () => {
-                props.setModalVisible(false);
-                
-                let filter : any = {};
-                if (brands !== "") {
-                  filter["vendor"] = {"$in" : brands}
-                }
-                
-                let price : any = {};
-                let priceSet = false;
-                if (lowerBound !== "") { 
-                  price["$gte"] = parseInt(lowerBound);priceSet=true; 
-                }
-                if (upperBound !== "") { 
-                  price["$lte"] = parseInt(upperBound);priceSet = true;
-                }
-                if (priceSet === true){filter["price"] = price }
-
-                const filterString = await AsyncStorage.getItem("filter");
-                let oldFilter = null;
-                if (filterString !== null){
-                  oldFilter = await JSON.parse(filterString);
-                }
-                if(oldFilter !== null){
-                  if (deepEqual(oldFilter , filter) === true){
-                    return;
-                  }
-                }
-
-                props.onConfirm(filter)
-                
-
-              }} 
-              text="Confirm"
-              style={{
-                marginHorizontal : size.scale(25),
-                paddingVertical : 6,
-                fontSize : 4,
-                fontWeight : "bold",
-              }}
-            />
-
-            <SecondaryButton
-              onPress={async () => {
-
-                props.setModalVisible(false);
-                
-                setLowerBound("")
-                setUpperBound("")
-                setBrands("")
-                setCategory("")
-
-                const filterString = await AsyncStorage.getItem("filter");
-                let oldFilter = null;
-                if (filterString !== null){
-                  oldFilter = await JSON.parse(filterString);
-                } else {
-                  return;
-                }
-                if(oldFilter !== null){
-                  if (deepEqual(oldFilter , {}) === true){
-                    return;
-                  }
-                }
-                // TODO : clear all items
-                await AsyncStorage.setItem("filter" , "")
-                props.onConfirm({})
-                
-              }} 
-              text="Clear Filters"
-              style={{
-                marginHorizontal : size.scale(25),
-                paddingVertical : 6,
-                fontSize : 4,
-                fontWeight : "bold",
-              }}
-            />
-            
-            </View>
-      </Modal>
-   
-  )
-}
-
-function Sharing(props : ModalProps){
-  // TODO : Implement swipe to bring down like instagram
-  return (
-    
-     <Modal
-        animationType="slide"
-        transparent={true}
-        visible={props.modalVisible}
-        onRequestClose={() => {
-          props.setModalVisible(false);
-        }}
-        onDismiss={() => {
-          props.setModalVisible(false);
-        }}
-        onAccessibilityEscape={() => {
-          props.setModalVisible(false);
-        }}
-
-
-           
-      >
-        <Pressable 
-            style={{position : "absolute" , bottom : SCREEN_HEIGHT * 0.4, height : SCREEN_HEIGHT, backgroundColor : "transparent", width : SCREEN_WIDTH}} 
-            onPress={() => props.setModalVisible(false)}
-          ></Pressable> 
-        <View 
-          style={{
-            backgroundColor : "#121212",
-            flex : 1,
-            marginTop : SCREEN_HEIGHT * 0.6,
-            borderTopLeftRadius : 30,
-            borderTopRightRadius : 30,
-          }}
-        >
-            <Text style={{color : "white", fontSize : 30, alignSelf : "center", fontFamily : "Poppins", marginTop: 20,}}>
-              SHARE
-            </Text>
-
-            </View>
-      </Modal>
-   
-  )
-}
-
 
 
 
 import { tabBarHeight } from './_layout';
 import { Loading } from './_common';
-import { deepEqual } from 'expo-router/build/fork/getPathFromState';
 
 
 

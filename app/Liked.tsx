@@ -5,6 +5,7 @@ import {
   FlatList,
   Pressable,
   ActivityIndicator,
+  Dimensions,
   Animated,
   Easing,
 } from "react-native";
@@ -12,13 +13,14 @@ import * as size from "react-native-size-matters";
 import * as Font from "expo-font";
 import * as api from "./(tabs)/api";
 
+
 import {Feather, Ionicons} from "@expo/vector-icons"
 import {router} from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Back , FastImageBackground} from "./(tabs)/_common";
+import { Back , FastImageBackground, asyncTimeout, fmtPrice} from "./(tabs)/_common";
 
 
-
+const SCREEN_WIDTH = Dimensions.get("screen").width;
 
 // TODO : Add backend data gettting logic
 // TODO : Add save progress logic
@@ -68,20 +70,22 @@ function toTitle(str : string) : string {
     
 function Card(props : any){
   // TODO : Load this specific item in feed
-  const height = 280;
-  const width = 180;
-  const textHeight = 80;
+  const height = 250;
+  const width = (SCREEN_WIDTH/2) - size.moderateScale(8);
+  const textHeight = 120;
   return (
     <Pressable onPress={() => {
       router.navigate({
         pathname: "/details",
-        params: props.item
+        params: {
+          data : JSON.stringify(props.item)
+        }
       })
     }}>
       <FastImageBackground
               style={{
                 height : size.verticalScale(height), 
-                minWidth : size.verticalScale(width),
+                width : width,
                 marginHorizontal : size.moderateScale(3),
                 marginVertical : size.verticalScale(5),
               }}
@@ -118,6 +122,21 @@ function Card(props : any){
                     color : "white"
                   }}>{toTitle(props.item.vendor as string)}</Text>
                 </View>
+                <View style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}>
+
+                
+                        <Text style={{
+                          fontSize: 14,
+                          color : "white",
+                          fontFamily : "Poppins",
+                          marginHorizontal : 10,
+                        }}>Rs. {fmtPrice(parseInt(props.item.price))}</Text>
+
+                </View>
                 </View>
               </LinearGradient>
             </FastImageBackground>
@@ -129,22 +148,9 @@ function Card(props : any){
 interface HomeState {
   products : any[] | null;
   loading : boolean;
+  refreshing : boolean;
 }
 
-function half(arr : Array<any>){
-  const n = arr.length;
-  let n1 = 0; // n of first array
-  // even
-  if ((n%2) == 0){
-    n1 = n/2;
-  } else {
-    n1 = n/2;
-  }
-
-  const data1 = arr.slice(0,n1);
-  const data2 = arr.slice(n1,n);
-  return {first : data1, second : data2}
-}
 
 export default class Home extends React.Component<{},HomeState> {
   constructor(props : any){
@@ -152,6 +158,7 @@ export default class Home extends React.Component<{},HomeState> {
     this.state = {
       products : null, 
       loading : true,
+      refreshing : false,
     }
   }
 
@@ -184,7 +191,7 @@ export default class Home extends React.Component<{},HomeState> {
     }
     // TODO : Add activity indicator when loading
     return (
-      <ScrollView style={{backgroundColor : "#121212"}}>
+      <View style={{backgroundColor : "#121212", flex : 1,}}>
 
         
 
@@ -199,36 +206,25 @@ export default class Home extends React.Component<{},HomeState> {
         <>
         <FlatList
           contentContainerStyle={{alignSelf: 'flex-start',marginLeft : 4}}
-          horizontal={true}
+          numColumns={2}
           
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={true}
-          data={half(this.state.products).first.reverse()}
+          data={this.state.products}
           keyExtractor={(item) => item.product_id}
           renderItem={({ item }) => <Card item={item}/>} 
           // TODO : Test this fully
           onRefresh={async () => {
-            this.setState({loading : true});
+            this.setState({refreshing : true});
             await this.getProducts();
-            this.setState({loading : false});
+            this.setState({refreshing : false});
           }}
-          refreshing={this.state.loading}
-        />
-
-        <FlatList
-          contentContainerStyle={{alignSelf: 'flex-start',marginLeft : 4,marginTop : 10,}}
-          horizontal={true}
-          
-          showsVerticalScrollIndicator={false}
-          showsHorizontalScrollIndicator={true}
-          data={half(this.state.products).second.reverse()}
-          keyExtractor={(item) => item.product_id}
-          renderItem={({ item }) => <Card item={item}/>} 
+          refreshing={this.state.refreshing}
         />
         </>
         }
 
-      </ScrollView>
+      </View>
     )
   }
 }

@@ -79,7 +79,9 @@ function Card(props : any){
       () => {
         router.navigate({
           pathname: "/details",
-          params: props.item
+          params: {
+            data : JSON.stringify(props.item)
+          }
         })
       }
     }>
