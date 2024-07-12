@@ -708,8 +708,8 @@ function DropDown(props : any){
   let marginTop = 0;
   let marginBottom = 0;
   if (Platform.OS === "ios") {
-    marginTop = SCREEN_HEIGHT * 0.1;
-    marginBottom = (SCREEN_HEIGHT * 0.4) + tabBarHeight;
+    marginTop = SCREEN_HEIGHT * 0.22;
+    marginBottom = (SCREEN_HEIGHT * 0.22) + tabBarHeight;
   }
   else if (Platform.OS === "android"){
     marginTop = SCREEN_HEIGHT * 0.22;
@@ -719,6 +719,7 @@ function DropDown(props : any){
     marginTop = SCREEN_HEIGHT * 0.22;
     marginBottom = (SCREEN_HEIGHT * 0.22) + tabBarHeight;
   }
+
 
   const styles = StyleSheet.create({
       input: {
@@ -764,7 +765,7 @@ function DropDown(props : any){
         }}>
         <ScrollView >
           {/* TODO : Fix this input */}
-          {props.type === "price" ? 
+          {props.type === "range" ? 
           <>
           <Text style={{marginVertical : 10, fontSize : 26, fontFamily : "Poppins", color : "white", textAlign: "center"}}>
               Price
@@ -780,19 +781,7 @@ function DropDown(props : any){
               <Text style={{marginVertical : 10, fontSize : 18, fontFamily : "Poppins", color : "white", textAlign : "center"}}>
                 Min
               </Text>
-              {[{
-                label : "500",
-                value : "500",},
-                {
-                label : "1000",
-                value : "1000",},
-                {
-                label : "2000",
-                value : "2000",},
-                {
-                label : "3000",
-                value : "3000",},
-              ].map((item : any) => {
+            {props.range.min.map((item : any) => {
             const [selected , setSelected] = useState(false);
             return <TouchableOpacity 
               key={item.value}
@@ -844,19 +833,7 @@ function DropDown(props : any){
                 Max
               </Text>
           {/* TODO : Replace with programmatic logic */}
-              {[{
-                label : "1000",
-                value : "1000",},
-                {
-                label : "2000",
-                value : "2000",},
-                {
-                label : "3000",
-                value : "3000",},
-                {
-                label : "4000",
-                value : "4000",},
-              ].map((item : any) => {
+              {props.range.max.map((item : any) => {
             const [selected , setSelected] = useState(false);
             
             return <TouchableOpacity 
@@ -963,7 +940,7 @@ function DropDown(props : any){
           text="Confirm" 
           onPress={() => {
             setOpen(false);
-            if (props.type === "price"){
+            if (props.type === "range"){
               props.onChange(lower, upper);
             }
           }}
@@ -1027,19 +1004,22 @@ function Filter(props : any){
   let marginTop = 0;
   let marginBottom = 0;
   if (Platform.OS === "ios") {
-    marginTop = SCREEN_HEIGHT * 0.1;
-    marginBottom = (SCREEN_HEIGHT * 0.3) + tabBarHeight;
+    marginTop = SCREEN_HEIGHT * 0.2;
+    marginBottom = (SCREEN_HEIGHT * 0.2) + tabBarHeight;
   }
   else if (Platform.OS === "android"){
     marginTop = SCREEN_HEIGHT * 0.2;
     marginBottom = (SCREEN_HEIGHT * 0.2) + tabBarHeight;
   }
   else {
-    marginTop = SCREEN_HEIGHT * 0.15;
-    marginBottom = (SCREEN_HEIGHT * 0.15) + tabBarHeight;
+    marginTop = SCREEN_HEIGHT * 0.2;
+    marginBottom = (SCREEN_HEIGHT * 0.2) + tabBarHeight;
   }
 
-
+  const [priceRange , setPriceRange] = useState({
+    min : [{label : "0", value : "0"},], 
+    max : [{label : "No Limit", value : "100000000"}]
+  })
   // TODO : Get dropdown options from backend like brands etc. 
   useEffect(() => {
     (async () => {
@@ -1049,7 +1029,35 @@ function Filter(props : any){
       }
       
     })()
+
     
+    for(let i = 1;i < 20;i++){
+      let value = (i) * 1000
+      priceRange.min.push({
+        label : `${value-500}`, value : `${value-1}`
+      });
+      priceRange.max.push({
+        label : `${value+500}`, value : `${value+1}`
+      });
+    }
+    setPriceRange(priceRange);
+
+    // const discountRange = {min : [
+    //   {label : "0", value : "0"},
+    // ], max : []}
+    // for(let i = 1;i < 15;i++){
+    //   let value = (i/2) * 10
+    //   priceRange.min.push({
+    //     label : `${value-1}`, value : `${value-1}`
+    //   });
+    //   priceRange.min.push({
+    //     label : `${value+1}`, value : `${value+1}`
+    //   });
+    // }
+
+    
+
+
   }, [])
 
   return (
@@ -1092,6 +1100,7 @@ function Filter(props : any){
               data : [
                 {label: 'Clothes', value: 'clothes'},
               ], 
+              range : {min : [1] , max : [1]},
               other : {multiple : true} , 
               type : "standard",
               onChange : (t : any) => setCategory(t),
@@ -1102,14 +1111,16 @@ function Filter(props : any){
               data : filterData.brands, 
               other : {multiple : true} , 
               type : "searchable",
+              range : {min : [1] , max : [1]},
               onChange : (t : any) => setBrands(t),
             },
             {
               id : 3,
               title : "Price", 
-              data : [], 
+              data : [],
+              range : priceRange, 
               other : {} ,
-              type : "price", 
+              type : "range", 
               onChange : (lower:any,upper:any) => {setLowerBound(lower);setUpperBound(upper)},
             },
           ]}
@@ -1119,6 +1130,7 @@ function Filter(props : any){
               other={item.other}
               onChange={item.onChange}
               type={item.type}
+              range={item.range}
               onPress={() => {}}
             /> } 
           // TODO : Test this fully

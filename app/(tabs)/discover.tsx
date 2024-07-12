@@ -260,17 +260,10 @@ export default class Home extends React.Component<{},HomeState> {
 
         <Text style={{color : "white", fontFamily : "Poppins", fontSize : 18 , marginLeft : 20}}>Discover Brands</Text>
 
-        <ScrollView
-          horizontal
-          showsVerticalScrollIndicator={false}
-          showsHorizontalScrollIndicator={false}
-          directionalLockEnabled={true}
-          alwaysBounceVertical={false}
-          contentContainerStyle={{flexGrow: 1,}}
-        >
+
         <FlatList
           contentContainerStyle={{alignSelf: 'flex-start',marginLeft : 4}}
-          numColumns={4}
+          horizontal
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
           directionalLockEnabled={true}
@@ -285,24 +278,16 @@ export default class Home extends React.Component<{},HomeState> {
           // }}
           // refreshing={this.state.loading}
         />
-        </ScrollView>
           
         {/* Discover products */}
         <View style={{marginVertical : size.verticalScale(10)}}></View>
 
         <Text style={{color : "white", fontFamily : "Poppins", fontSize : 18 , marginLeft : 20}}>For You</Text>
 
-        <ScrollView
-          horizontal
-          showsVerticalScrollIndicator={false}
-          showsHorizontalScrollIndicator={false}
-          directionalLockEnabled={true}
-          alwaysBounceVertical={false}
-          contentContainerStyle={{flexGrow: 1,}}
-        >
+
         <FlatList
           contentContainerStyle={{alignSelf: 'flex-start',marginLeft : 4}}
-          numColumns={4}
+          horizontal
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
           directionalLockEnabled={true}
@@ -317,7 +302,6 @@ export default class Home extends React.Component<{},HomeState> {
           }}
           refreshing={this.state.loading}
         />
-        </ScrollView>
       </ScrollView>
     )
   }

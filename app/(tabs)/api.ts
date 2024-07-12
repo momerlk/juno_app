@@ -32,7 +32,7 @@ export class WS {
         if (this.open === true){
           this.open = false;
         }
-        console.error(`WS : failed to connect to websocket, error = ${JSON.stringify(error)}`) 
+        console.log(`WS : failed to connect to websocket, error = ${JSON.stringify(error)}`) 
       }
       this!.socket.onmessage = (ev : MessageEvent<any>) => {
         try {
