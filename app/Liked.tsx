@@ -138,7 +138,7 @@ function half(arr : Array<any>){
   if ((n%2) == 0){
     n1 = n/2;
   } else {
-    n1 = n1/2;
+    n1 = n/2;
   }
 
   const data1 = arr.slice(0,n1);

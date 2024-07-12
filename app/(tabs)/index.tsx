@@ -21,6 +21,7 @@ import {Image as FastImage} from "expo-image"
 import {
   shortTitle , toTitle , fmtPrice, Logo, 
   PrimaryButton, SecondaryButton,
+  DropDown,
 } from "./_common"
 
 
@@ -697,297 +698,6 @@ interface ModalProps {
   modalVisible : boolean;
 }
 
-function DropDown(props : any){
-  const [open , setOpen] = useState(false);
-  const [value , setValue] = useState<any>([]);
-  const [items, setItems] = useState(props.data);
-
-  const [lower, setLower] = useState("")
-  const [upper , setUpper] = useState("")
-
-  let marginTop = 0;
-  let marginBottom = 0;
-  if (Platform.OS === "ios") {
-    marginTop = SCREEN_HEIGHT * 0.22;
-    marginBottom = (SCREEN_HEIGHT * 0.22) + tabBarHeight;
-  }
-  else if (Platform.OS === "android"){
-    marginTop = SCREEN_HEIGHT * 0.22;
-    marginBottom = (SCREEN_HEIGHT * 0.22) + tabBarHeight;
-  }
-  else {
-    marginTop = SCREEN_HEIGHT * 0.22;
-    marginBottom = (SCREEN_HEIGHT * 0.22) + tabBarHeight;
-  }
-
-
-  const styles = StyleSheet.create({
-      input: {
-          marginRight : size.scale(10),
-          height : 50,
-          width : size.scale(100),
-          paddingLeft : 10,
-          fontSize : 15,
-          fontFamily : "Poppins",
-          backgroundColor : "black",
-          borderWidth : 1,
-          borderColor : "white",
-          color : "white",
-          borderRadius : 10,
-      },
-  });
-
-  return (
-    <View style={{
-      marginHorizontal : size.scale(20),
-        marginBottom: 16,
-    }}>
-
-      <Modal
-        animationType="none"
-        transparent={true}
-        visible={open}
-        onRequestClose={() => {
-         setOpen(!open);
-        }}
-           
-      >
-        <View style={{
-          zIndex : open ? 4000 : 1,
-          backgroundColor : "#121212",
-          flex : 1,
-          marginTop: marginTop,
-          marginBottom : marginBottom,
-          marginHorizontal : size.scale(35),
-          paddingHorizontal : 20,
-          borderRadius : 8,
-          paddingVertical : 30,
-        }}>
-        <ScrollView >
-          {/* TODO : Fix this input */}
-          {props.type === "range" ? 
-          <>
-          <Text style={{marginVertical : 10, fontSize : 26, fontFamily : "Poppins", color : "white", textAlign: "center"}}>
-              Price
-          </Text>
-          <View style={{
-            marginHorizontal : size.scale(6),
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-evenly',
-          }}>
-            {/* TODO : Replace with programmatic logic */}
-            <ScrollView style={{marginHorizontal : 10}}>
-              <Text style={{marginVertical : 10, fontSize : 18, fontFamily : "Poppins", color : "white", textAlign : "center"}}>
-                Min
-              </Text>
-            {props.range.min.map((item : any) => {
-            const [selected , setSelected] = useState(false);
-            return <TouchableOpacity 
-              key={item.value}
-              style={{
-                backgroundColor : "#222222",
-                paddingVertical : 10,
-                paddingHorizontal : 8,
-                borderRadius : 5,
-                marginVertical : 5,
-                zIndex : 6000,
-              }} 
-              onPress={() => {
-                if(selected === true){
-                  setSelected(false);
-                  setLower("")
-                  return;
-                } 
-                setSelected(true)
-                setLower(item.value)
-                setValue([item.value , upper])
-                props.onChange(item.value , upper);
-              }}
-            >
-              <View style={{
-                display : "flex" , 
-                flexDirection : "row" , 
-                justifyContent : "space-between" , 
-                
-              }}>
-
-                <Text style={{
-                    fontSize : 17, 
-                    color : "white", 
-                    alignSelf : "center", 
-                    fontFamily : "Poppins", 
-                  }}>
-                  {item.label}
-                </Text>
-
-                {selected ? 
-                <AntDesign name="check" size={20} color="white" style={{marginTop : 3}}/> 
-                : <></>}
-              </View>
-          </TouchableOpacity>
-          })}
-          </ScrollView>
-          <ScrollView>
-            <Text style={{marginVertical : 10, fontSize : 18, fontFamily : "Poppins", color : "white", textAlign: "center"}}>
-                Max
-              </Text>
-          {/* TODO : Replace with programmatic logic */}
-              {props.range.max.map((item : any) => {
-            const [selected , setSelected] = useState(false);
-            
-            return <TouchableOpacity 
-              key={item.value}
-              style={{
-                backgroundColor : "#222222",
-                paddingVertical : 10,
-                paddingHorizontal : 8,
-                borderRadius : 5,
-                marginVertical : 5,
-                zIndex : 6000,
-              }} 
-              onPress={() => {  
-                if(selected === true){
-                  setSelected(false);
-                  setUpper("")
-                  return;
-                } 
-                setSelected(true)
-                setUpper(item.value)
-                setValue([item.value , upper])
-                props.onChange(lower, item.value);
-              }}
-            >
-              <View style={{
-                display : "flex" , 
-                flexDirection : "row" , 
-                justifyContent : "space-between" , 
-                
-              }}>
-
-                <Text style={{
-                    fontSize : 17, 
-                    color : "white", 
-                    alignSelf : "center", 
-                    fontFamily : "Poppins", 
-                  }}>
-                  {item.label}
-                </Text>
-
-                {selected ? 
-                <AntDesign name="check" size={20} color="white" style={{marginTop : 3}}/> 
-                : <></>}
-              </View>
-          </TouchableOpacity>
-          })}
-          </ScrollView>
-          </View> 
-          </>
-          : <></>}
-          {items.map((item : any) => {
-            const [selected , setSelected] = useState(false);
-            return <TouchableOpacity 
-              key={item.value}
-              style={{
-                backgroundColor : "#222222",
-                paddingVertical : 10,
-                paddingHorizontal : 8,
-                borderRadius : 5,
-                marginVertical : 5,
-                zIndex : 6000,
-              }} 
-              onPress={() => {
-                let newValue = null
-                if(selected === false){
-                  newValue = value.concat(item.value);
-                  setSelected(true);
-                } else {
-                  newValue = value.filter((v : any) => v !== item.value);
-                  setSelected(false);
-                }
-                setValue(newValue);
-                props.onChange(newValue);
-              }}
-            >
-              <View style={{
-                display : "flex" , 
-                flexDirection : "row" , 
-                justifyContent : "space-between" , 
-                
-              }}>
-
-                <Text style={{
-                    fontSize : 17, 
-                    color : "white", 
-                    alignSelf : "center", 
-                    fontFamily : "Poppins", 
-                  }}>
-                  {item.label}
-                </Text>
-
-                {selected ? 
-                <AntDesign name="check" size={20} color="white" style={{marginTop : 3}}/> 
-                : <></>}
-              </View>
-          </TouchableOpacity>
-          })}
-
-          <View style={{paddingVertical : 20,}}/>
-
-          
-        </ScrollView>
-        <PrimaryButton 
-          text="Confirm" 
-          onPress={() => {
-            setOpen(false);
-            if (props.type === "range"){
-              props.onChange(lower, upper);
-            }
-          }}
-          style={{
-            paddingVertical : 5,
-            fontSize : 5,
-          }} 
-        />
-        </View>
-      </Modal>
-
-      <TouchableOpacity 
-        style={{
-          backgroundColor : "white", 
-          width : size.scale(250),
-          paddingHorizontal : 10,
-          paddingVertical : size.verticalScale(10),
-          borderRadius : 10,
-        }} 
-        onPress={() => {
-          setOpen(true);
-        }}
-      >
-        <View style={{
-          display : "flex" , 
-          flexDirection : "row" , 
-          
-        }}>
-          <View style={{
-            height : 22, 
-            width : 22, 
-            borderRadius : 50, 
-            marginTop : 3,
-            marginRight : 7,
-            backgroundColor : "black"
-          }}>
-            {value.length !== 0 ? 
-            <AntDesign name="check" size={14} color="white" style={{margin : 4}}/> 
-            : <></>}
-          </View>
-          <Text style={{fontFamily : "Poppins",fontSize : 18}}>{props.title}</Text>
-        </View>
-      </TouchableOpacity>
-    </View>
-  )
-}
-
 
 
 function Filter(props : any){
@@ -1101,7 +811,7 @@ function Filter(props : any){
                 {label: 'Clothes', value: 'clothes'},
               ], 
               range : {min : [1] , max : [1]},
-              other : {multiple : true} , 
+              multiple : true, 
               type : "standard",
               onChange : (t : any) => setCategory(t),
             },
@@ -1109,7 +819,7 @@ function Filter(props : any){
               id : 2,
               title : "Brands", 
               data : filterData.brands, 
-              other : {multiple : true} , 
+              multiple : true,
               type : "searchable",
               range : {min : [1] , max : [1]},
               onChange : (t : any) => setBrands(t),
@@ -1119,7 +829,7 @@ function Filter(props : any){
               title : "Price", 
               data : [],
               range : priceRange, 
-              other : {} ,
+              multiple : false,
               type : "range", 
               onChange : (lower:any,upper:any) => {setLowerBound(lower);setUpperBound(upper)},
             },
@@ -1127,10 +837,10 @@ function Filter(props : any){
           renderItem={({ item }) => <DropDown 
               data={item.data} 
               title={item.title}
-              other={item.other}
               onChange={item.onChange}
               type={item.type}
               range={item.range}
+              multiple={item.multiple}
               onPress={() => {}}
             /> } 
           // TODO : Test this fully

@@ -8,7 +8,7 @@ import {Logo, Loading} from "./_common"
 
 import * as api from "./api"
 
-import DropDownPicker from 'react-native-dropdown-picker';
+import {DropDown as DropDownPicker} from './_common';
 
 function toTitle(str : string) : string {
     if (str === undefined){
@@ -195,20 +195,6 @@ function DropDown(props : any){
   const [value , setValue] = useState(null);
   const [items, setItems] = useState(props.data);
 
-  useEffect(() => {
-    let ops = []
-    try {
-    if (props.data === undefined || props.data === null){
-      return
-    }} catch(e){ return }
-    for(let i = 0;i < props.data.length;i++){
-      ops.push(
-        {label : props.data[i]["title"] , value : props.data[i]["id"]}
-      )
-    }
-    setItems(ops)
-  } , [])
-
   return (
     <View style={{
       marginLeft : 5,
@@ -216,29 +202,25 @@ function DropDown(props : any){
       marginBottom : 0,
       zIndex : open ? 3000 : 1,
     }}>
-   
+
       <DropDownPicker
-        open={open}
-        value={value}
-        items={items}
-        onChangeValue={props.onChange}
-        style={{
+        data={items.map((item : any) => {
+          try {
+          if (props.data === undefined || props.data === null){
+            return
+          }} catch(e){ return }
+            return  {label : item["title"] , value : item["id"]} 
+          })
+        } 
+        title={"Options"}
+        onChange={props.onChange}
+        multiple={false}
+        range={{min : [], max : []}}
+        onPress={() => {}}
+        buttonStyle={{
           width : size.scale(120),
+          marginHorizontal : 0,
         }}
-        
-        setOpen={setOpen}
-        setValue={setValue}
-        setItems={setItems}
-        searchable={props.searchable}
-        textStyle={{
-          fontFamily: "Poppins",
-          fontSize: size.scale(12),
-        }}
-        placeholder={props.title}
-        placeholderStyle={{
-          fontSize: size.scale(14),
-        }}
-        {...props.other}
       />
     </View>
   )
