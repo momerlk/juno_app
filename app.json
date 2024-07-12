@@ -8,9 +8,9 @@
     "scheme": "myapp",
     "userInterfaceStyle": "dark",
     "splash": {
-      "image": "./app/assets/juno_text_splash.png",
+      "image": "./app/assets/juno_splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#000000"
+      "backgroundColor": "#C80321"
     },
     "ios": {
       "supportsTablet": false
@@ -18,7 +18,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./app/assets/juno.png",
-        "backgroundColor": "#000000"
+        "backgroundColor": "#C80321"
       },
       "package": "com.learnables.juno"
     },

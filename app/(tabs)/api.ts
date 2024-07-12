@@ -109,7 +109,7 @@ export class WSFeed extends WS {
     }
     
     if(this.open === false){
-      console.error(`resolving to http`)
+      console.log(`resolving to http`)
 
       // TODO : Post action to database
       let res = await postAction(data)

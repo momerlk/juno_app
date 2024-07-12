@@ -362,7 +362,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
                           fontFamily : "Poppins",
                           color : "#FF1D18",
                           marginHorizontal : 10,
-                        }}>{item.discount}% off</Text>
+                        }}>{item.discount}% Off</Text>
                         </>
                       )
                     } else {
@@ -699,7 +699,7 @@ interface ModalProps {
 
 function DropDown(props : any){
   const [open , setOpen] = useState(false);
-  const [value , setValue] = useState([]);
+  const [value , setValue] = useState<any>([]);
   const [items, setItems] = useState(props.data);
 
   const [lower, setLower] = useState("")
@@ -770,29 +770,140 @@ function DropDown(props : any){
               Price
           </Text>
           <View style={{
-            marginHorizontal : size.scale(12),
+            marginHorizontal : size.scale(6),
             flexDirection: 'row',
             alignItems: 'center',
-            justifyContent: 'space-around',
+            justifyContent: 'space-evenly',
           }}>
-              <TextInput
-                  placeholder="Price Min"
-                  placeholderTextColor={"white"}
-                  value={lower}
-                  
-                  onChangeText={text => setLower(text)}
-                  keyboardType="numeric"
-                  style={styles.input}
-              />
-              <TextInput
-                  placeholder="Price Max"
-                  placeholderTextColor={"white"}
-                  value={upper}
-                  onChangeText={text => setUpper(text)}
-                  keyboardType="numeric"
-                  
-                  style={styles.input}
-              />
+            {/* TODO : Replace with programmatic logic */}
+            <ScrollView style={{marginHorizontal : 10}}>
+              <Text style={{marginVertical : 10, fontSize : 18, fontFamily : "Poppins", color : "white", textAlign : "center"}}>
+                Min
+              </Text>
+              {[{
+                label : "500",
+                value : "500",},
+                {
+                label : "1000",
+                value : "1000",},
+                {
+                label : "2000",
+                value : "2000",},
+                {
+                label : "3000",
+                value : "3000",},
+              ].map((item : any) => {
+            const [selected , setSelected] = useState(false);
+            return <TouchableOpacity 
+              key={item.value}
+              style={{
+                backgroundColor : "#222222",
+                paddingVertical : 10,
+                paddingHorizontal : 8,
+                borderRadius : 5,
+                marginVertical : 5,
+                zIndex : 6000,
+              }} 
+              onPress={() => {
+                if(selected === true){
+                  setSelected(false);
+                  setLower("")
+                  return;
+                } 
+                setSelected(true)
+                setLower(item.value)
+                setValue([item.value , upper])
+                props.onChange(item.value , upper);
+              }}
+            >
+              <View style={{
+                display : "flex" , 
+                flexDirection : "row" , 
+                justifyContent : "space-between" , 
+                
+              }}>
+
+                <Text style={{
+                    fontSize : 17, 
+                    color : "white", 
+                    alignSelf : "center", 
+                    fontFamily : "Poppins", 
+                  }}>
+                  {item.label}
+                </Text>
+
+                {selected ? 
+                <AntDesign name="check" size={20} color="white" style={{marginTop : 3}}/> 
+                : <></>}
+              </View>
+          </TouchableOpacity>
+          })}
+          </ScrollView>
+          <ScrollView>
+            <Text style={{marginVertical : 10, fontSize : 18, fontFamily : "Poppins", color : "white", textAlign: "center"}}>
+                Max
+              </Text>
+          {/* TODO : Replace with programmatic logic */}
+              {[{
+                label : "1000",
+                value : "1000",},
+                {
+                label : "2000",
+                value : "2000",},
+                {
+                label : "3000",
+                value : "3000",},
+                {
+                label : "4000",
+                value : "4000",},
+              ].map((item : any) => {
+            const [selected , setSelected] = useState(false);
+            
+            return <TouchableOpacity 
+              key={item.value}
+              style={{
+                backgroundColor : "#222222",
+                paddingVertical : 10,
+                paddingHorizontal : 8,
+                borderRadius : 5,
+                marginVertical : 5,
+                zIndex : 6000,
+              }} 
+              onPress={() => {  
+                if(selected === true){
+                  setSelected(false);
+                  setUpper("")
+                  return;
+                } 
+                setSelected(true)
+                setUpper(item.value)
+                setValue([item.value , upper])
+                props.onChange(lower, item.value);
+              }}
+            >
+              <View style={{
+                display : "flex" , 
+                flexDirection : "row" , 
+                justifyContent : "space-between" , 
+                
+              }}>
+
+                <Text style={{
+                    fontSize : 17, 
+                    color : "white", 
+                    alignSelf : "center", 
+                    fontFamily : "Poppins", 
+                  }}>
+                  {item.label}
+                </Text>
+
+                {selected ? 
+                <AntDesign name="check" size={20} color="white" style={{marginTop : 3}}/> 
+                : <></>}
+              </View>
+          </TouchableOpacity>
+          })}
+          </ScrollView>
           </View> 
           </>
           : <></>}
@@ -814,7 +925,7 @@ function DropDown(props : any){
                   newValue = value.concat(item.value);
                   setSelected(true);
                 } else {
-                  newValue = value.filter(v => v !== item.value);
+                  newValue = value.filter((v : any) => v !== item.value);
                   setSelected(false);
                 }
                 setValue(newValue);

@@ -12,7 +12,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import PinchableCarousel from "./_image"
-import { Back , toTitle} from './(tabs)/_common';
+import { Back , toTitle, fmtPrice} from './(tabs)/_common';
 
 
 
@@ -22,8 +22,13 @@ const ProductDetail: React.FC<any> = () => {
   const params = useLocalSearchParams();
 
   const { 
-    title, vendor, description , images , variants , price, image_url , product_url
+    title, vendor, description , images , variants, discount, compare_price , price, image_url , product_url
   } = params; // TODO : cannot send arrays in params
+
+  let discountNum = 0;
+  if (discount !== undefined){
+    discountNum = parseInt(discount as string);
+  }
   
   const images_arr = (images as string).split(",");
 
@@ -52,6 +57,8 @@ const ProductDetail: React.FC<any> = () => {
     );
   };
 
+  const height = 400;
+
   return (
     <>
       <ScrollView style={{...styles.container , backgroundColor : "#121212"}}>
@@ -63,6 +70,62 @@ const ProductDetail: React.FC<any> = () => {
           <Text style={[styles.title , {fontFamily : "Poppins"}]}>{toTitle(title as string)}</Text>
           <Text style={{fontSize : 28, marginBottom : 20,color : "white" , fontFamily : "Poppins"}}>
             By {toTitle(vendor as string)}</Text>
+
+          <View style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}>
+
+                  {(() => {
+                    if (discountNum > 0 && parseInt(compare_price as string) > 0){
+                      return (
+                        <>
+
+                        <View style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                        }}>
+                          <Text style={{
+                            fontSize: 24,
+                            color : "white",
+                            fontFamily : "Poppins",
+                          }}>Rs. {fmtPrice(parseInt(price as string))}</Text>
+                          
+                          <Text style={{
+                              fontSize: 24,
+                              fontWeight : "bold",
+                              fontFamily : "Poppins",
+                              color : "white",
+                              marginHorizontal : 10,
+                              textDecorationLine : "line-through",
+                            }}>{fmtPrice(parseInt(compare_price as string))}</Text>
+                        </View>
+                        
+                        
+                        
+                        <Text style={{
+                          fontSize: 24,
+                          fontWeight : "bold",
+                          fontFamily : "Poppins",
+                          color : "#FF1D18",
+                          marginHorizontal : 10,
+                        }}>{discount}% Off</Text>
+                        </>
+                      )
+                    } else {
+                      return (
+                        <Text style={{
+                          fontSize: 24,
+                          color : "white",
+                          fontFamily : "Poppins",
+                          marginHorizontal : 10,
+                        }}>Rs. {fmtPrice(parseInt(price as string))}</Text>
+                      )
+                    }
+                  })()}
+                </View>
 
           {/* <View style={styles.sizeAndColorContainer}>
             <View style={styles.sizeContainer}>
