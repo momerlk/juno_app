@@ -22,18 +22,22 @@ import * as api from "../../api"
 
 export default function SettingsPage() {
   const [data , setData] = useState({
-    id : "",
-    avatar: "",
-    name: "",
-    number: "",
-    username: "",
-    email: "",
-    password: ""
+    id : "na",
+    avatar: "na",
+    name: "Not Available",
+    number: "Not Available",
+    username: "Not Available",
+    email: "Noat available",
+    password: "na"
   })
   useEffect(() => {
     (async () => {
+      try {
       const resp = await api.getDetails();
       setData(resp);
+      } catch (e){
+        alert(`failed to get user details, try logging in again or check your internet connection`)
+      }
     })()
   } , [])
   // TODO : Get User details from backend

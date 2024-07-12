@@ -211,6 +211,7 @@ export async function getProducts(n : number){
   const token = await AsyncStorage.getItem("token")
   if (token === null){
     alert(`Authenticate again`)
+    router.navigate("/sign-in")
     return null;
   }
   const requestOptions = {
@@ -287,6 +288,7 @@ export async function getLiked(){
   const token = await AsyncStorage.getItem("token")
   if (token === null){
     alert(`Authenticate again`)
+    router.navigate("/sign-in")
     return null;
   }
   const requestOptions = {
