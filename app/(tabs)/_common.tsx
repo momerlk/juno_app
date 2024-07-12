@@ -21,7 +21,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
-
 export class FastImageBackground extends React.Component<any , any> {
   render() {
     const { children , style = {}, imageStyle, ...props } = this.props

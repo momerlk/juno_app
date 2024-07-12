@@ -138,6 +138,7 @@ const ProductDetail: React.FC<any> = () => {
                     <Text style={{
                         fontSize: 24,
                         fontWeight : "bold",
+                        marginLeft : 20,
                         fontFamily : "Poppins",
                         color : "white",
                         textDecorationLine : "line-through",

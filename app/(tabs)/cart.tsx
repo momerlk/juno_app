@@ -1,58 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, ImageBackground, FlatList, Image, View, Text, ScrollView, Pressable, Button} from 'react-native';
+import { StyleSheet,
+  TouchableOpacity, ImageBackground, Dimensions, FlatList, Image, View, Text, ScrollView, Pressable, Button} from 'react-native';
 import * as Font from "expo-font";
 import {router} from "expo-router";
-import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import * as size from "react-native-size-matters";
-import {Logo, Loading} from "./_common"
+import {Logo, Loading, fmtPrice} from "./_common"
 
 import * as api from "./api"
 
-import {DropDown as DropDownPicker} from './_common';
+import {DropDown as DropDownPicker, toTitle, shortTitle} from './_common';
 
-function toTitle(str : string) : string {
-    if (str === undefined){
-      return ""
-    }
-    str = str.replaceAll("_" , " ");
-    const words = str.split(" ");
-    for (let i = 0; i < words.length; i++) {
-      try {
-        words[i] = words[i][0].toUpperCase() + words[i].substr(1);
-      } catch(e){
-        return ""
-      }
-    }
-
-    return words.join(" "); 
-  }
-
-  function shortTitle(str : string) : string {
-    if (str === undefined){
-      return ""
-    }
-    
-    const strTitle = toTitle(str);
-    str = (strTitle == "") ? str : strTitle;
-
-    const words = str.split(" ");
-    if(words.length < 3){
-      return str;
-    }
-
-    let three_words = [];
-
-    for(let i = 0;i < 3;i++){
-      if (words[i][0] === "("){
-        continue;
-      }
-      three_words.push(words[i])
-    }
-    return three_words.join(" ") + " ..." 
-  }
-
-
-
+const SCREEN_WIDTH = Dimensions.get("screen").width;
+const SCREEN_HEIGHT = Dimensions.get("screen").height;
 
 export default function CartPage() {
   const [data, setData] = useState<any>(mockData);
@@ -217,9 +176,16 @@ function DropDown(props : any){
         multiple={false}
         range={{min : [], max : []}}
         onPress={() => {}}
+        containerStyle={{
+          marginHorizontal :0,
+        }}
         buttonStyle={{
           width : size.scale(120),
           marginHorizontal : 0,
+          paddingVertical : 8,
+        }}
+        textStyle={{
+          fontSize : 16
         }}
       />
     </View>
@@ -233,6 +199,7 @@ function Card(props : any){
   // TODO : add proper quantity connected to backend
   const [quantity , setQuantity] = useState(1);
   const [id , setId] = useState("")
+  const [price , setPrice] = useState(props.item.price)
   
 
 
@@ -240,8 +207,8 @@ function Card(props : any){
     <View style={{display : "flex", flexDirection : "row"}}>
       <Image
               style={{
-                height : size.verticalScale(200), 
-                width : size.verticalScale(120),
+                minHeight : size.verticalScale(200), 
+                width : SCREEN_WIDTH/2,
                 marginHorizontal : size.moderateScale(8),
                 marginVertical : size.verticalScale(5),
                 borderRadius : 8,
@@ -253,18 +220,18 @@ function Card(props : any){
           <Text style={{
             color : "white",
             marginHorizontal : 10,
-            fontSize : 16,
+            fontSize : 18,
             fontFamily : "Poppins",
             width : size.scale(140),
             }}>
-              {props.item.title}
+              {shortTitle(props.item.title)}
             </Text> 
 
             <Text style={{
             color : "gray",
             marginHorizontal : 10,
             marginVertical : 6,
-            fontSize : 16,
+            fontSize : 18,
             fontFamily : "Poppins",
             width : size.scale(140),
             }}>
@@ -280,21 +247,43 @@ function Card(props : any){
             <Text style={{
               fontSize: 15, fontFamily: "Poppins",
               color : "white"
-            }}>Rs. {props.item.price}</Text>
+            }}>Rs. {fmtPrice(price * quantity)}</Text>
           </View>
         </View>
         
         <DropDown 
           title="Options"
-          onChange={(id : string) => {
-            setId(id) 
-            props.onChange(id , quantity)
+          onChange={(idParam : string) => {
+            setId(idParam) 
+
+            // update to price to match option
+            const variants = props.item.variants;
+            const idParsed = JSON.parse(idParam)
+            for(let i = 0;i < variants.length;i++){
+              const vId = parseInt(variants[i].id)
+              if (vId === idParsed){
+                setPrice(variants[i].price);
+              }
+            }
+
+
+            props.onChange(idParam , quantity)
           }}
           data={props.item.variants} 
         />
 
-        <View style={{marginTop : size.verticalScale(60),marginHorizontal : 10, display : "flex" , flexDirection : "row"}}>
-          <Pressable style={{width : 40, height : 40, borderRadius : 6}}
+        <View style={{
+          marginTop : size.verticalScale(60),
+          marginHorizontal : 10, 
+          display : "flex" , 
+          flexDirection : "row",
+          backgroundColor : "black",
+          borderColor : "white",
+          borderWidth : 1,
+          borderRadius : 10,
+          width : size.scale(100),
+        }}>
+          <TouchableOpacity style={{width : size.scale(35), height : size.scale(35), borderRadius : 6}}
             onPress={() => {
               if (quantity < 1){
                 return
@@ -306,10 +295,10 @@ function Card(props : any){
               props.onChange(id , quantity - 1)
             }}
           >
-            <Text style={{color : "gray", fontSize : 30, alignSelf : "center"}}>-</Text>
-          </Pressable>
-          <Text style={{marginHorizontal : 10, color : "white", fontSize : 23, alignSelf : "center"}}>{quantity}</Text>
-          <Pressable style={{width : 40, height : 40, borderRadius : 6}}
+            <Text style={{color : "gray", fontSize : 27, alignSelf : "center"}}>-</Text>
+          </TouchableOpacity>
+          <Text style={{marginHorizontal : 10, color : "white", fontSize : 20, alignSelf : "center"}}>{quantity}</Text>
+          <TouchableOpacity style={{width : size.scale(35), height : size.scale(35), borderRadius : 6}}
             onPress={() => {
               if (quantity > 8){
                 return
@@ -318,8 +307,8 @@ function Card(props : any){
               props.onChange(id , quantity + 1)
             }} 
           >
-            <Text style={{color : "gray", fontSize : 30, alignSelf : "center"}}>+</Text>
-          </Pressable>
+            <Text style={{color : "gray", fontSize : 27, alignSelf : "center"}}>+</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>

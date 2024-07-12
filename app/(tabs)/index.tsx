@@ -147,13 +147,13 @@ export class SwipeView extends React.Component<AppProps, AppState> {
         // TODO : optimise the number of renders even more
         if (Math.abs(dx) > Math.abs(dy)) {
           // Horizontal movement
-          if (dx > 80) {
+          if (dx > 60) {
             const newDirection = 'right';
             if (this.direction !== newDirection){
               this.setState({likeOpacity : 1, dislikeOpacity : 0, superLikeOpacity : 0})
               this.direction = newDirection;
             }
-          } else if (dx < -80) {
+          } else if (dx < -60) {
             const newDirection = 'left';
             if (this.direction !== newDirection){
               this.setState({likeOpacity : 0, dislikeOpacity : 1, superLikeOpacity : 0})
@@ -162,7 +162,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
           }
         } else {
           // Vertical movement
-          if (dy > 120) {
+          if (dy > 100) {
             const newDirection = 'down';
             this.direction = newDirection;
           } else if (dy < -110) {
@@ -208,7 +208,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
       Animated.spring(this.position, {
         toValue: { x: SCREEN_WIDTH + 100, y: gestureState.dy },
         useNativeDriver: true,
-        speed: 40, // Adjust speed for faster animation
+        speed: 80, // Adjust speed for faster animation
         bounciness: 0, // Remove bounciness for quicker completion
       }).start(() => {
         this.position.setValue({ x: 0, y: 0 });
@@ -226,7 +226,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
       Animated.spring(this.position, {
         toValue: { x: -SCREEN_WIDTH - 100, y: gestureState.dy },
         useNativeDriver: true,
-        speed: 40, // Adjust speed for faster animation
+        speed: 80, // Adjust speed for faster animation
         bounciness: 0, // Remove bounciness for quicker completion
       }).start(() => {
         this.position.setValue({ x: 0, y: 0 });
@@ -242,7 +242,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
       Animated.spring(this.position, {
         toValue: { x: gestureState.dx, y: -SCREEN_HEIGHT - 100 },
         useNativeDriver: true,
-        speed: 40, // Adjust speed for faster animation
+        speed: 80, // Adjust speed for faster animation
         bounciness: 0, // Remove bounciness for quicker completion
       }).start(() => {
         this.position.setValue({ x: 0, y: 0 });

@@ -17,7 +17,7 @@ import * as api from "./(tabs)/api";
 import {Feather, Ionicons} from "@expo/vector-icons"
 import {router} from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Back , FastImageBackground, asyncTimeout, fmtPrice} from "./(tabs)/_common";
+import { Back , FastImageBackground, asyncTimeout, fmtPrice, toTitle, shortTitle} from "./(tabs)/_common";
 
 
 const SCREEN_WIDTH = Dimensions.get("screen").width;
@@ -25,48 +25,6 @@ const SCREEN_WIDTH = Dimensions.get("screen").width;
 // TODO : Add backend data gettting logic
 // TODO : Add save progress logic
 
-
-
-function toTitle(str : string) : string {
-    if (str === undefined){
-      return ""
-    }
-    str = str.replaceAll("_" , " ");
-    const words = str.split(" ");
-    for (let i = 0; i < words.length; i++) {
-      try {
-        words[i] = words[i][0].toUpperCase() + words[i].substr(1);
-      } catch(e){
-        return ""
-      }
-    }
-
-    return words.join(" "); 
-  }
-
-  function shortTitle(str : string) : string {
-    if (str === undefined){
-      return ""
-    }
-    
-    const strTitle = toTitle(str);
-    str = (strTitle == "") ? str : strTitle;
-
-    const words = str.split(" ");
-    if(words.length < 3){
-      return str;
-    }
-
-    let three_words = [];
-
-    for(let i = 0;i < 3;i++){
-      if (words[i][0] === "("){
-        continue;
-      }
-      three_words.push(words[i])
-    }
-    return three_words.join(" ") + " ..." 
-  }
     
 function Card(props : any){
   // TODO : Load this specific item in feed
