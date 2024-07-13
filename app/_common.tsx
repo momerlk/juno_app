@@ -708,10 +708,10 @@ export function Filter(props : any){
                 
                 let price : any = {};
                 let priceSet = false;
-                if (lowerBound !== "") { 
+                if (lowerBound !== "" && lowerBound !== null) { 
                   price["$gte"] = parseInt(lowerBound);priceSet=true; 
                 }
-                if (upperBound !== "") { 
+                if (upperBound !== "" && upperBound !== null) { 
                   price["$lte"] = parseInt(upperBound);priceSet = true;
                 }
                 if (priceSet === true){filter["price"] = price }

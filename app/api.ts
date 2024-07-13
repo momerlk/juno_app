@@ -119,13 +119,26 @@ export class WSFeed extends WS {
 
       let products = null;
       if (query !== null){
-        products = await queryProducts(query.text , query.filter)
+        try {
+          console.error(`query = ${JSON.stringify(query)}`)
+          products = await queryProducts(query.text , query.filter)
+        } catch (e) {
+          console.error(`failed to get filter products , error = ${e}, query = ${JSON.stringify(query)}`)
+          alert(`failed to get filtered products, check your internet or report bug`)
+          return
+        }
       } else {
-        products = await getProducts(3); 
+        try {
+          products = await getProducts(2); 
+        } catch(e){
+          alert(`failed to get product recommendations , check your internet or report bug`)
+          return
+        }
       }
+      
        
       if (products === null){
-        alert(`failed to connect to server, check your internet or report bug`)
+        alert(`failed to get products data from server, check your internet or report bug`)
         return;
       }
       if (products.length === 0){
@@ -149,6 +162,7 @@ export function createQuery(text : any | null, filter : any | null){
 
   if (text === null && filter !== null){
     return {
+      text : "",
       filter : filter
     }
   }
@@ -242,10 +256,20 @@ export async function getProducts(n : number){
 }
 
 export async function queryProducts(text : string, filter : any){
-    await AsyncStorage.setItem("filter" , JSON.stringify(filter));
-    const resp = await fetch(base_url + "/query", {
+  const token = await AsyncStorage.getItem("token")
+  if (token === null){
+    alert(`Authenticate again`)
+    router.navigate("/sign-in")
+    return null;
+  }
+
+  await AsyncStorage.setItem("filter" , JSON.stringify(filter));
+  let resp = null;
+  try {
+    resp = await fetch(base_url + "/query", {
     method: "POST",
     headers: {
+        "Authorization" : token,
         "Content-Type" : "application/json",
     },
     body: JSON.stringify({
@@ -253,13 +277,27 @@ export async function queryProducts(text : string, filter : any){
         filter : filter,
     }),
     })
-    
-    const products = await resp.json();
-    if (products === null || products === undefined){
-        return null;
+  } catch(e){
+    console.error(`query products response failed error = ${e}`)
+  }
+  
+  if(resp !== null){
+    let products = null;
+    try {
+      const products = await resp.json();
+      if (products === null || products === undefined){
+          return null;
+      } 
     }
-
+    catch(e){
+      console.error(`failed to decode response, resp = ${JSON.stringify(resp)}`)
+      return null
+    }
+    
     return products;
+  }
+  
+  return null
 }
 
 export async function search(query : string){
