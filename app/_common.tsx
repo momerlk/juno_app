@@ -317,11 +317,11 @@ export const DropDown: React.FC<DropDownProps> = ({ data, type, range, selected,
     onChange([itemValue]);
   };
 
-  const renderRangeItem = ({ item }: { item: {id : string, label: string; value: any } }, isMin: boolean) => {
+  const renderRangeItem = ({ item }: { item: {label: string; value: any } }, isMin: boolean) => {
     const isSelected = (isMin ? lower : upper) === item.value;
     return (
       <TouchableOpacity
-        key={item.id}
+        key={item.value}
         style={{
           backgroundColor: "#222222",
           paddingVertical: 10,
@@ -423,7 +423,7 @@ export const DropDown: React.FC<DropDownProps> = ({ data, type, range, selected,
               <FlatList
                 data={range?.min}
                 renderItem={(item) => renderRangeItem(item, true)}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => item.value}
               />
               <Text style={{ marginVertical: 5, fontSize: 17, fontFamily: "Poppins", color: "white", textAlign: "center" }}>
                 Max
@@ -431,7 +431,7 @@ export const DropDown: React.FC<DropDownProps> = ({ data, type, range, selected,
               <FlatList
                 data={range?.max}
                 renderItem={(item) => renderRangeItem(item, false)}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => item.value}
               />
             </>
           ) : (
@@ -540,9 +540,9 @@ export function Filter(props : any){
     marginBottom = (SCREEN_HEIGHT * 0.2) + tabBarHeight;
   }
 
-  const [priceRange , setPriceRange] = useState({
-    min : [{id : "1", label : "0", value : "0"},], 
-    max : [{id : "2", label : "No Limit", value : "100000000"}]
+  const [priceRange , setPriceRange] = useState<any>({
+    min : [{id : "1", label : "0", value : null},], 
+    max : [{id : "2", label : "No Limit", value : null}]
   })
   // TODO : Get dropdown options from backend like brands etc. 
   useEffect(() => {
@@ -574,17 +574,37 @@ export function Filter(props : any){
       
     })()
 
-    for(let i = 1;i < 10;i++){
+
+
+    // major bug fix for duplicate values
+    let minValues : any[] = [];
+    let maxValues : any[] = [];
+    try {
+      if (priceRange.max.length > 2){
+        return;
+      } 
+      if(priceRange.min.length > 2){
+        return;
+      }
+    } catch(e){}
+
+    for(let i = 1;i < 20;i++){
       let value = (i) * 1000
       let minValue = value-500;
       let maxValue = value+500;
 
+      if(minValues.indexOf(minValue) !== -1) {continue}
+      if(maxValues.indexOf(maxValue) !== -1) {continue}
+
+      minValues.push(minValue);
+      maxValues.push(maxValue);
+
 
       priceRange.min.push({
-        id : `${Math.random()}-${Math.random()}`, label : `${minValue}`, value : `${minValue}`
+        label : `${minValue}`, value : `${minValue}`
       });
       priceRange.max.push({
-        id : `${Math.random()}-${Math.random()}`,label : `${maxValue}`, value : `${maxValue}`
+        label : `${maxValue}`, value : `${maxValue}`
       });
 
     }
