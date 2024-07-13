@@ -120,7 +120,6 @@ export class WSFeed extends WS {
       let products = null;
       if (query !== null){
         try {
-          console.error(`query = ${JSON.stringify(query)}`)
           products = await queryProducts(query.text , query.filter)
         } catch (e) {
           console.error(`failed to get filter products , error = ${e}, query = ${JSON.stringify(query)}`)
@@ -131,18 +130,18 @@ export class WSFeed extends WS {
         try {
           products = await getProducts(2); 
         } catch(e){
-          alert(`failed to get product recommendations , check your internet or report bug`)
+          console.error(`failed to get product recommendations , check your internet or report bug`)
           return
         }
       }
       
        
       if (products === null){
-        alert(`failed to get products data from server, check your internet or report bug`)
+        console.error(`failed to get products data from server, check your internet or report bug`)
         return;
       }
       if (products.length === 0){
-        alert(`failed to connect to server, check your internet or report bug`)
+        console.error(`failed to get recommendations, product array is empty, check your internet or report bug`)
         return;
       }
       this.onMessage(products)
@@ -264,9 +263,7 @@ export async function queryProducts(text : string, filter : any){
   }
 
   await AsyncStorage.setItem("filter" , JSON.stringify(filter));
-  let resp = null;
-  try {
-    resp = await fetch(base_url + "/query", {
+  const resp = await fetch(base_url + "/query", {
     method: "POST",
     headers: {
         "Authorization" : token,
@@ -276,24 +273,10 @@ export async function queryProducts(text : string, filter : any){
         text : text,
         filter : filter,
     }),
-    })
-  } catch(e){
-    console.error(`query products response failed error = ${e}`)
-  }
-  
-  if(resp !== null){
-    let products = null;
-    try {
-      const products = await resp.json();
-      if (products === null || products === undefined){
-          return null;
-      } 
-    }
-    catch(e){
-      console.error(`failed to decode response, resp = ${JSON.stringify(resp)}`)
-      return null
-    }
-    
+  })
+
+  if(resp.status === 200){
+    let products = await resp.json();
     return products;
   }
   

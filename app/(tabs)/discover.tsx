@@ -316,7 +316,10 @@ export default class Home extends React.Component<{},HomeState> {
     return (
       <View style={{flex : 1, backgroundColor : "black"}}>
         <View style={{marginTop : size.verticalScale(10)}}></View>
-        <Pressable onPress={() => this.setState({query : ""})} style={{
+        <Pressable onPress={async () => {
+          await AsyncStorage.setItem("filter" , "")
+          this.setState({query : ""})
+        }} style={{
           display : "flex" , flexDirection : "row", marginBottom : 7, marginTop : 15 , paddingTop : 20
           }}>
           <View  

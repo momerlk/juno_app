@@ -113,6 +113,49 @@ export function Loading(){
   )
 }
 
+interface TrimResult {
+    trimmedArray: any[];
+    updatedIndex: number;
+}
+
+export function trimArray(array: any[], currentIndex: number): TrimResult {
+  const minItemsBefore = 10;
+  const minItemsAfter = 40;
+
+  // Ensure array is at least 50 items long
+  if (array.length < 50) {
+      return {
+          trimmedArray: array,
+          updatedIndex: currentIndex
+      };
+  }
+
+  // Calculate start and end indices for the trimmed array
+  let start = currentIndex - minItemsBefore;
+  let end = currentIndex + minItemsAfter;
+
+  // Adjust start and end indices if they exceed array boundaries
+  if (start < 0) {
+      start = 0;
+  }
+  if (end > array.length) {
+      end = array.length;
+  }
+
+  // Get the trimmed array slice
+  const trimmedArray = array.slice(start, end);
+
+  // Calculate updated index based on trimming
+  const updatedIndex = currentIndex - start;
+
+  // Return the trimmed array and updated index
+  return {
+      trimmedArray: trimmedArray,
+      updatedIndex: updatedIndex
+  };
+}
+
+
 export function toTitle(str: string | undefined): string {
   if (!str) {
     return "";
