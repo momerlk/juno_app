@@ -437,6 +437,7 @@ export const DropDown: React.FC<DropDownProps> = ({ data, type, range, selected,
           ) : (
             <FlatList
               data={items}
+              showsVerticalScrollIndicator={true}
               renderItem={renderItem}
               keyExtractor={(item) => item.value.toString()}
             />

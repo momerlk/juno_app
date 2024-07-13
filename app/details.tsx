@@ -187,8 +187,7 @@ const ProductDetail: React.FC<any> = () => {
                     "product_id" : `${product_id}`,
                 }
               )
-              await asyncTimeout(500)
-              setTimeout(() => router.navigate("/(tabs)/cart"), 70)
+              setTimeout(() => router.navigate("/(tabs)/cart"), 120)
             }}
           style={{
             marginVertical : 0,
@@ -207,7 +206,6 @@ const ProductDetail: React.FC<any> = () => {
         </View>
         
       </ScrollView>
-      {_renderBottom()}
     </>
   );
 };

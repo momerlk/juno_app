@@ -594,7 +594,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
           <View style={{position : "absolute" , top : size.verticalScale(50), display : "flex" , flexDirection : "row"}}>
             <Logo />
           </View> 
-          <TouchableOpacity onPress={() => router.navigate("/liked")} style={{margin : 10, position : "absolute",top: size.verticalScale(25),right : 10,}}>
+          <TouchableOpacity onPress={() => router.navigate("/liked")} style={{margin : 10, position : "absolute",top: size.verticalScale(35),right : 10,}}>
             <Feather name="heart" size={35} color="white" /> 
           </TouchableOpacity>
         </>
@@ -865,7 +865,7 @@ export default class App extends React.Component<any , any> {
       <>
         <SwipeView
           paddingTop={size.verticalScale(70)}
-          height={(SCREEN_HEIGHT * 0.885) - tabBarHeight}
+          height={(SCREEN_HEIGHT * 0.88) - tabBarHeight}
           cards={this.state.products.length === 0 ? this.state.mock : this.state.products}
           onSwipe={this.handleSwipe}
           onUndo={() => this.setState({currentIndex : this.state.currentIndex - 1})}
