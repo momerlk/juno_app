@@ -408,6 +408,12 @@ export class SwipeView extends React.Component<AppProps, AppState> {
       if (i < this.state.currentIndex) {
         return null;
       } else if (i === this.state.currentIndex) {
+        try {
+          if (item.status === 500 || item.status === "500"){
+            alert(`could not get recommendations`)
+            return <></>
+          }
+        } catch(e){}
         return (
           <Animated.View
             {...this.PanResponder.panHandlers}

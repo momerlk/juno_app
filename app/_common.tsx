@@ -245,6 +245,7 @@ interface DropDownProps {
   data: { label: string; value: any }[];
   type?: 'range' | "standard" | string;
   range?: any;
+  selected : any | null;
   onChange: Function;
   onPress : Function | undefined;
   containerStyle? : object;
@@ -254,12 +255,32 @@ interface DropDownProps {
   multiple?: boolean;
 }
 
-export const DropDown: React.FC<DropDownProps> = ({ data, type, range, onChange, containerStyle, buttonStyle, textStyle, title, multiple = false }) => {
+export const DropDown: React.FC<DropDownProps> = ({ data, type, range, selected, onChange, containerStyle, buttonStyle, textStyle, title, multiple = false } : any) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<any[]>([]);
   const [items, setItems] = useState(data);
   const [lower, setLower] = useState("");
   const [upper, setUpper] = useState("");
+
+  useEffect(() => {
+    if (type === "range" && selected !== null){   
+      if(selected.lower !== null && selected.upper !== null){
+        setValue([lower,upper])
+        setLower(lower)
+        setUpper(upper)
+      }
+      else if (selected.lower !== null) {
+        setLower(selected.lower)
+        setValue([lower])
+      }
+      else if (selected.upper !== null) {
+        setUpper(selected.upper)
+        setValue([upper])
+      }
+    } else if (selected !== null){
+      setValue(selected)
+    }
+  } , []) 
 
   const SCREEN_HEIGHT = Platform.OS === "ios" || Platform.OS === "android" ? 800 : 600; // Mock screen height
   const tabBarHeight = 50; // Mock tab bar height
@@ -296,11 +317,11 @@ export const DropDown: React.FC<DropDownProps> = ({ data, type, range, onChange,
     onChange([itemValue]);
   };
 
-  const renderRangeItem = ({ item }: { item: { label: string; value: any } }, isMin: boolean) => {
+  const renderRangeItem = ({ item }: { item: {id : string, label: string; value: any } }, isMin: boolean) => {
     const isSelected = (isMin ? lower : upper) === item.value;
     return (
       <TouchableOpacity
-        key={item.value}
+        key={item.id}
         style={{
           backgroundColor: "#222222",
           paddingVertical: 10,
@@ -321,7 +342,7 @@ export const DropDown: React.FC<DropDownProps> = ({ data, type, range, onChange,
     );
   };
 
-  const renderItem = ({ item }: { item: { label: string; value: any } }) => {
+  const renderItem = ({ item }: { item: {image : string | undefined , label: string; value: any } }) => {
     const isSelected = value.includes(item.value);
     return (
       <TouchableOpacity
@@ -344,12 +365,32 @@ export const DropDown: React.FC<DropDownProps> = ({ data, type, range, onChange,
             setOpen(false);
           }
         }}
-      >
+      > 
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text style={{ fontSize: 17, color: "white", fontFamily: "Poppins" }}>
-            {item.label}
-          </Text>
-          {isSelected && <AntDesign name="check" size={20} color="white" style={{ marginTop: 3 }} />}
+
+          <View style={{
+            display : "flex",
+            flexDirection : "row",
+          }}>
+
+            {item.image !== undefined ?
+            <Image source={{uri : item.image}} 
+            style={{
+              height: 40,
+              width: 40,
+              borderRadius: 50,
+              marginTop: 3,
+              marginRight: 7,
+              backgroundColor : "white",
+            }}/> 
+            : <></>}
+
+            <Text style={{ fontSize: 17, marginTop : 8, marginLeft : 4, color: "white", fontFamily: "Poppins" }}>
+              {item.label}
+            </Text>
+          </View>
+
+          {isSelected && <AntDesign name="check" size={20} color="white" style={{ marginTop: 8 }} />}
         </View>
       </TouchableOpacity>
     );
@@ -382,7 +423,7 @@ export const DropDown: React.FC<DropDownProps> = ({ data, type, range, onChange,
               <FlatList
                 data={range?.min}
                 renderItem={(item) => renderRangeItem(item, true)}
-                keyExtractor={(item) => item.value.toString()}
+                keyExtractor={(item) => item.id}
               />
               <Text style={{ marginVertical: 5, fontSize: 17, fontFamily: "Poppins", color: "white", textAlign: "center" }}>
                 Max
@@ -390,7 +431,7 @@ export const DropDown: React.FC<DropDownProps> = ({ data, type, range, onChange,
               <FlatList
                 data={range?.max}
                 renderItem={(item) => renderRangeItem(item, false)}
-                keyExtractor={(item) => item.value.toString()}
+                keyExtractor={(item) => item.id}
               />
             </>
           ) : (
@@ -476,10 +517,10 @@ export const deepEqual = (obj1 : any, obj2 : any) => {
 export function Filter(props : any){
 
   const [category , setCategory] = useState("");
-  const [brands , setBrands] = useState("");
-  const [color , setColor] = useState("");
-  const [lowerBound, setLowerBound] = useState('');
-  const [upperBound, setUpperBound] = useState('');
+  const [brands , setBrands] = useState<any>(null);
+  const [color , setColor] = useState<any>("");
+  const [lowerBound, setLowerBound] = useState<any>(null);
+  const [upperBound, setUpperBound] = useState<any>(null);
   const [filterData , setFilter] = useState<any>({brands : [
     {"label" : "Can't load brands", "value" : "none"},
   ]})
@@ -500,48 +541,57 @@ export function Filter(props : any){
   }
 
   const [priceRange , setPriceRange] = useState({
-    min : [{label : "0", value : "0"},], 
-    max : [{label : "No Limit", value : "100000000"}]
+    min : [{id : "1", label : "0", value : "0"},], 
+    max : [{id : "2", label : "No Limit", value : "100000000"}]
   })
   // TODO : Get dropdown options from backend like brands etc. 
   useEffect(() => {
     (async () => {
       const data = await api.getFilter();
+      
+      // TODO : Save filter progress
+      const filterString = await AsyncStorage.getItem("filter");
+      let oldFilter = null;
+      if (filterString !== null){
+        try {
+        oldFilter = await JSON.parse(filterString);
+        } catch (e){}
+      }
+      if(oldFilter !== null){
+        try {
+          setBrands(oldFilter["vendor"]["$in"]);
+        } catch (e) {
+        }
+        try {
+        setLowerBound(oldFilter.price["$gte"])
+        setUpperBound(oldFilter.price["$lte"])
+        } catch (e) {}
+      }
+      
       if (data !== null){
         setFilter(data);
       }
       
     })()
 
-    
-    for(let i = 1;i < 20;i++){
+    for(let i = 1;i < 10;i++){
       let value = (i) * 1000
+      let minValue = value-500;
+      let maxValue = value+500;
+
+
       priceRange.min.push({
-        label : `${value-500}`, value : `${value-1}`
+        id : `${Math.random()}-${Math.random()}`, label : `${minValue}`, value : `${minValue}`
       });
       priceRange.max.push({
-        label : `${value+500}`, value : `${value+1}`
+        id : `${Math.random()}-${Math.random()}`,label : `${maxValue}`, value : `${maxValue}`
       });
+
     }
     setPriceRange(priceRange);
 
-    // const discountRange = {min : [
-    //   {label : "0", value : "0"},
-    // ], max : []}
-    // for(let i = 1;i < 15;i++){
-    //   let value = (i/2) * 10
-    //   priceRange.min.push({
-    //     label : `${value-1}`, value : `${value-1}`
-    //   });
-    //   priceRange.min.push({
-    //     label : `${value+1}`, value : `${value+1}`
-    //   });
-    // }
 
-    
-
-
-  }, [])
+  }, [props.modalVisible])
 
   return (
     
@@ -583,6 +633,7 @@ export function Filter(props : any){
               data : [
                 {label: 'Clothes', value: 'clothes'},
               ], 
+              selected : null,
               range : {min : [1] , max : [1]},
               multiple : true, 
               type : "standard",
@@ -593,6 +644,7 @@ export function Filter(props : any){
               title : "Brands", 
               data : filterData.brands, 
               multiple : true,
+              selected : brands,
               type : "searchable",
               range : {min : [1] , max : [1]},
               onChange : (t : any) => setBrands(t),
@@ -601,6 +653,7 @@ export function Filter(props : any){
               id : 3,
               title : "Price", 
               data : [],
+              selected : lowerBound !== null || upperBound !== null ? {lower : lowerBound , upper : upperBound} : null,
               range : priceRange, 
               multiple : false,
               type : "range", 
@@ -614,6 +667,7 @@ export function Filter(props : any){
               type={item.type}
               range={item.range}
               multiple={item.multiple}
+              selected={item.selected}
               onPress={() => {}}
             /> } 
           // TODO : Test this fully
@@ -627,7 +681,7 @@ export function Filter(props : any){
                 props.setModalVisible(false);
                 
                 let filter : any = {};
-                if (brands !== "") {
+                if (brands !== "" && brands !== null) {
                   filter["vendor"] = {"$in" : brands}
                 }
                 
@@ -640,10 +694,17 @@ export function Filter(props : any){
                   price["$lte"] = parseInt(upperBound);priceSet = true;
                 }
                 if (priceSet === true){filter["price"] = price }
+
+
                 const filterString = await AsyncStorage.getItem("filter");
                 let oldFilter = null;
                 if (filterString !== null){
+                  try {
                   oldFilter = await JSON.parse(filterString);
+                  }
+                  catch (e){
+
+                  }
                 }
                 if(oldFilter !== null){
                   if (deepEqual(oldFilter , filter) === true){
@@ -677,7 +738,11 @@ export function Filter(props : any){
                 const filterString = await AsyncStorage.getItem("filter");
                 let oldFilter = null;
                 if (filterString !== null){
+                  try {
                   oldFilter = await JSON.parse(filterString);
+                  } catch(e){
+
+                  }
                 } else {
                   return;
                 }
