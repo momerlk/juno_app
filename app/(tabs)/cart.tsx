@@ -66,14 +66,29 @@ const fetchFonts = () => {
   });
 };
 
+// TODO : create an api endpoint /cartupdate which just updates the cart based on these actions
 
+const deleteAction = "deleted_from_cart"
 
 export function Cart (props : any) { 
-  const vendor_data = props.item;
+  const vendor_data = props.item
+  const [items, setItems] = useState(props.item.items);
   // TODO : replace with actual shopify permalink
   const [uri, setUri] = useState("")
 
   const [order, setOrder] = useState<any>({})
+
+  const handleDelete = async (productId : string) => {
+    // Filter out the item to be deleted
+    await api.postAction({
+        "user_id" : "",
+        "action_type" : deleteAction,
+        "action_timestamp" : "",
+        "product_id" : `${productId}`
+    }) 
+    const updatedItems = items.filter((item : any) => item.product_id !== productId);
+    setItems(updatedItems);
+  }; 
 
 
   // TODO : add delete and update functions and connect them to server
@@ -88,7 +103,7 @@ export function Cart (props : any) {
           numColumns={1}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
-          data={vendor_data.items}
+          data={items}
           keyExtractor={(item) => {
             const p_url : string = item.product_url;
             const urlObject = new URL(p_url);
@@ -97,6 +112,7 @@ export function Cart (props : any) {
             return item.product_id;
           }}
           renderItem={({ item }) => <Card item={item}
+              onDelete={() => handleDelete(item.product_id)}
               onChange={(id : string , quantity : number) => {
                 
                 if (id !== "null" && id !== null){
@@ -173,6 +189,7 @@ function DropDown(props : any){
         } 
         title={"Options"}
         onChange={props.onChange}
+        selected={null}
         multiple={false}
         range={{min : [], max : []}}
         onPress={() => {}}
@@ -250,6 +267,8 @@ function Card(props : any){
             }}>Rs. {fmtPrice(price * quantity)}</Text>
           </View>
         </View>
+
+        
         
         <DropDown 
           title="Options"
@@ -271,6 +290,14 @@ function Card(props : any){
           }}
           data={props.item.variants} 
         />
+
+        <TouchableOpacity style={{marginLeft : 10}} onPress={props.onDelete}>
+          <Text style={{
+
+              fontSize: 18, fontFamily: "Poppins",
+              color : "#FF2C2C",
+            }}>Delete</Text>
+        </TouchableOpacity>
 
         <View style={{
           marginTop : size.verticalScale(60),

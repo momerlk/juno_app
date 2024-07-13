@@ -772,6 +772,9 @@ export function Filter(props : any){
                   }
                 }
                 // TODO : clear all items
+                setBrands(null)
+                setLowerBound(null)
+                setUpperBound(null)
                 await AsyncStorage.setItem("filter" , "")
                 props.onConfirm({})
                 

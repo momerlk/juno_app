@@ -39,6 +39,7 @@ function DropDown(props : any){
         title={"Options"}
         onChange={props.onChange}
         multiple={false}
+        selected={null}
         range={{min : [], max : []}}
         onPress={() => {}}
         containerStyle={{
@@ -78,22 +79,21 @@ const ProductDetail: React.FC<any> = () => {
   const _renderBottom = () => {
     return (
       <View style={{...styles.bottomButtons, backgroundColor : "#121212"}}>
-        <Pressable
+        <PrimaryButton
           onPress={() => {
-            router.navigate({
-              pathname : "/browser",
-              params : {
-                uri : product_url as string,
-              }
-            })
-          }}
+              router.navigate({
+                pathname : "/browser",
+                params : {
+                  uri : product_url as string,
+                }
+              })
+            }}
           style={{
-            ...styles.addButton,
-            backgroundColor : "white",
-          }}>
-          <Text style={styles.buttonLabel}>Check Website</Text>
-        </Pressable>
-        <Text style={styles.price}>{`Rs. ${price}`}</Text>
+            marginVertical : 0,
+          }} 
+          text="Check Website" 
+        />
+        
       </View>
     );
   };
@@ -167,7 +167,12 @@ const ProductDetail: React.FC<any> = () => {
             })()}
           </View>
 
-
+          <DropDown 
+            title="Options"
+            onChange={(id : string) => {
+            }}
+            data={variants} 
+          />
 
           <View style={{...styles.section}}>
             <Text style={styles.sectionTitle}>Details</Text>
@@ -176,16 +181,11 @@ const ProductDetail: React.FC<any> = () => {
 
  
 
-          <DropDown 
-            title="Options"
-            onChange={(id : string) => {
-            }}
-            data={variants} 
-          />
+          
         </View>
         
       </ScrollView>
-      
+      {_renderBottom()}
     </>
   );
 };
