@@ -679,15 +679,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
             </TouchableOpacity>
 
 
-          <TouchableOpacity style={{
-              marginHorizontal: 15,
-              width: size.scale(45),
-              height: size.scale(45),
-              borderRadius: size.scale(25), // Half of the width/height to make it a circle
-              backgroundColor: "white",
-              justifyContent: "center", // Center vertically
-              alignItems: "center", // Center horizontally
-            }}
+          <TouchableOpacity
             onPress={() => {
                 // TODO : add share functionality 
                 // this.setState({shareVisible : true})
@@ -699,10 +691,21 @@ export class SwipeView extends React.Component<AppProps, AppState> {
                     data : JSON.stringify(this.props.cards[this.state.currentIndex])
                   },
                 })
-            }} 
+            }}  
+          >
+          <LinearGradient style={{
+              marginHorizontal: 15,
+              width: size.scale(50),
+              height: size.scale(50),
+              borderRadius: size.scale(25), // Half of the width/height to make it a circle
+              justifyContent: "center", // Center vertically
+              alignItems: "center", // Center horizontally
+            }}
+            colors={["#F9CE34", "#EE2A7B","#6228D7"]}
             >
-              <Entypo name="paper-plane" size={size.scale(26)} color="black" />
-            </TouchableOpacity>
+              <AntDesign name="instagram" size={size.scale(26)} color="white" />
+            </LinearGradient>
+          </TouchableOpacity>
         </View>
       : <></>}
       </View>

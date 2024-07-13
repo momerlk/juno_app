@@ -5,15 +5,16 @@ import { useWindowDimensions } from 'react-native';
 
 import {router, useLocalSearchParams} from "expo-router";
 
-import { ImageBackground, Pressable } from 'react-native';
+import { ImageBackground, Pressable, TouchableOpacity } from 'react-native';
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import PinchableCarousel from "./_image"
-import { Back , toTitle, fmtPrice, DropDown as DropDownPicker, PrimaryButton, SecondaryButton} from './_common';
+import { Back , toTitle, fmtPrice, DropDown as DropDownPicker, PrimaryButton, SecondaryButton, asyncTimeout} from './_common';
 
 import * as size from "react-native-size-matters"
+import * as api from "./api"
 
 function DropDown(props : any){
   const [open , setOpen] = useState(false);
@@ -64,8 +65,9 @@ const ProductDetail: React.FC<any> = () => {
   } = params; // TODO : cannot send arrays in params
 
   const item = JSON.parse(data as string)
-  const { title, vendor, description , images , variants, discount, compare_price , price, image_url , product_url } = item
+  const { title, vendor, description , images , variants, discount, compare_price , price, image_url , product_url, product_id} = item
 
+  const [quantity , setQuantity] = useState(1)
 
   let discountNum = 0;
   if (discount !== undefined){
@@ -78,7 +80,7 @@ const ProductDetail: React.FC<any> = () => {
 
   const _renderBottom = () => {
     return (
-      <View style={{...styles.bottomButtons, backgroundColor : "#121212"}}>
+      <View style={{...styles.bottomButtons, backgroundColor : "#121212", borderTopWidth : 1, borderColor : "white"}}>
         <PrimaryButton
           onPress={() => {
               router.navigate({
@@ -99,6 +101,8 @@ const ProductDetail: React.FC<any> = () => {
   };
 
   const height = 400;
+
+  // TODO : 
 
   return (
     <>
@@ -173,13 +177,31 @@ const ProductDetail: React.FC<any> = () => {
             }}
             data={variants} 
           />
+          <SecondaryButton
+          onPress={async () => {
+              await api.postAction(
+                {
+                    "user_id" : "",
+                    "action_type" : "added_to_cart",
+                    "action_timestamp" : "",
+                    "product_id" : `${product_id}`,
+                }
+              )
+              await asyncTimeout(500)
+              setTimeout(() => router.navigate("/(tabs)/cart"), 70)
+            }}
+          style={{
+            marginVertical : 0,
+          }} 
+          text="Add to Cart" 
+        />
 
           <View style={{...styles.section}}>
             <Text style={styles.sectionTitle}>Details</Text>
             <Text style={[styles.description , {fontFamily : "Poppins"}]}>{description}</Text>
           </View>
 
- 
+          
 
           
         </View>
@@ -279,7 +301,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: scale(20),
+    paddingHorizontal: scale(20),
+    paddingBottom : 10,
   },
   addButton: {
     paddingVertical: scale(10),
