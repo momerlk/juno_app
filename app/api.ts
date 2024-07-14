@@ -201,16 +201,27 @@ export async function signIn(email : string, password : string){
     }
 }
 
-export async function signUp(email : string, number : string, password : string){
+export interface SignUpData {
+  email : string;
+  age : number; 
+  gender : string;
+  password : string;
+  username : string;
+  number : string;
+}
+export async function signUp(accountData : SignUpData){
     const response = await fetch(base_url + '/signUp', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            "email" : email,
-            "phone_number" : number  , 
-            "password" : password,
+            "email" : accountData.email,
+            "phone_number" : accountData.number  , 
+            "username" : accountData.username,
+            "gender" : accountData.gender,
+            "age" : accountData.age,
+            "password" : accountData.password,
         })
     });
 

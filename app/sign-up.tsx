@@ -1,4 +1,6 @@
-import { View, Text, Image, Pressable, TextInput, TouchableOpacity, StyleProp, ViewStyle, TextInputProps, NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
+import { View, Text, Image, Pressable,
+   TextInput, TouchableOpacity,
+    ScrollView} from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from "react-native-safe-area-context";
 import COLORS from './constants/colors';
@@ -9,6 +11,8 @@ import {router} from "expo-router"
 
 import * as Font from "expo-font";
 import * as api from "./api"
+import * as size from "react-native-size-matters"
+import { PrimaryButton, SecondaryButton, DropDown as DropDownPicker } from './_common';
 
 const fetchFonts = () => {
   return Font.loadAsync({
@@ -25,10 +29,16 @@ const Signup = () => {
   const [isChecked, setIsChecked] = useState(false);
 
   const [password , setPassword] = useState("");
+  const [confirmPassword , setConfirmPassword] = useState("")
   const [email , setEmail] = useState("");
+  const [username, setUsername] = useState("")
   const [number , setNumber] = useState("")
+  const [gender , setGender] = useState("") 
+  const [age, setAge] = useState(0) 
+  const [dateOfBirth , setDateOfBirth] = useState("")
+  
   const [message , setMessage] = useState("")
-
+  
   useEffect(() => {
     fetchFonts();
   }, [])
@@ -36,10 +46,20 @@ const Signup = () => {
   const handleSignup = async () => {
         // e.preventDefault();
         try {
-            await api.signUp(email , number , password);
+            await api.signUp({
+              username : username,
+              email : email,
+              password : password,
+              number : number,
+              age : age,
+              gender : gender,
+            });
             setEmail("")
             setNumber("")
             setPassword("")
+            setEmail("")
+            setAge(0)
+            setGender("")
         } catch (error : any) {
             setMessage('Error: ' + error.message);
         }
@@ -47,21 +67,24 @@ const Signup = () => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#121212"}}>
-      <View style={{ flex: 1, marginHorizontal: 22 }}>
+      <ScrollView style={{ flex: 1, marginHorizontal: 22, paddingBottom : 100}}
+        showsVerticalScrollIndicator={false} 
+      >
         <View style={{ marginVertical: 22 }}>
           <Text style={{
             fontSize: 22,
             fontWeight: 'bold',
+            fontFamily : "Poppins",
             marginVertical: 12,
             color: "white"
           }}>
-            Create Account
+            Create Your Account
           </Text>
 
           <Text style={{
             fontSize: 16,
-            color: "white"
-          }}>Shopping at your fingertips!</Text>
+            color: "white",
+          }}>Fill in all the details below to create your account!</Text>
         </View>
 
 
@@ -75,13 +98,8 @@ const Signup = () => {
 
           <View style={{
             width: "100%",
-            height: 48,
-            borderColor: "white",
-            borderWidth: 1,
-            borderRadius: 8,
             alignItems: "center",
             justifyContent: "center",
-            paddingLeft: 22
           }}>
             <TextInput
               placeholder='Enter your email address'
@@ -90,7 +108,50 @@ const Signup = () => {
               keyboardType='email-address'
               style={{
                 width: "100%",
-                color : "white",
+                color: "white",
+                fontSize : 16,
+                fontFamily : "Montserrat",
+                backgroundColor : "#222222",
+                height: 48,
+                borderRadius: 8,
+                alignItems: "center",
+                justifyContent: "center",
+                paddingLeft: 22
+              }}
+            />
+          </View>
+        </View>
+
+        <View style={{ marginBottom: 12 }}>
+          <Text style={{
+            fontSize: 16,
+            fontWeight: '400',
+            marginVertical: 8,
+            color : "white"
+          }}>Username </Text>
+
+          <View style={{
+            width: "100%",
+            alignItems: "center",
+            justifyContent: "center",
+          }}>
+            <TextInput
+              placeholder='Enter your username'
+              value={username}
+              onChangeText={(text : string) => setUsername(text)}
+              placeholderTextColor={"white"}
+              keyboardType='default'
+              style={{
+                width: "100%",
+                color: "white",
+                fontSize : 16,
+                fontFamily : "Montserrat",
+                backgroundColor : "#222222",
+                height: 48,
+                borderRadius: 8,
+                alignItems: "center",
+                justifyContent: "center",
+                paddingLeft: 22
               }}
             />
           </View>
@@ -102,30 +163,31 @@ const Signup = () => {
             fontWeight: '400',
             marginVertical: 8,
             color : "white",
-          }}>Mobile Number</Text>
+          }}>Mobile Number </Text>
 
           <View style={{
             width: "100%",
-            height: 48,
-            borderColor: "white",
-            borderWidth: 1,
-            borderRadius: 8,
             alignItems: "center",
             flexDirection: "row",
             justifyContent: "space-between",
-            paddingLeft: 22
           }}>
             <TextInput
               value='+92'
               editable={false}
               placeholderTextColor={"white"}
-              keyboardType='numeric'
+              keyboardType='phone-pad'
               style={{
-                width: "12%",
-                borderRightWidth: 1,
-                borderRightColor: COLORS.grey,
-                height: "100%",
-                color : "white",
+                width: "30%",
+                color: "white",
+                fontSize : 16,
+                fontFamily : "Montserrat",
+                backgroundColor : "#222222",
+                height: 48,
+                alignItems: "center",
+                justifyContent: "center",
+                paddingLeft: 22,
+                borderColor : "white",
+                borderRightWidth : 2,
               }}
             />
 
@@ -133,16 +195,96 @@ const Signup = () => {
               placeholder='Enter your phone number'
               placeholderTextColor={"white"}
               onChangeText={(text : string) => setNumber(`+92 ${text}`)}
-              keyboardType='numeric'
+              keyboardType='phone-pad'
               style={{
-                width: "80%",
-                color : "white",
+                width: "100%",
+                color: "white",
+                fontSize : 16,
+                fontFamily : "Montserrat",
+                backgroundColor : "#222222",
+                height: 48,
+                borderTopRightRadius : 8,
+                borderBottomRightRadius: 8,
+                alignItems: "center",
+                justifyContent: "center",
+                paddingLeft: 22
               }}
             />
           </View>
         </View>
 
         <View style={{ marginBottom: 12 }}>
+          <Text style={{
+            fontSize: 16,
+            fontWeight: '400',
+            marginVertical: 8,
+            color : "white"
+          }}>Age </Text>
+
+          <View style={{
+            width: "100%",
+            alignItems: "center",
+            justifyContent: "center",
+          }}>
+            <TextInput
+              placeholder='Enter your age'
+              onChangeText={(text : string) => setAge(parseInt(text))}
+              placeholderTextColor={"white"}
+              keyboardType='numeric'
+              style={{
+                width: "100%",
+                color: "white",
+                fontSize : 16,
+                fontFamily : "Montserrat",
+                backgroundColor : "#222222",
+                height: 48,
+                borderRadius: 8,
+                alignItems: "center",
+                justifyContent: "center",
+                paddingLeft: 22
+              }}
+            />
+          </View>
+        </View>
+
+        <View style={{ marginBottom: 15 }}>
+          <Text style={{
+            fontSize: 16,
+            fontWeight: '400',
+            marginVertical: 8,
+            color : "white",
+          }}>Gender </Text>
+          <DropDownPicker
+            data={[{label : "Male", value : "male"}, {label : "Female", value : "female"} , {label : "Other" , value : "Other"}]} 
+            title={"Gender"}
+            onChange={(v : string) => {
+              setGender(gender)
+            }}
+            selected={null}
+            multiple={false}
+            range={{min : [], max : []}}
+            onPress={() => {}}
+            containerStyle={{
+              width : "100%",
+              marginHorizontal : 0,
+            }}
+            buttonStyle={{
+              width : "100%",
+              backgroundColor : "#222222",
+              marginHorizontal : 0,
+              height : 51,
+            }}
+            textStyle={{
+              color : "white",
+              marginTop : 4,
+              marginLeft : 6,  
+              fontSize : 15,
+              fontFamily : "Montserrat"
+            }}
+          />
+        </View>
+
+        <View style={{ marginBottom: 15 }}>
           <Text style={{
             fontSize: 16,
             fontWeight: '400',
@@ -152,13 +294,8 @@ const Signup = () => {
 
           <View style={{
             width: "100%",
-            height: 48,
-            borderColor: "white",
-            borderWidth: 1,
-            borderRadius: 8,
             alignItems: "center",
             justifyContent: "center",
-            paddingLeft: 22
           }}>
             <TextInput
               placeholder='Enter your password'
@@ -167,7 +304,15 @@ const Signup = () => {
               secureTextEntry={!isPasswordShown}
               style={{
                 width: "100%",
-                color : "white",
+                color: "white",
+                fontSize : 16,
+                fontFamily : "Montserrat",
+                backgroundColor : "#222222",
+                height: 48,
+                borderRadius: 8,
+                alignItems: "center",
+                justifyContent: "center",
+                paddingLeft: 22
               }}
             />
 
@@ -187,145 +332,85 @@ const Signup = () => {
           </View>
         </View>
 
-        <View style={{
-          flexDirection: 'row',
-          marginVertical: 6
-        }}>
-          <Checkbox
-            style={{ marginRight: 8 }}
-            value={isChecked}
-            onValueChange={setIsChecked}
-            color={isChecked ? COLORS.primary : undefined}
-          />
+        <View style={{ marginBottom: 15 }}>
+          <Text style={{
+            fontSize: 16,
+            fontWeight: '400',
+            marginVertical: 8,
+            color : "white",
+          }}>Confirm Password</Text>
 
-          <Text style={{color : "white"}}>I agree to the terms and conditions</Text>
-        </View>
-
-       
-
-        <Pressable
-        style={[
-          {
-            paddingBottom: 16,
-            paddingVertical: 10,
-            marginHorizontal : 14,
-            marginTop : 20,
-            borderRadius: 4,
-            alignItems: 'center',
-            justifyContent: 'center'
-          },
-          { backgroundColor: "white" },
-        ]}
-        onPress={async () => {
-            try {
-              await handleSignup()
-              router.navigate("/sign-in")
-          } catch (e){
-              alert(`couldn't log in. error = ${e}`)
-          }
-          
-        }}
-      >
-        <Text style={{ fontSize: 18, color: "black", fontFamily : "Poppins" }}>Sign in</Text>
-      </Pressable>
-
-        {/* <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 20 }}>
-          <View
-            style={{
-              flex: 1,
-              height: 1,
-              backgroundColor: COLORS.grey,
-              marginHorizontal: 10
-            }}
-          />
-          <Text style={{ fontSize: 14 }}>Or Sign up with</Text>
-          <View
-            style={{
-              flex: 1,
-              height: 1,
-              backgroundColor: COLORS.grey,
-              marginHorizontal: 10
-            }}
-          />
-        </View>
-
-        <View style={{
-          flexDirection: 'row',
-          justifyContent: 'center'
-        }}>
-          <TouchableOpacity
-            onPress={() => console.log("Pressed")}
-            style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexDirection: 'row',
-              height: 52,
-              borderWidth: 1,
-              borderColor: COLORS.grey,
-              marginRight: 4,
-              borderRadius: 10
-            }}
-          >
-            <Image
-              source={require("./assets/facebook.png")}
+          <View style={{
+            width: "100%",
+            alignItems: "center",
+            justifyContent: "center",
+          }}>
+            <TextInput
+              placeholder='Confirm your password'
+              onChangeText={(text : string) => setConfirmPassword(text)}
+              placeholderTextColor={"white"}
+              secureTextEntry={!isPasswordShown}
               style={{
-                height: 36,
-                width: 36,
-                marginRight: 8
+                width: "100%",
+                color: "white",
+                fontSize : 16,
+                fontFamily : "Montserrat",
+                backgroundColor : "#222222",
+                height: 48,
+                borderRadius: 8,
+                alignItems: "center",
+                justifyContent: "center",
+                paddingLeft: 22
               }}
-              resizeMode='contain'
             />
 
-            <Text>Facebook</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => console.log("Pressed")}
-            style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexDirection: 'row',
-              height: 52,
-              borderWidth: 1,
-              borderColor: COLORS.grey,
-              marginRight: 4,
-              borderRadius: 10
-            }}
-          >
-            <Image
-              source={require("./assets/google.png")}
+            <TouchableOpacity
+              onPress={() => setIsPasswordShown(!isPasswordShown)}
               style={{
-                height: 36,
-                width: 36,
-                marginRight: 8
+                position: "absolute",
+                right: 12
               }}
-              resizeMode='contain'
-            />
+            >
+              {isPasswordShown ? (
+                <Ionicons name="eye-off" size={24} color={"white"} />
+              ) : (
+                <Ionicons name="eye" size={24} color={"white"} />
+              )}
+            </TouchableOpacity>
+          </View>
+        </View>
 
-            <Text>Google</Text>
-          </TouchableOpacity>
-        </View> */}
+        <PrimaryButton 
+          onPress={async () => {
+                try {
+                  await handleSignup()
+                  router.navigate("/sign-in")
+              } catch (e){
+                  alert(`couldn't create account . error = ${e}`)
+              } 
+          }}
+          text="Create account" 
+        />
+
 
         <View style={{
           flexDirection: "row",
           justifyContent: "center",
           marginVertical: 22
         }}>
-          <Text style={{ fontSize: 16, color: "white" }}>Already have an account</Text>
+          <Text style={{ fontSize: 16, color: "white", fontFamily : "Poppins" }}>Already have an account ?</Text>
           <Pressable
             onPress={() => router.navigate("/sign-in")}
           >
             <Text style={{
-              fontSize: 16,
-              color: COLORS.primary,
-              fontWeight: "bold",
-              marginLeft: 6
+              fontSize: 17,
+              color: "white",
+              marginLeft: 6,
+              textDecorationLine : "underline",
             }}>Login</Text>
           </Pressable>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
