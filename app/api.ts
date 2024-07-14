@@ -208,6 +208,7 @@ export interface SignUpData {
   password : string;
   username : string;
   number : string;
+  name : string;
 }
 export async function signUp(accountData : SignUpData){
     const response = await fetch(base_url + '/signUp', {
@@ -220,6 +221,7 @@ export async function signUp(accountData : SignUpData){
             "phone_number" : accountData.number  , 
             "username" : accountData.username,
             "gender" : accountData.gender,
+            "name" : accountData.name,
             "age" : accountData.age,
             "password" : accountData.password,
         })

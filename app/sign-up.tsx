@@ -33,6 +33,7 @@ const Signup = () => {
   const [email , setEmail] = useState("");
   const [username, setUsername] = useState("")
   const [number , setNumber] = useState("")
+  const [name , setName] = useState("")
   const [gender , setGender] = useState("") 
   const [age, setAge] = useState(0) 
   const [dateOfBirth , setDateOfBirth] = useState("")
@@ -53,6 +54,7 @@ const Signup = () => {
               number : number,
               age : age,
               gender : gender,
+              name : name,
             });
             setEmail("")
             setNumber("")
@@ -205,6 +207,40 @@ const Signup = () => {
                 height: 48,
                 borderTopRightRadius : 8,
                 borderBottomRightRadius: 8,
+                alignItems: "center",
+                justifyContent: "center",
+                paddingLeft: 22
+              }}
+            />
+          </View>
+        </View>
+
+        <View style={{ marginBottom: 12 }}>
+          <Text style={{
+            fontSize: 16,
+            fontWeight: '400',
+            marginVertical: 8,
+            color : "white"
+          }}>Name</Text>
+
+          <View style={{
+            width: "100%",
+            alignItems: "center",
+            justifyContent: "center",
+          }}>
+            <TextInput
+              placeholder='Enter your full name'
+              onChangeText={(text : string) => setName(text)}
+              placeholderTextColor={"white"}
+              keyboardType='email-address'
+              style={{
+                width: "100%",
+                color: "white",
+                fontSize : 16,
+                fontFamily : "Montserrat",
+                backgroundColor : "#222222",
+                height: 48,
+                borderRadius: 8,
                 alignItems: "center",
                 justifyContent: "center",
                 paddingLeft: 22
