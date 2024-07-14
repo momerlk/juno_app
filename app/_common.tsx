@@ -4,6 +4,7 @@ import {Text , Image , Pressable ,
   View, ActivityIndicator, TouchableOpacity,
   ScrollView,Modal,Platform,Dimensions,
   FlatList,
+  TextInput,
   StyleSheet
 } from "react-native"
 import {Ionicons, AntDesign} from "@expo/vector-icons"
@@ -439,6 +440,10 @@ export const DropDown: React.FC<DropDownProps> = ({ data, type, range, selected,
     );
   };
 
+  // ref for the searchable component to fix focus issue on android
+  const searchInputRef = React.useRef<any>(null);
+  const [brandQuery , setBrandQuery] = useState("")
+
   return (
     <View style={[{ marginHorizontal: size.scale(20), marginBottom: 16 }, containerStyle]}>
       <Modal
@@ -446,6 +451,12 @@ export const DropDown: React.FC<DropDownProps> = ({ data, type, range, selected,
         transparent={true}
         visible={open}
         onRequestClose={() => setOpen(!open)}
+        onShow={() => {
+          setTimeout(() => {
+            // searchInputRef.current?.blur();
+            // searchInputRef.current?.focus();
+          }, 100)
+        }}
       >
         <View style={{
           zIndex: open ? 4000 : 1,
@@ -478,12 +489,43 @@ export const DropDown: React.FC<DropDownProps> = ({ data, type, range, selected,
               />
             </>
           ) : (
+            <>
+            {type === "searchable" && Platform.OS !== "android"? 
+              <TextInput 
+                style={{
+                  borderStyle : "solid",
+                  borderWidth : 2,
+                  borderColor : "white",
+
+                  color : "white",
+
+                  marginBottom : 10,
+                  paddingVertical : 10,
+                  paddingHorizontal : 10,
+                  fontSize : 20,
+                }}
+                value={brandQuery}
+                onChangeText={v => {
+                  setBrandQuery(v)
+                }}
+                placeholder={`Search brands`}
+                placeholderTextColor={"gray"}
+              /> 
+            : <></>}
             <FlatList
-              data={items}
+              data={(() => {
+                if (brandQuery === ""){
+                  return items;
+                } else {
+                  const itemsArr = items as Array<any>;
+                  return itemsArr.filter(item => api.fuzzysearch(brandQuery , item.label)) 
+                }
+              })()}
               showsVerticalScrollIndicator={true}
               renderItem={renderItem}
               keyExtractor={(item) => item.value.toString()}
             />
+            </>
           )}
           <PrimaryButton
             text="Confirm"
