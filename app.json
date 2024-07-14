@@ -2,10 +2,10 @@
   "expo": {
     "name": "juno",
     "slug": "juno",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "orientation": "portrait",
     "icon": "./app/assets/juno.png",
-    "scheme": "myapp",
+    "scheme": "juno",
     "userInterfaceStyle": "dark",
     "splash": {
       "image": "./app/assets/juno_splash.png",
@@ -16,10 +16,11 @@
       "supportsTablet": false,
       "bundleIdentifier": "com.thejunoshop.app",
       "infoPlist": {
-        "CFBundleDisplayName": "Juno : Shop Women's Fashion"
+        "CFBundleDisplayName": "juno"
       }
     },
     "android": {
+      "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "./app/assets/juno.png",
         "backgroundColor": "#C80321"
@@ -32,8 +33,9 @@
       "favicon": "./app/assets/images/juno.png"
     },
     "plugins": [
+      "./plugins/withCustomAndroidManifest.js",
       "expo-router",
-      "expo-font"
+      "expo-font" 
     ],
     "experiments": {
       "typedRoutes": true
