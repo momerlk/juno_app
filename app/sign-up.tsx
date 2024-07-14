@@ -410,6 +410,8 @@ const Signup = () => {
             }}>Login</Text>
           </Pressable>
         </View>
+
+        <View style={{paddingVertical : 200}}/>
       </ScrollView>
     </SafeAreaView>
   );

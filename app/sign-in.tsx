@@ -184,6 +184,9 @@ const Login = () => {
             }}>Register</Text>
           </Pressable>
         </View>
+
+      <View style={{paddingVertical : 200}}/>
+
       </ScrollView>
     </SafeAreaView>
   );
