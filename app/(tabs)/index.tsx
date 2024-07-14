@@ -738,6 +738,11 @@ export default class App extends React.Component<any , any> {
 
   async componentDidMount() {
 
+    const firstTime = await AsyncStorage.getItem("first_time");
+    if (firstTime === null || firstTime !== "no"){
+      router.replace("/welcome")
+    }
+
     await AsyncStorage.setItem("filter" , "") // so that filter from previous session doesn't interfere
     
     const token = await AsyncStorage.getItem('token');
@@ -750,11 +755,11 @@ export default class App extends React.Component<any , any> {
       if(this.state.loading === true){
         const products = await api.getProducts(5); 
         if (products === null){
-          alert(`failed to connect to server`)
+          console.error(`failed to get products data from server`)
           return;
         }
         if (products.length === 0){
-          alert(`failed to connect to server`)
+          console.error(`products data length is 0`)
           return;
         }
         this.setState({loading : false , products : products})

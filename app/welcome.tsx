@@ -98,33 +98,15 @@ const Welcome = () => {
         >
           <Text
             style={{
-              fontSize: 50,
+              fontSize: 38,
               fontWeight: '800',
               color: COLORS.white
             }}
           >
-            Juno Swipe To Shop
+            Stop Scrolling,{"\n"}Start Swiping
           </Text>
 
-          {/* <View style={{ marginVertical: 22 }}>
-            <Text
-              style={{
-                fontSize: 16,
-                color: COLORS.white,
-                marginVertical: 4
-              }}
-            >
-              Blazingly Swift Delivery.
-            </Text>
-            <Text
-              style={{
-                fontSize: 16,
-                color: COLORS.white
-              }}
-            >
-              Order From Your Favourite Brands.
-            </Text>
-          </View> */}
+          
 
           <Button
             title="Join Now"
