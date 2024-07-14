@@ -294,7 +294,7 @@ const Signup = () => {
             data={[{label : "Male", value : "male"}, {label : "Female", value : "female"} , {label : "Other" , value : "Other"}]} 
             title={"Gender"}
             onChange={(v : string) => {
-              setGender(gender)
+              setGender(v[0])
             }}
             selected={null}
             multiple={false}
