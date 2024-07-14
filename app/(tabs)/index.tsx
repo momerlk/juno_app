@@ -23,11 +23,11 @@ import {
   PrimaryButton, SecondaryButton,
   DropDown,
   Filter,
-  trimArray,
+  Loading,
   Sharing,
 } from "../_common"
 
-
+import { tabBarHeight } from './_layout';
 import * as api from "../api";
 
 
@@ -595,6 +595,16 @@ export class SwipeView extends React.Component<AppProps, AppState> {
           <View style={{position : "absolute" , top : size.verticalScale(50), display : "flex" , flexDirection : "row"}}>
             <Logo />
           </View> 
+          <TouchableOpacity onPress={() => router.navigate("/liked")} style={{margin : 10, position : "absolute",top: size.verticalScale(35),right : 65,}}>
+            <Image 
+              source={require("../assets/icons/search.png")} 
+              style={{
+                width : 33,
+                height : 33,
+              }}
+            />
+          </TouchableOpacity>
+
           <TouchableOpacity onPress={() => router.navigate("/liked")} style={{margin : 10, position : "absolute",top: size.verticalScale(35),right : 10,}}>
             <Feather name="heart" size={35} color="white" /> 
           </TouchableOpacity>
@@ -718,12 +728,11 @@ export class SwipeView extends React.Component<AppProps, AppState> {
 
 
 
-import { tabBarHeight } from './_layout';
-import { Loading } from '../_common';
 
 
 
-export default class App extends React.Component<any , any> {
+
+export default class Home extends React.Component<any , any> {
   constructor(props : any) {
     super(props);
     this.state = {
