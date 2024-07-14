@@ -42,7 +42,6 @@ export default function ProfilePage(){
       (async () => {
       const resp = await api.getDetails();
       setData(resp);
-      alert(`resp = ${JSON.stringify(resp)}`)
       setLoading(false);
       })()
   } , [])

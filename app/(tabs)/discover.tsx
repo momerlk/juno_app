@@ -136,11 +136,7 @@ function Card(props : any){
 interface HomeState {
   spotlight : any;
   products : any[];
-  queryProducts : any[];
   loading : boolean;
-  query : string;
-  WSFeed : api.WSFeed | null;
-  currentIndex : number;
 }
 
 export default class Home extends React.Component<{},HomeState> {
@@ -150,10 +146,6 @@ export default class Home extends React.Component<{},HomeState> {
       spotlight : mockData[0],
       products : mockData, 
       loading : true,
-      query : "",
-      queryProducts : [],
-      WSFeed : null,
-      currentIndex : 0,
     }
   }
 
@@ -170,57 +162,14 @@ export default class Home extends React.Component<{},HomeState> {
 
   async componentDidMount(){
     const token = await AsyncStorage.getItem('token');
-    const wsfeed = new api.WSFeed(token!, (data : any) => {
-      this.setState({ queryProducts: this.state.queryProducts.concat(data) });
-    });
-    this.setState({ WSFeed: wsfeed });
-
     await fetchFonts();
     await this.getProducts();
   }
 
   async componentWillUnmount() {
-    this.setState({currentIndex : 0})
-    // closes on reload; major bug fix
-    if(this.state.WSFeed !== null){
-      this.state.WSFeed.close();
-    }
-
-    await AsyncStorage.setItem("filter" , "") // so that filter from previous session doesn't interfere
   }
 
-  handleSwipe = async (action_type : string , _ : number) => {
-
-    console.log(`products.length = ${this.state.products.length} , index = ${this.state.currentIndex}`)
-    console.log(`WSFeed open = ${this.state.WSFeed?.open}`)
-
-    const filterString = await AsyncStorage.getItem('filter');
-    let filter = null;
-    if(filterString !== null && filterString !== ""){
-      filter = JSON.parse(filterString as string);
-    }
-
-    const { WSFeed, queryProducts } = this.state;
-    const products = queryProducts;
-
-    if (WSFeed) {
-      if (products.length === 0) {
-        return;
-      }
-      try {
-        WSFeed.sendAction(
-            action_type,
-             products[this.state.currentIndex].product_id, 
-            api.createQuery(null, filter)
-          );
-      } catch (e) {
-        console.log(`products.length = ${products.length}, index = ${this.state.currentIndex}, error = ${e}`);
-      }
-    }
-
-    this.setState({currentIndex : this.state.currentIndex + 1})
-  };
-
+  
   renderHome(){
     return (
       <ScrollView style={{backgroundColor : "#121212"}}>
@@ -238,21 +187,6 @@ export default class Home extends React.Component<{},HomeState> {
 
           
         </View>
-
-        <Search 
-          placeholder="What do you want to buy?" 
-          onSubmit={async (v : string) => {
-            const products = await api.search(v);
-            if(products !== null && products !== undefined){
-              this.setState({query : v , queryProducts : products})
-            }
-          }}
-          onChange={(v : string) => {
-            if (v === ""){
-              this.setState({query : ""})
-            }
-          }}
-        />
 
         {/* TODO : Navigate to feed instead of showing details. */}
 
@@ -304,69 +238,13 @@ export default class Home extends React.Component<{},HomeState> {
           }}
           refreshing={this.state.loading}
         />
+
+        <View style={{paddingVertical : 50}}/>
       </ScrollView>
     )
   }
 
-  update(products : any){
-    this.setState({queryProducts : products , currentIndex : 0})
-  }
-
-  renderSearch(){
-    return (
-      <View style={{flex : 1, backgroundColor : "black"}}>
-        <View style={{marginTop : size.verticalScale(10)}}></View>
-        <Pressable onPress={async () => {
-          await AsyncStorage.setItem("filter" , "")
-          this.setState({query : ""})
-        }} style={{
-          display : "flex" , flexDirection : "row", marginBottom : 7, marginTop : 15 , paddingTop : 20
-          }}>
-          <View  
-            style={{
-              left : 10,
-              top : 10,
-              marginBottom : 10,
-              }} >
-              <Ionicons name="arrow-back" size={32} color="white"/>
-          </View>
-          <Text 
-            style={{
-              color : "white", 
-              fontFamily : "Poppins", 
-              fontSize : 22 , 
-              marginLeft : 20,
-              marginTop : 10,
-            }} >
-              Home
-          </Text>
-        </Pressable>
-        <SwipeView 
-          paddingTop={1}
-          cards={this.state.queryProducts} 
-          height={size.verticalScale(520)} 
-          onSwipe={this.handleSwipe}
-          onUndo={() => this.setState({currentIndex : this.state.currentIndex - 1})}
-          onFilter={async (filter : any) => {
-            try { 
-              const products = await api.queryProducts(this.state.query , filter);
-              if (products === null || products === undefined){
-                return;
-              }
-              this.update(products);
-            } catch (e){
-              alert(`failed to set storage , error = ${e}`)
-            }
-          }}
-          loading={false}
-
-          topNav={false}
-          bottomNav={true}
-        />
-      </View>
-    )
-  }
-
+  
   render(){
     if (this.state.loading){
       return <View style={{flex : 1,backgroundColor : "black", paddingTop : 40, paddingLeft : 20}}>
@@ -384,7 +262,7 @@ export default class Home extends React.Component<{},HomeState> {
       <>
         {/* <Text style={{color : "white", fontFamily : "Poppins", fontSize : 24, alignSelf  :"center"}}>Feed</Text> */}
 
-        {this.state.query === "" ? this.renderHome() : this.renderSearch()}
+        {this.renderHome()}
 
         {/* TODO : Add these two sections */}
 
