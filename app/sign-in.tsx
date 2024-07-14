@@ -48,7 +48,7 @@ const Login = () => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#121212" }}>
-      <ScrollView style={{ flex: 1, marginHorizontal: 22 }}>
+      <ScrollView style={{ flex: 1, marginHorizontal: 22 }} showsVerticalScrollIndicator={false}>
         <View style={{ marginTop : 40, marginBottom : 55 }}>
           <Text style={{
             fontSize: 22,

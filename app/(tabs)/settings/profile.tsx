@@ -18,13 +18,15 @@ import * as api from "../../api"
 export default function ProfilePage(){
 
   const [data , setData] = useState<any>({
-      id : "",
-      avatar: "",
-      name: "",
-      number: "",
-      username: "",
-      email: "",
-      password: ""
+      "id": "",
+      "avatar": "",
+      "age": 0,
+      "gender": "0",
+      "name": "None",
+      "phone_number": "0",
+      "username": "juno",
+      "email": "0",
+      "password": ""
   })
   const [loading , setLoading] = useState(true);
 
@@ -32,7 +34,7 @@ export default function ProfilePage(){
 
   // TODO : connect to backend
   const updateData = (fieldName : string, value : any) => {
-    data.username = "value"
+    data.username = value
     setData(data);
   }
 
@@ -40,7 +42,7 @@ export default function ProfilePage(){
       (async () => {
       const resp = await api.getDetails();
       setData(resp);
-      setUsername(resp.username);
+      alert(`resp = ${JSON.stringify(resp)}`)
       setLoading(false);
       })()
   } , [])
@@ -65,7 +67,7 @@ export default function ProfilePage(){
 
         <EditableField 
           name="Username" 
-          value={username} 
+          value={data.username} 
           editable={true}
 
           onChange={(v:string) => {}} 
@@ -85,7 +87,7 @@ export default function ProfilePage(){
 
         <EditableField 
           name="Phone" 
-          value={data.number} 
+          value={data.phone_number} 
           editable={false}
           onChange={(v:string) => {}} 
           onSubmit={(v:string) => updateData("number" , v)}
@@ -108,7 +110,7 @@ interface EditableProps {
 function EditableField(props : EditableProps){
   const [editing , setEditing] = useState(false);
   const [value , setValue] = useState("");
-
+  
   return (
     <View style={{
       backgroundColor : "black",
