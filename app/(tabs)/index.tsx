@@ -329,7 +329,8 @@ export class SwipeView extends React.Component<AppProps, AppState> {
   // the component of single product image
   ItemCard(props: any){
     const item = props.item;
-    const textHeight = props.height/(SCREEN_HEIGHT/400);
+    let textHeight = props.height * 0.5;
+    textHeight += Platform.OS === "ios" ? 40 : 0;
     return (
       <FastImageBackground
               style={{
@@ -352,13 +353,13 @@ export class SwipeView extends React.Component<AppProps, AppState> {
                  <Text style={{
                   color : "white",
                   marginHorizontal : 10,
-                  fontSize : props.height * 0.04,
+                  fontSize : 25,
                   fontFamily : "Poppins"
                   }}>{shortTitle(item.title as string)}</Text> 
                 
                   
                   <Text style={{
-                    fontSize: props.height * 0.036, fontFamily: "Poppins",
+                    fontSize: 23, fontFamily: "Poppins",
                     color : "white",
                     marginHorizontal : 10,
                   }}>{toTitle(item.vendor as string)}</Text>
@@ -380,14 +381,14 @@ export class SwipeView extends React.Component<AppProps, AppState> {
                           justifyContent: "space-between",
                         }}>
                           <Text style={{
-                            fontSize: props.height * 0.03, marginVertical: 5,
+                            fontSize: 20, marginVertical: 5,
                             color : "white",
                             fontFamily : "Poppins",
                             marginHorizontal : 10,
                           }}>Rs. {fmtPrice(item.price)}</Text>
                           
                           <Text style={{
-                              fontSize: props.height * 0.03, marginVertical: 5,
+                              fontSize: 20, marginVertical: 5,
                               fontWeight : "bold",
                               fontFamily : "Poppins",
                               color : "white",
@@ -399,7 +400,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
                         
                         
                         <Text style={{
-                          fontSize: props.height * 0.03, marginVertical: 5,
+                          fontSize: 20, marginVertical: 5,
                           fontWeight : "bold",
                           fontFamily : "Poppins",
                           color : "#FF1D18",
@@ -410,7 +411,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
                     } else {
                       return (
                         <Text style={{
-                          fontSize: props.height * 0.03, marginVertical: 5,
+                          fontSize: 20, marginVertical: 5,
                           color : "white",
                           fontFamily : "Poppins",
                           marginHorizontal : 10,
@@ -792,7 +793,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
             <Image  source={require("../assets/juno_text.png")} style={{
               position : "absolute",
               left : 15,
-              top : 35,
+              top : Platform.OS === "ios" ? 0 : 35,
               height : 65, 
               width : 65, 
               resizeMode : "cover" 
@@ -802,7 +803,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
           style={{
             margin : 10,
             position : "absolute",
-            top: size.verticalScale(30),
+            top: Platform.OS === "ios" ? 0 : size.verticalScale(30),
             width : size.scale(160),
             height : 40,
             backgroundColor : "#222222",
@@ -835,15 +836,15 @@ export class SwipeView extends React.Component<AppProps, AppState> {
             >{this.getSearchBarPlaceholder(this.state.query)}</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => router.navigate("/liked")} style={{margin : 10, position : "absolute",top: size.verticalScale(35),right : 10,}}>
+          <TouchableOpacity onPress={() => router.navigate("/liked")} style={{margin : 10, position : "absolute",top: Platform.OS === "ios" ? 0 : size.verticalScale(35),right : 10,}}>
             <Feather name="heart" size={35} color="white" /> 
           </TouchableOpacity>
           </View> 
         </>
         : <></>}
 
-        {Platform.OS === "ios" ? <View style={{paddingBottom : 40}}/> : 
-        <View style={{paddingBottom : 100}}/>}
+        <View style={{paddingBottom : Platform.OS === "ios" ? size.verticalScale(45) : size.verticalScale(80)}}/>
+
         <View style={{ flex: 1 }}>
           {this.renderProducts()}
         </View>
@@ -873,7 +874,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
 
         <View style={{
           display : "flex", flexDirection : "row", 
-          bottom : size.verticalScale(10),
+          bottom : Platform.OS === "ios" ? 0 : 10,
           justifyContent : "space-evenly",
           }}>
           <TouchableOpacity style={{
@@ -1078,6 +1079,10 @@ export default class Home extends React.Component<any , HomeState> {
       return;
     }
 
+    let dataEmpty = false;
+    if (deepEqual(data , {})){
+      dataEmpty = true;
+    }
 
     try {
       const filterString = await AsyncStorage.getItem("filter")
@@ -1086,6 +1091,18 @@ export default class Home extends React.Component<any , HomeState> {
         filter = (filterString as string);
       }
       if (deepEqual(filter , data)){
+        return;
+      }
+      if (filter !== null && dataEmpty === true){
+        await AsyncStorage.setItem('filter', "");
+        this.setState({loading : true, products: [], currentIndex : 0});
+        const { WSFeed } = this.state;
+        await WSFeed?.sendAction('open', '', null);
+        this.setState({loading : false})
+        return;
+      }
+      
+      if(dataEmpty === true){
         return;
       }
 
@@ -1131,11 +1148,17 @@ export default class Home extends React.Component<any , HomeState> {
         <Loading />
       )
     }
+    let modifier = 0.88;
+    let paddingTop = 20;
+    if (Platform.OS === "ios"){
+      modifier = 0.85;
+      paddingTop = 70;
+    }
     return (
-      <SafeAreaView style={{flex : 1}}>
+      <SafeAreaView style={{flex : 1, backgroundColor : "black"}}>
         <SwipeView
-          paddingTop={size.verticalScale(70)}
-          height={(SCREEN_HEIGHT * 0.88) - tabBarHeight}
+          paddingTop={size.verticalScale(paddingTop)}
+          height={(SCREEN_HEIGHT * modifier) - tabBarHeight}
           cards={this.state.products.length === 0 ? this.state.mock : this.state.products}
           onSwipe={this.handleSwipe}
           onUndo={() => this.setState({currentIndex : this.state.currentIndex - 1})}
