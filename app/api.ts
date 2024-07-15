@@ -6,7 +6,7 @@ import { router } from "expo-router";
 const production_url = "https://junoapi-production.up.railway.app"
 const testing_url = "http://192.168.18.16:3001"
 
-const base_url = testing_url
+const base_url = production_url
 const ws_base_url = "ws://192.168.18.16:8080" // websockets are high unreliable right now
 
 // TODO : Fix memory issue. these products data take too much memory javascript ran out of memory
