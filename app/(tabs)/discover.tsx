@@ -136,7 +136,12 @@ function Card(props : any){
 interface HomeState {
   spotlight : any;
   products : any[];
+  unstitched : any[];
+  stitched : any[];
+  twopiece : any[];
+  threepiece : any[];
   loading : boolean;
+  refresh : boolean;
 }
 
 export default class Home extends React.Component<{},HomeState> {
@@ -145,18 +150,36 @@ export default class Home extends React.Component<{},HomeState> {
     this.state = {
       spotlight : mockData[0],
       products : mockData, 
+      unstitched : mockData,
+      stitched : mockData,
+      twopiece : mockData,
+      threepiece : mockData,
       loading : true,
+      refresh : false,
     }
   }
 
   async getProducts(){
     const products = await api.getProducts(9);
+
+    const unstitched = await api.search("unstitched", "yes", 8)
+    const stitched = await api.search("stitched", "yes", 8);
+    const twopiece = await api.search("two piece 2 Pc", "yes", 8);
+    const threepiece = await api.search("three piece 3 Pc", "yes", 8)
+
     if (products === null){
       this.setState({loading : false})
       return;
     }
     else {
-      this.setState({spotlight : products[0] , products : products.splice(1,8) , loading : false})
+      this.setState({
+        spotlight : products[0] , 
+        products : products.splice(1,8) , 
+        unstitched : unstitched,
+        stitched : stitched,
+        twopiece : twopiece,
+        threepiece : threepiece,
+        loading : false})
     }
   }
 
@@ -194,10 +217,10 @@ export default class Home extends React.Component<{},HomeState> {
 
         <View style={{marginVertical : size.verticalScale(10)}}></View>
 
-        <Text style={{color : "white", fontFamily : "Poppins", fontSize : 18 , marginLeft : 20}}>Discover Brands</Text>
+        {/* <Text style={{color : "white", fontFamily : "Poppins", fontSize : 18 , marginLeft : 20}}>Discover Brands</Text> */}
 
 
-        <FlatList
+        {/* <FlatList
           contentContainerStyle={{alignSelf: 'flex-start',marginLeft : 4}}
           horizontal
           showsVerticalScrollIndicator={false}
@@ -213,13 +236,12 @@ export default class Home extends React.Component<{},HomeState> {
           //   this.setState({loading : false});
           // }}
           // refreshing={this.state.loading}
-        />
+        /> */}
           
         {/* Discover products */}
         <View style={{marginVertical : size.verticalScale(10)}}></View>
 
         <Text style={{color : "white", fontFamily : "Poppins", fontSize : 18 , marginLeft : 20}}>For You</Text>
-
 
         <FlatList
           contentContainerStyle={{alignSelf: 'flex-start',marginLeft : 4}}
@@ -232,12 +254,107 @@ export default class Home extends React.Component<{},HomeState> {
           renderItem={({ item }) => <Card item={item}/>} 
           // TODO : Test this fully
           onRefresh={async () => {
-            this.setState({loading : true});
+            this.setState({refresh : true});
             await this.getProducts();
-            this.setState({loading : false});
+            this.setState({refresh : false});
           }}
-          refreshing={this.state.loading}
+          refreshing={this.state.refresh}
         />
+        
+        <View style={{paddingBottom : 40}}/>
+
+        {/* Unstitched */}
+        <Text style={{color : "white", fontFamily : "Poppins", fontSize : 18 , marginLeft : 20}}>Unstitched</Text>
+
+        <FlatList
+          contentContainerStyle={{alignSelf: 'flex-start',marginLeft : 4}}
+          horizontal
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+          directionalLockEnabled={true}
+          data={this.state.unstitched}
+          keyExtractor={(item) => item.product_id}
+          renderItem={({ item }) => <Card item={item}/>} 
+          // TODO : Test this fully
+          onRefresh={async () => {
+            this.setState({refresh : true});
+            await this.getProducts();
+            this.setState({refresh : false});
+          }}
+          refreshing={this.state.refresh}
+        />
+        
+        {/* Stitched */}
+        <View style={{paddingBottom : 40}}/>
+
+        <Text style={{color : "white", fontFamily : "Poppins", fontSize : 18 , marginLeft : 20}}>Stitched</Text>
+
+        <FlatList
+          contentContainerStyle={{alignSelf: 'flex-start',marginLeft : 4}}
+          horizontal
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+          directionalLockEnabled={true}
+          data={this.state.stitched}
+          keyExtractor={(item) => item.product_id}
+          renderItem={({ item }) => <Card item={item}/>} 
+          // TODO : Test this fully
+          onRefresh={async () => {
+            this.setState({refresh : true});
+            await this.getProducts();
+            this.setState({refresh : false});
+          }}
+          refreshing={this.state.refresh}
+        />
+        
+        <View style={{paddingBottom : 40}}/>
+
+        {/* Two piece */}
+        <Text style={{color : "white", fontFamily : "Poppins", fontSize : 18 , marginLeft : 20}}>Two Piece</Text>
+
+        <FlatList
+          contentContainerStyle={{alignSelf: 'flex-start',marginLeft : 4}}
+          horizontal
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+          directionalLockEnabled={true}
+          data={this.state.twopiece}
+          keyExtractor={(item) => item.product_id}
+          renderItem={({ item }) => <Card item={item}/>} 
+          // TODO : Test this fully
+          onRefresh={async () => {
+            this.setState({refresh : true});
+            await this.getProducts();
+            this.setState({refresh : false});
+          }}
+          refreshing={this.state.refresh}
+        />
+        
+        <View style={{paddingBottom : 40}}/>
+
+          {/* three piece */}
+          <Text style={{color : "white", fontFamily : "Poppins", fontSize : 18 , marginLeft : 20}}>Three piece</Text>
+
+        <FlatList
+          contentContainerStyle={{alignSelf: 'flex-start',marginLeft : 4}}
+          horizontal
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+          directionalLockEnabled={true}
+          data={this.state.threepiece}
+          keyExtractor={(item) => item.product_id}
+          renderItem={({ item }) => <Card item={item}/>} 
+          // TODO : Test this fully
+          onRefresh={async () => {
+            this.setState({refresh : true});
+            await this.getProducts();
+            this.setState({refresh : false});
+          }}
+          refreshing={this.state.refresh}
+        />
+        
+        <View style={{paddingBottom : 40}}/>
+        
 
         <View style={{paddingVertical : 50}}/>
       </ScrollView>

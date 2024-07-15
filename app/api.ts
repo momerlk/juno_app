@@ -306,11 +306,18 @@ export async function queryProducts(text : string, filter : any | null){
   return null
 }
 
-export async function search(query : string){
+export async function search(query : string, random? : "yes" | undefined, n? : number | undefined){
   if(query === ""){
     return;
   }
-  const resp = await fetch(`${base_url}/search?q=${query}`, {
+  let url = `${base_url}/search?q=${query}`
+  if (random === "yes"){
+    url += `&random=yes`
+  }
+  if (n !== undefined){
+    url += `&n=${n}`
+  }
+  const resp = await fetch(url, {
     method : "GET",
     headers: {
                   'Content-Type': 'application/json',

@@ -14,8 +14,9 @@ const SCREEN_WIDTH = Dimensions.get("screen").width;
 const SCREEN_HEIGHT = Dimensions.get("screen").height;
 
 export default function CartPage() {
-  const [data, setData] = useState<any>(mockData);
+  const [data, setData] = useState<any>({});
   const [req , setReq] = useState(0);
+  const [refresh, setRefresh] = useState(false);
   const [loading , setLoading] = useState(true);
   fetchFonts();
   
@@ -47,14 +48,14 @@ export default function CartPage() {
           renderItem={({ item }) => <Cart item={item}/>}
           // TODO : Test this fully
           onRefresh={async () => {
-            setLoading(true);
+            setRefresh(true);
             const cart = await api.getCart();
             if(cart !== null){
               setData(cart)
             }
-            setLoading(false);
+            setRefresh(false);
           }}
-          refreshing={loading}
+          refreshing={refresh}
         />
     </View>
   );
@@ -341,92 +342,4 @@ function Card(props : any){
     </View>
   )
 }
-
-
-
-const mockData = [{
-  "product_id": "90d3a4e5-9cd2-4183-bb73-0a532281ce31",
-  "product_url": "https://www.afrozeh.com/products/serenova",
-  "shopify_id": "8212329103594",
-  "handle": "serenova",
-  "title": "Serenova",
-  "vendor": "afrozeh",
-  "vendor_title": "Afrozeh",
-  "category": "",
-  "product_type": "",
-  "image_url": "https://cdn.shopify.com/s/files/1/0052/2030/2897/files/AIZ09441.jpg?v=1700654661",
-  "images": [
-    "https://cdn.shopify.com/s/files/1/0052/2030/2897/files/AIZ09441.jpg?v=1700654661",
-    "https://cdn.shopify.com/s/files/1/0052/2030/2897/files/AIZ09455.jpg?v=1700654660",
-    "https://cdn.shopify.com/s/files/1/0052/2030/2897/files/AIZ09458.jpg?v=1700654661",
-    "https://cdn.shopify.com/s/files/1/0052/2030/2897/files/AIZ09517.jpg?v=1700654661",
-    "https://cdn.shopify.com/s/files/1/0052/2030/2897/files/AIZ09550.jpg?v=1700654661",
-    "https://cdn.shopify.com/s/files/1/0052/2030/2897/files/AIZ09582.jpg?v=1700654661",
-    "https://cdn.shopify.com/s/files/1/0052/2030/2897/files/AIZ09605.jpg?v=1700654660",
-    "https://cdn.shopify.com/s/files/1/0052/2030/2897/files/AIZ09649.jpg?v=1700654662"
-  ],
-  "description": "Serenova showcases sheer stitched three-piece perfection. It’s an open-cut shirt in a green hue with delicate, monotone floral embroidery on plain khadar fabric that exudes timeless charm. Paired with an embroidered border shawl, complemented by the perfect touch of laces on each side, and plain pants, that add a touch of opulence and luxury.\nNote: Pret orders will dispatch by 5th of December",
-  "price": 12720,
-  "compare_price": 15900,
-  "discount": 19,
-  "currency": "PKR",
-  "variants": [
-    {
-      "id": "44260308812010",
-      "price": 12720,
-      "title": "Stitched / S",
-      "compare_price": 15900,
-      "option1": "Stitched",
-      "option2": "S",
-      "option3": ""
-    },
-    {
-      "id": "44305551884522",
-      "price": 12720,
-      "title": "Stitched / M",
-      "compare_price": 15900,
-      "option1": "Stitched",
-      "option2": "M",
-      "option3": ""
-    },
-    {
-      "id": "44305551917290",
-      "price": 12720,
-      "title": "Stitched / L",
-      "compare_price": 15900,
-      "option1": "Stitched",
-      "option2": "L",
-      "option3": ""
-    }
-  ],
-  "options": [
-    {
-      "name": "Type",
-      "position": 1,
-      "values": [
-        "Stitched"
-      ]
-    },
-    {
-      "name": "Size",
-      "position": 2,
-      "values": [
-        "S",
-        "M",
-        "L"
-      ]
-    }
-  ],
-  "tags": [
-    "custom_flow",
-    "ELARA LUXURY PRET",
-    "Hide_Custom_Flow",
-    "rtw-custom-flow",
-    "Sale-1-July",
-    "Serenova",
-    "show_fabric_color_metafield"
-  ],
-  "available": true
-}]
-
 

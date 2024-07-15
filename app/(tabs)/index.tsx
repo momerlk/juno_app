@@ -622,7 +622,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
           style={{
             backgroundColor : "black",
             flex : 1,
-            marginTop: SCREEN_HEIGHT * 0.05,
+            marginTop: Platform.OS === "ios" ? SCREEN_HEIGHT * 0.12 : SCREEN_HEIGHT * 0.05,
             marginBottom : SCREEN_HEIGHT * 0.4,
             marginHorizontal : size.scale(25),
             borderRadius : 12,
@@ -767,29 +767,10 @@ export class SwipeView extends React.Component<AppProps, AppState> {
     }
   }
 
-  // render the entire swipeview component
-  render() {
-    if(this.state.loading){
-        return <View style={{flex : 1,backgroundColor : "black", paddingTop : 30, paddingLeft : 10}}>
-            
-            <ActivityIndicator style={{
-                position: 'absolute',
-                left: '50%',
-                top: '50%',
-                transform: [{ translateX: -50 }, { translateY: -50 }],
-            }} size={60} color="white"/>
-        </View>
-    } else {
+  renderTopNav(){
     return (
-      <View style={{ 
-        flex: 1,
-        backgroundColor: "black",
-        paddingBottom : (SCREEN_HEIGHT - this.props.height) - size.verticalScale(130)
-        }}
-      >
-        {this.props.topNav === true ?
-        <>
-          <View style={{display : "flex" , flexDirection : "row", justifyContent : "center"}}>
+      <>
+          <View style={{display : "flex" , flexDirection : "row", justifyContent : "center", zIndex : 4000}}>
             <Image  source={require("../assets/juno_text.png")} style={{
               position : "absolute",
               left : 15,
@@ -841,38 +822,12 @@ export class SwipeView extends React.Component<AppProps, AppState> {
           </TouchableOpacity>
           </View> 
         </>
-        : <></>}
+    )
+  }
 
-        <View style={{paddingBottom : Platform.OS === "ios" ? size.verticalScale(45) : size.verticalScale(80)}}/>
-
-        <View style={{ flex: 1 }}>
-          {this.renderProducts()}
-        </View>
-
-        {this.renderSearchModal()}
-        
-
-
-        <Filter 
-          modalVisible={this.state.modalVisible} 
-          filter={this.state.filter}
-          setModalVisible={(v: boolean) => this.setState({modalVisible : v})}
-          onConfirm={(data : any) => {
-            this.props.onFilter(data);
-            
-          }}
-          onClear={() => {
-            this.props.onFilterClear()
-          }}
-        />
-        <Sharing 
-          modalVisible={this.state.shareVisible} 
-          setModalVisible={(v: boolean) => this.setState({shareVisible : v})}
-        />
-
-        {this.props.bottomNav === true ? 
-
-        <View style={{
+  renderBottomNav(){
+    return (
+      <View style={{
           display : "flex", flexDirection : "row", 
           bottom : Platform.OS === "ios" ? 0 : 10,
           justifyContent : "space-evenly",
@@ -961,7 +916,59 @@ export class SwipeView extends React.Component<AppProps, AppState> {
             </LinearGradient>
           </TouchableOpacity>
         </View>
-      : <></>}
+    )
+  }
+
+  // render the entire swipeview component
+  render() {
+    if(this.state.loading){
+        return <View style={{flex : 1,backgroundColor : "black", paddingTop : 30, paddingLeft : 10}}>
+            
+            <ActivityIndicator style={{
+                position: 'absolute',
+                left: '50%',
+                top: '50%',
+                transform: [{ translateX: -50 }, { translateY: -50 }],
+            }} size={60} color="white"/>
+        </View>
+    } else {
+    return (
+      <View style={{ 
+        flex: 1,
+        backgroundColor: "black",
+        paddingBottom : (SCREEN_HEIGHT - this.props.height) - size.verticalScale(130)
+        }}
+      >
+        {this.props.topNav === true ? this.renderTopNav() : <></>}
+
+        <View style={{paddingBottom : Platform.OS === "ios" ? size.verticalScale(45) : size.verticalScale(80)}}/>
+
+        <View style={{ flex: 1 }}>
+          {this.renderProducts()}
+        </View>
+
+        {this.renderSearchModal()}
+        
+
+
+        <Filter 
+          modalVisible={this.state.modalVisible} 
+          filter={this.state.filter}
+          setModalVisible={(v: boolean) => this.setState({modalVisible : v})}
+          onConfirm={(data : any) => {
+            this.props.onFilter(data);
+            
+          }}
+          onClear={() => {
+            this.props.onFilterClear()
+          }}
+        />
+        <Sharing 
+          modalVisible={this.state.shareVisible} 
+          setModalVisible={(v: boolean) => this.setState({shareVisible : v})}
+        />
+
+        {this.props.bottomNav === true ? this.renderBottomNav() : <></>}
       </View>
     );
     }
