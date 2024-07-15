@@ -92,7 +92,6 @@ export class WSFeed extends WS {
   async sendAction(action_type : string , product_id : string , 
     query : { filter: any; text?: undefined; } | { text: any; filter?: undefined; } | { text: any; filter: any; } | null){
     
-    
     let data : any = {
       user_id : "",
       action_type : action_type,
@@ -196,7 +195,8 @@ export async function signIn(email : string, password : string){
         await AsyncStorage.setItem("first_time", "no"); 
         return true;
     } else {
-        alert('failed to login, error: ' + data.message);
+        console.error('failed to login, error: ' + data.message);
+        alert(`failed to log in check details`)
         return false;
     }
 }
@@ -269,14 +269,16 @@ export async function getProducts(n : number){
   }
 }
 
-export async function queryProducts(text : string, filter : any){
+export async function queryProducts(text : string, filter : any | null){
+  if (filter === null){
+    return
+  }
   const token = await AsyncStorage.getItem("token")
   if (token === null){
     alert(`Authenticate again`)
     router.navigate("/sign-in")
     return null;
   }
-
   await AsyncStorage.setItem("filter" , JSON.stringify(filter));
   const resp = await fetch(base_url + "/query", {
     method: "POST",
@@ -293,6 +295,12 @@ export async function queryProducts(text : string, filter : any){
   if(resp.status === 200){
     let products = await resp.json();
     return products;
+  }
+
+  if (resp.status === 401){
+    alert(`Authenticate again`)
+    router.replace("/sign-in")
+    return null;
   }
   
   return null

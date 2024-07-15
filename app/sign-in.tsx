@@ -38,7 +38,8 @@ const Login = () => {
             setPassword('')
 
         } catch (error : any) {
-            alert('failed to login, error: ' + error.message);
+            console.error('failed to login, error: ' + error.message);
+            alert(`failed to log in check details`)
         }
 
         if(ok){

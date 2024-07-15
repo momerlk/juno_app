@@ -9,12 +9,13 @@ import {
   ActivityIndicator,Platform, FlatList, Modal, 
   PanResponderInstance, GestureResponderEvent, 
   PanResponderGestureState, TouchableOpacity,
+  SafeAreaView,
 } from 'react-native';
 import * as size from "react-native-size-matters"
 import { AntDesign, Ionicons, Entypo, EvilIcons , Feather} from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { FastImageBackground  } from '../_common';
+import { deepEqual, FastImageBackground  } from '../_common';
 import {Image as FastImage} from "expo-image"
 
 
@@ -45,25 +46,44 @@ const fetchFonts = () => {
 interface AppState {
   currentIndex: number;
   cards: any[];
+ 
   loading : boolean;
+  
   modalVisible : boolean;
   shareVisible : boolean;
+  searchBarVisible : boolean;
+
   likeOpacity: number;
   dislikeOpacity: number;
   superLikeOpacity: number;
+
+
   width : number,
   height : number,
   filter : any;
+
+  query : string;
+  
 }
 
 interface AppProps {
   cards : any[];
+  
   height : number;
+  
   onSwipe : Function;
   onUndo : Function;
   onFilter : Function;
+  onSearch : (text : string) => void;
+  onFilterClear : Function;
+
+  query : string;
+  
+  
   loading : boolean;
+  
   paddingTop : number;
+
   topNav : boolean;
   bottomNav : boolean;
 }
@@ -125,6 +145,9 @@ export class SwipeView extends React.Component<AppProps, AppState> {
       height : 0,
       width : 0,
       filter : {},
+
+      searchBarVisible : false,
+      query : this.props.query,
     };
 
     this.direction = "center";
@@ -149,13 +172,14 @@ export class SwipeView extends React.Component<AppProps, AppState> {
         if (Math.abs(dx) > Math.abs(dy)) {
           // Horizontal movement
           if (dx > 60) {
-            const newDirection = 'right';
+            const newDirection = 'right'; // like detected
             if (this.direction !== newDirection){
               this.setState({likeOpacity : 1, dislikeOpacity : 0, superLikeOpacity : 0})
               this.direction = newDirection;
             }
           } else if (dx < -60) {
             const newDirection = 'left';
+            // disliked detected
             if (this.direction !== newDirection){
               this.setState({likeOpacity : 0, dislikeOpacity : 1, superLikeOpacity : 0})
               this.direction = newDirection;
@@ -196,6 +220,9 @@ export class SwipeView extends React.Component<AppProps, AppState> {
   async componentDidMount() {
     await fetchFonts();
 
+    if(this.state.currentIndex !== 0){
+      this.setState({currentIndex : 0})
+    }
     // if user first time user redirect them to welcome
     const firstTime = await AsyncStorage.getItem("first_time")
     if (firstTime === null ||  firstTime !== "no"){
@@ -204,11 +231,12 @@ export class SwipeView extends React.Component<AppProps, AppState> {
   }
 
   
-
+  // meant as a wrapper for props handling
   async handleSwipeAction(action: string) {
     this.props.onSwipe(action , this.state.currentIndex);
   }
 
+  // handles animation and index update, and action detection of swipe.
   handleSwipe = (gestureState: any) => {
     if (gestureState.dx > 120) {
       // Swipe right
@@ -297,6 +325,8 @@ export class SwipeView extends React.Component<AppProps, AppState> {
     }
   }
 
+
+  // the component of single product image
   ItemCard(props: any){
     const item = props.item;
     const textHeight = props.height/(SCREEN_HEIGHT/400);
@@ -399,6 +429,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
     )
   }
 
+  // render products lists efficiently
   renderProducts = () => {
     const rotate = this.position.x.interpolate({
       inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
@@ -565,6 +596,177 @@ export class SwipeView extends React.Component<AppProps, AppState> {
     }).reverse();
   };
 
+    
+  // toggle search bar on or off
+  toggleSearch(){
+    this.setState({searchBarVisible : !this.state.searchBarVisible});
+  }
+
+  renderSearchModal(){
+    return (
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={this.state.searchBarVisible}
+        onRequestClose={() => {
+          this.toggleSearch();
+        }}
+           
+      >
+        <View style={{
+          ...StyleSheet.absoluteFillObject,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent black background
+        }}/>
+        <View
+          style={{
+            backgroundColor : "black",
+            flex : 1,
+            marginTop: SCREEN_HEIGHT * 0.05,
+            marginBottom : SCREEN_HEIGHT * 0.4,
+            marginHorizontal : size.scale(25),
+            borderRadius : 12,
+          }}
+        >
+          <View style={{
+            width: "100%",
+            alignItems: "center",
+            justifyContent: "center",
+          }}>
+              <TextInput
+                placeholder='Search for something ...'
+                value={this.state.query}
+                onChangeText={(text : string) => {
+                  this.setState({query : text})
+                }}
+                onSubmitEditing={() => {
+                  this.props.onSearch(this.state.query)
+                }}
+                placeholderTextColor={"gray"}
+                style={{
+                  width: "100%",
+                  color: "white",
+                  fontSize : 16,
+                  fontFamily : "Poppins",
+                  backgroundColor : "#222222",
+                  height: 60,
+                  borderTopRightRadius: 12,
+                  borderTopLeftRadius : 12,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  paddingLeft: 50,
+                  paddingRight : 10,
+                }}
+              />
+
+              <Image
+                source={require("../assets/icons/search.png")}
+                style={{
+                  position: "absolute",
+                  left : 12,
+                  width : 20,
+                  height : 20,
+                }}
+              />
+          </View>
+          
+          <Text
+            style={{
+              fontSize : 19,
+              fontFamily : "Poppins",
+              color : "white",
+              marginTop : 10,
+              marginBottom : 10,
+              marginLeft : 20,
+              
+            }} 
+          >Suggested Searches</Text>
+          {/* TODO : Replace with trending queries and autocomplete */}
+          <FlatList 
+            data={mockQueries} 
+            style={{paddingRight : 10,}}
+            renderItem={(item) => (
+              <TouchableOpacity 
+                style={{
+                  marginVertical : 6,
+                  marginLeft : 50,
+                  display : "flex",
+                  flexDirection : "row",
+                }}
+                onPress={() => this.setState({query : item.item})} 
+              >
+                <Image 
+                  source={require("../assets/icons/search.png")} 
+                  style={{
+                    marginTop : 5,
+                    width : 20,
+                    height : 20,
+                  }}
+                />
+                <Text style={{
+                  fontSize : 18, 
+                  marginLeft : 15,
+                  fontFamily : "Poppins", 
+                  color : "white",
+                }}>
+                  {item.item}
+                </Text>
+              </TouchableOpacity>
+            )}
+            keyExtractor={(item : any, index : number) => `query-${index}`}
+          />
+          <View style={{display : "flex", flexDirection : "row", flex : 1, justifyContent : "space-evenly", marginHorizontal : 7,marginBottom : 30, paddingVertical : 60}}>
+            <PrimaryButton
+              onPress={() => {
+                this.props.onSearch(this.state.query)
+                this.toggleSearch()
+              }}
+              style={{
+                height : 50,
+              }}
+              textStyle={{
+                fontSize : 14
+              }}
+              text="Confirm" 
+            />
+            <SecondaryButton
+              onPress={() => {
+                this.props.onSearch("")
+                this.toggleSearch()
+              }}
+              style={{
+                height : 50,
+              }}
+              textStyle={{
+                fontSize : 14
+              }}
+              text="Clear" 
+            />
+          </View>
+        </View>
+        
+      </Modal>
+    )
+  }
+
+  getSearchBarPlaceholder(val : string | undefined | null){
+    if (val === null){
+      return "Search"
+    }
+    if(val === undefined){
+      return "Search"
+    }
+    const text = val as string;
+    if(text === ""){
+      return "Search"
+    }
+    if (text.length > 10){
+      return text.substring(0,9) + " ..."
+    } else {
+      return text
+    }
+  }
+
+  // render the entire swipeview component
   render() {
     if(this.state.loading){
         return <View style={{flex : 1,backgroundColor : "black", paddingTop : 30, paddingLeft : 10}}>
@@ -581,35 +783,73 @@ export class SwipeView extends React.Component<AppProps, AppState> {
       <View style={{ 
         flex: 1,
         backgroundColor: "black",
-        paddingTop : this.props.paddingTop, 
         paddingBottom : (SCREEN_HEIGHT - this.props.height) - size.verticalScale(130)
         }}
       >
-        
-        <View style={{ flex: 1 }}>
-          {this.renderProducts()}
-        </View>
-        
         {this.props.topNav === true ?
         <>
-          <View style={{position : "absolute" , top : size.verticalScale(50), display : "flex" , flexDirection : "row"}}>
-            <Logo />
-          </View> 
-          <TouchableOpacity onPress={() => router.navigate("/liked")} style={{margin : 10, position : "absolute",top: size.verticalScale(35),right : 65,}}>
+          <View style={{display : "flex" , flexDirection : "row", justifyContent : "center"}}>
+            <Image  source={require("../assets/juno_text.png")} style={{
+              position : "absolute",
+              left : 15,
+              top : 35,
+              height : 65, 
+              width : 65, 
+              resizeMode : "cover" 
+            }} 
+          />
+          <TouchableOpacity onPress={() => this.toggleSearch()} 
+          style={{
+            margin : 10,
+            position : "absolute",
+            top: size.verticalScale(30),
+            width : size.scale(160),
+            height : 40,
+            backgroundColor : "#222222",
+            borderRadius : 20,
+            alignSelf : 'center',
+            display : "flex",
+            flexDirection : "row",
+            justifyContent : "center",
+          }}>
+            {this.state.query === "" ?
             <Image 
               source={require("../assets/icons/search.png")} 
               style={{
-                width : 33,
-                height : 33,
+                position : "absolute",
+                left : 20,
+                marginVertical : 10,
+                width : 20,
+                height : 20,
               }}
             />
+            : <></>}
+            <Text 
+              style={{
+                fontFamily : "Poppins",
+                textAlign : "center",
+                alignSelf : "center",
+                fontSize : 16,
+                color : this.state.query === "" ? "gray" : "white",
+              }} 
+            >{this.getSearchBarPlaceholder(this.state.query)}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => router.navigate("/liked")} style={{margin : 10, position : "absolute",top: size.verticalScale(35),right : 10,}}>
             <Feather name="heart" size={35} color="white" /> 
           </TouchableOpacity>
+          </View> 
         </>
         : <></>}
+
+        {Platform.OS === "ios" ? <View style={{paddingBottom : 40}}/> : 
+        <View style={{paddingBottom : 100}}/>}
+        <View style={{ flex: 1 }}>
+          {this.renderProducts()}
+        </View>
+
+        {this.renderSearchModal()}
+        
 
 
         <Filter 
@@ -618,8 +858,10 @@ export class SwipeView extends React.Component<AppProps, AppState> {
           setModalVisible={(v: boolean) => this.setState({modalVisible : v})}
           onConfirm={(data : any) => {
             this.props.onFilter(data);
-            // TODO : this change in index when filter is called may cause some issues.
-            this.setState({currentIndex : 0})
+            
+          }}
+          onClear={() => {
+            this.props.onFilterClear()
           }}
         />
         <Sharing 
@@ -729,10 +971,17 @@ export class SwipeView extends React.Component<AppProps, AppState> {
 
 
 
+interface HomeState {
+  products : Array<any>;
+  mock : Array<any>;
+  WSFeed : api.WSFeed | null;
+  loading : boolean;
+  currentIndex : number;
+  query : string;
+}
 
 
-
-export default class Home extends React.Component<any , any> {
+export default class Home extends React.Component<any , HomeState> {
   constructor(props : any) {
     super(props);
     this.state = {
@@ -741,6 +990,7 @@ export default class Home extends React.Component<any , any> {
       WSFeed: null,
       loading : true,
       currentIndex : 0,
+      query : "",
     };
     fetchFonts();
   }
@@ -804,11 +1054,15 @@ export default class Home extends React.Component<any , any> {
       if (products.length === 0) {
         return;
       }
+      let queryNull = false;
+      if (this.state.query === "" && filter === null){
+        queryNull = true;
+      }
       try {
         WSFeed.sendAction(
             action_type,
              products[this.state.currentIndex].product_id, 
-            api.createQuery(null, filter)
+            !queryNull ? api.createQuery(this.state.query, filter) : null,
           );
       } catch (e) {
         console.error(`products.length = ${products.length}, index = ${this.state.currentIndex}, error = ${e}`);
@@ -819,34 +1073,12 @@ export default class Home extends React.Component<any , any> {
   };
 
   handleFilter = async (data : any) => {
-    const deepEqual = (obj1 : any, obj2 : any) => {
-      if (obj1 === obj2) {
-        return true;
-      }
-
-      if (typeof obj1 !== 'object' || obj1 === null || typeof obj2 !== 'object' || obj2 === null) {
-        return false;
-      }
-
-      const keys1 = Object.keys(obj1);
-      const keys2 = Object.keys(obj2);
-
-      if (keys1.length !== keys2.length) {
-        return false;
-      }
-
-      for (let key of keys1) {
-        if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) {
-          return false;
-        }
-      }
-
-      return true;
-    }
 
     if (data === null || data === undefined){
       return;
     }
+
+
     try {
       const filterString = await AsyncStorage.getItem("filter")
       let filter = null;
@@ -862,13 +1094,36 @@ export default class Home extends React.Component<any , any> {
       await AsyncStorage.setItem('filter', JSON.stringify(data));
       this.setState({loading : true, products: [], currentIndex : 0});
       const { WSFeed } = this.state;
-      await WSFeed?.sendAction('open', '', api.createQuery(null, data));
+      await WSFeed?.sendAction('open', '', api.createQuery(this.state.query, data));
       this.setState({loading : false})
       console.log('on filter called');
     } catch (e) {
       alert(`failed to set filter, error = ${e}`);
     }
   };
+
+
+
+  // handle search
+  async handleSearch(query : string){
+    this.setState({loading : true , query : query})
+    const filterString = await AsyncStorage.getItem("filter")
+    let filter : any | null = null;
+    if(filterString !== null && filterString !== ""){
+      try {
+        filter = await JSON.parse(filterString);
+      } catch(e){}
+    }
+
+    if (filter === null){
+      const products = await api.search(this.state.query);
+      this.setState({loading : false, products : products , currentIndex : 0})
+      return;
+    }
+
+    const products = await api.queryProducts(this.state.query , filter);
+    this.setState({loading : false, products : products , currentIndex : 0})
+  }  
 
   render() {
     if(this.state.loading){
@@ -877,7 +1132,7 @@ export default class Home extends React.Component<any , any> {
       )
     }
     return (
-      <>
+      <SafeAreaView style={{flex : 1}}>
         <SwipeView
           paddingTop={size.verticalScale(70)}
           height={(SCREEN_HEIGHT * 0.88) - tabBarHeight}
@@ -886,14 +1141,38 @@ export default class Home extends React.Component<any , any> {
           onUndo={() => this.setState({currentIndex : this.state.currentIndex - 1})}
           onFilter={this.handleFilter}
           loading={false}
-
+          query={this.state.query}
+          onSearch={(query : string) => {
+            if (query === this.state.query){
+              return
+            }
+            if (query === "" && this.state.query !== ""){
+              this.setState({query : ""})
+              this.handleFilter({})
+              return
+            }
+            if (query === ""){
+              this.setState({query : ""})
+              return
+            }
+            this.handleSearch(query)
+          }}
+          onFilterClear={() => {
+            this.handleFilter({})
+          }}
           topNav={true}
           bottomNav={true}
         />
-      </>
+      </SafeAreaView>
     );
   }
 }
 
 
-
+const mockQueries = [
+  "3 pc dress",
+  "2 pc dress",
+  "Stitched ready made 2 pc",
+  "Unstitched lawn",
+  "Chiffon dress"
+]

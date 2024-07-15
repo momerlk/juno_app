@@ -240,7 +240,7 @@ export function PrimaryButton(props : any){
         ]}
         
       >
-        <Text style={{ fontSize: 18, color: "black", fontFamily : "Poppins" }}>{props.text}</Text>
+        <Text style={[{ fontSize: 18, color: "black", fontFamily : "Poppins" }, props.textStyle]}>{props.text}</Text>
         {props.children}
       </TouchableOpacity>
   )
@@ -268,7 +268,7 @@ export function SecondaryButton(props : any){
         ]}
         
       >
-        <Text style={{ fontSize: 18, color: "white", fontFamily : "Poppins" }}>{props.text}</Text>
+        <Text style={[{ fontSize: 18, color: "white", fontFamily : "Poppins" },props.textStyle]}>{props.text}</Text>
         {props.children}
       </TouchableOpacity>
   )
@@ -833,6 +833,8 @@ export function Filter(props : any){
 
             <SecondaryButton
               onPress={async () => {
+                
+                props.onClear()
 
                 props.setModalVisible(false);
                 
@@ -862,7 +864,7 @@ export function Filter(props : any){
                 setLowerBound(null)
                 setUpperBound(null)
                 await AsyncStorage.setItem("filter" , "")
-                props.onConfirm({})
+                
                 
               }} 
               text="Clear Filters"
