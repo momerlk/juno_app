@@ -731,6 +731,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
             />
             <SecondaryButton
               onPress={() => {
+                this.setState({query : ""})
                 this.props.onSearch("")
                 this.toggleSearch()
               }}
@@ -1149,6 +1150,15 @@ export default class Home extends React.Component<any , HomeState> {
     this.setState({loading : false, products : products , currentIndex : 0})
   }  
 
+  async resetProducts(n : number){
+    const products = await api.getProducts(n);
+    if (products !== null){
+      this.setState({query : "", products : products , currentIndex : 0, loading : false})
+    } else {
+      alert(`failed to get new recommendations`)
+    }
+  }
+
   render() {
     if(this.state.loading){
       return (
@@ -1170,19 +1180,18 @@ export default class Home extends React.Component<any , HomeState> {
           onSwipe={this.handleSwipe}
           onUndo={() => this.setState({currentIndex : this.state.currentIndex - 1})}
           onFilter={this.handleFilter}
-          loading={false}
+          loading={this.state.loading}
           query={this.state.query}
-          onSearch={(query : string) => {
+          onSearch={async (query : string) => {
             if (query === this.state.query){
               return
             }
             if (query === "" && this.state.query !== ""){
-              this.setState({query : ""})
-              this.handleFilter({})
+              this.setState({loading : true})
+              await this.resetProducts(50) 
               return
             }
             if (query === ""){
-              this.setState({query : ""})
               return
             }
             this.handleSearch(query)
