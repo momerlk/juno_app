@@ -6,7 +6,6 @@ import { useEffect } from 'react';
 import React from "react";
 
 import { SessionProvider } from './backend/ctx';
-import { Slot } from 'expo-router';
 import { fetchFonts } from './backend/util';
 
 
@@ -34,7 +33,6 @@ export default function RootLayout() {
             headerShown: false,
           }}
         >
-
       </Stack>
     </SessionProvider>
   )
