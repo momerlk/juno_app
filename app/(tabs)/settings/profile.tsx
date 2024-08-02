@@ -9,9 +9,9 @@ import { EvilIcons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { AntDesign, Feather } from '@expo/vector-icons';
 
-import {Back, PrimaryButton, SecondaryButton, Loading} from "../../_common"
+import {Back, PrimaryButton, SecondaryButton, Loading} from "../../components/_common"
 
-import * as api from "../../api"
+import * as api from "../../backend/api"
 
 
 
@@ -56,7 +56,7 @@ export default function ProfilePage(){
 
         <Text style={{
           color : "white" , 
-          fontFamily : "Poppins", 
+          fontFamily : "Poppins_400Regular", 
           fontWeight : "bold",
           fontSize: 25,
           marginHorizontal : 30,
@@ -132,7 +132,7 @@ function EditableField(props : EditableProps){
             fontSize : 20, 
             color : "white", 
             alignSelf : "center", 
-            fontFamily : "Poppins", 
+            fontFamily : "Poppins_400Regular", 
           }}>
           {props.name}
         </Text>
@@ -144,7 +144,7 @@ function EditableField(props : EditableProps){
               fontSize : 17, 
               color : "white", 
               alignSelf : "center", 
-              fontFamily : "Poppins", 
+              fontFamily : "Poppins_400Regular", 
               fontWeight :"semibold",
               marginHorizontal : 20,
             }}>
@@ -171,7 +171,7 @@ function EditableField(props : EditableProps){
         <Text style={{
             fontSize : 19, 
             color : "white", 
-            fontFamily : "Poppins", 
+            fontFamily : "Poppins_400Regular", 
             fontWeight :"semibold",
             marginVertical : 20,
           }}>

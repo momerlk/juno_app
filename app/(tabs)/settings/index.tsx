@@ -16,9 +16,9 @@ import {
   Ionicons,
 } from '@expo/vector-icons';
 import * as size from "react-native-size-matters"
-import {Logo} from "../../_common"
+import {Logo} from "../../components/_common"
 
-import * as api from "../../api"
+import * as api from "../../backend/api"
 
 export default function SettingsPage() {
   const [data , setData] = useState({
@@ -49,10 +49,10 @@ export default function SettingsPage() {
       <Text style={{fontSize : 25, color : "white", alignSelf : "center", fontFamily : "Montserrat", fontWeight :"bold"}}>
         {data.name}
       </Text> 
-      <Text style={{fontSize : 18, color : "gray", alignSelf : "center", marginTop : 20, fontFamily : "Poppins"}}>
+      <Text style={{fontSize : 18, color : "gray", alignSelf : "center", marginTop : 20, fontFamily : "Poppins_400Regular"}}>
         {data.email}
       </Text>
-      <Text style={{fontSize : 18, color : "gray", alignSelf : "center", marginBottom : 20, fontFamily : "Poppins"}}>
+      <Text style={{fontSize : 18, color : "gray", alignSelf : "center", marginBottom : 20, fontFamily : "Poppins_400Regular"}}>
         {data.number}
       </Text>
 
@@ -91,7 +91,7 @@ export default function SettingsPage() {
       <Action 
         icon={(<Feather name="info" size={23} color="#d3d3d3" style={{marginTop : 4}}/>)}
         name="Log Out"
-        route="/sign-in"
+        route="/auth/sign-in"
         replace={true}
       />
     </ScrollView>
@@ -123,7 +123,7 @@ function Action(props : any){
         {props.icon}
         <Text style={{
           marginLeft : 15,
-          fontSize: 20, fontFamily: "Poppins",
+          fontSize: 20, fontFamily: "Poppins_400Regular",
           color : "#d3d3d3"
         }}>{props.name}</Text>
         </View> 
@@ -131,7 +131,7 @@ function Action(props : any){
         <Text style={{
           fontSize: 25, marginVertical: 5,
           color : "gray",
-          fontFamily : "Poppins",
+          fontFamily : "Poppins_400Regular",
         }}>{">"}</Text>
       </TouchableOpacity> 
   )

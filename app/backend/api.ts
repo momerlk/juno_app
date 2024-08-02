@@ -239,7 +239,7 @@ export async function getProducts(n : number){
   const token = await AsyncStorage.getItem("token")
   if (token === null){
     alert(`Authenticate again`)
-    router.navigate("/sign-in")
+    router.navigate("/auth/sign-in")
     return null;
   }
   const requestOptions = {
@@ -255,7 +255,7 @@ export async function getProducts(n : number){
     const resp = await fetch(`${base_url}/products?n=${n}`, requestOptions);
     if (resp.status === 401){
         alert(`token expired sign in again`)
-        router.replace("/sign-in")
+        router.replace("/auth/sign-in")
         return null;
     } else if (resp.status !== 200){
         return null;
@@ -276,7 +276,7 @@ export async function queryProducts(text : string, filter : any | null){
   const token = await AsyncStorage.getItem("token")
   if (token === null){
     alert(`Authenticate again`)
-    router.navigate("/sign-in")
+    router.navigate("/auth/sign-in")
     return null;
   }
   await AsyncStorage.setItem("filter" , JSON.stringify(filter));
@@ -299,7 +299,7 @@ export async function queryProducts(text : string, filter : any | null){
 
   if (resp.status === 401){
     alert(`Authenticate again`)
-    router.replace("/sign-in")
+    router.replace("/auth/sign-in")
     return null;
   }
   
@@ -339,7 +339,7 @@ export async function getLiked(){
   const token = await AsyncStorage.getItem("token")
   if (token === null){
     alert(`Authenticate again`)
-    router.navigate("/sign-in")
+    router.navigate("/auth/sign-in")
     return null;
   }
   const requestOptions = {
@@ -355,7 +355,7 @@ export async function getLiked(){
     const resp = await fetch(`${base_url}/liked`, requestOptions);
     if (resp.status === 401){
         alert(`token expired sign in again`)
-        router.replace("/sign-in")
+        router.replace("/auth/sign-in")
         return null;
     } else if (resp.status !== 200){
         return null;

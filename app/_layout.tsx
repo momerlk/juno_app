@@ -5,15 +5,17 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import React from "react";
 
+import { SessionProvider } from './backend/ctx';
+import { Slot } from 'expo-router';
+import { fetchFonts } from './backend/util';
+
 
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const [loaded] = useFonts({
-    Montserrat: require('./assets/fonts/Montserrat.ttf'),
-  });
+  const loaded = fetchFonts();
 
   useEffect(() => {
     if (loaded) {
@@ -25,14 +27,16 @@ export default function RootLayout() {
     return null;
   }
   return (
-    <Stack
+    <SessionProvider>
+      <Stack
           screenOptions={{
             // Hide the header for all other routes.
             headerShown: false,
           }}
         >
 
-        </Stack>
+      </Stack>
+    </SessionProvider>
   )
 
 }

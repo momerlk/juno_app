@@ -10,11 +10,11 @@ import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import PinchableCarousel from "./_image"
-import { Back , toTitle, fmtPrice, DropDown as DropDownPicker, PrimaryButton, SecondaryButton, asyncTimeout} from './_common';
+import PinchableCarousel from "./components/_image"
+import { Back , toTitle, fmtPrice, DropDown as DropDownPicker, PrimaryButton, SecondaryButton, asyncTimeout} from './components/_common';
 
 import * as size from "react-native-size-matters"
-import * as api from "./api"
+import * as api from "./backend/api"
 
 function DropDown(props : any){
   const [open , setOpen] = useState(false);
@@ -113,8 +113,8 @@ const ProductDetail: React.FC<any> = () => {
 
         <View style={{...styles.detailsContainer , backgroundColor : "#121212"}}>
           {/* TODO : totTitle doesn't work in some cases */}
-          <Text style={[styles.title , {fontFamily : "Poppins"}]}>{toTitle(title as string)}</Text>
-          <Text style={{fontSize : 28, marginBottom : 20,color : "white" , fontFamily : "Poppins"}}>
+          <Text style={[styles.title , {fontFamily : "Poppins_400Regular"}]}>{toTitle(title as string)}</Text>
+          <Text style={{fontSize : 28, marginBottom : 20,color : "white" , fontFamily : "Poppins_400Regular"}}>
             By {toTitle(vendor as string)}</Text>
 
                    <View style={{
@@ -136,14 +136,14 @@ const ProductDetail: React.FC<any> = () => {
                     <Text style={{
                       fontSize: 24,
                       color : "white",
-                      fontFamily : "Poppins",
+                      fontFamily : "Poppins_400Regular",
                     }}>Rs. {fmtPrice(parseInt(price as string))}</Text>
                     
                     <Text style={{
                         fontSize: 24,
                         fontWeight : "bold",
                         marginLeft : 20,
-                        fontFamily : "Poppins",
+                        fontFamily : "Poppins_400Regular",
                         color : "white",
                         textDecorationLine : "line-through",
                       }}>{fmtPrice(parseInt(compare_price as string))}</Text>
@@ -154,7 +154,7 @@ const ProductDetail: React.FC<any> = () => {
                   <Text style={{
                     fontSize: 24,
                     fontWeight : "bold",
-                    fontFamily : "Poppins",
+                    fontFamily : "Poppins_400Regular",
                     color : "#FF1D18",
                   }}>{discount}% Off</Text>
                   </>
@@ -164,7 +164,7 @@ const ProductDetail: React.FC<any> = () => {
                   <Text style={{
                     fontSize: 24,
                     color : "white",
-                    fontFamily : "Poppins",
+                    fontFamily : "Poppins_400Regular",
                   }}>Rs. {fmtPrice(parseInt(price as string))}</Text>
                 )
               }
@@ -197,7 +197,7 @@ const ProductDetail: React.FC<any> = () => {
 
           <View style={{...styles.section}}>
             <Text style={styles.sectionTitle}>Details</Text>
-            <Text style={[styles.description , {fontFamily : "Poppins"}]}>{description}</Text>
+            <Text style={[styles.description , {fontFamily : "Poppins_400Regular"}]}>{description}</Text>
           </View>
 
           

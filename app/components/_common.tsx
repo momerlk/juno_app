@@ -9,9 +9,9 @@ import {Text , Image , Pressable ,
 } from "react-native"
 import {Ionicons, AntDesign} from "@expo/vector-icons"
 
-import { tabBarHeight } from "./(tabs)/_layout";
+import { tabBarHeight } from "../(tabs)/_layout";
 import * as size from "react-native-size-matters"
-import * as api from "./api"
+import * as api from "../backend/api"
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -51,7 +51,7 @@ export function Logo(){
   const topMargin = 42;
     return (
     <>
-        <Image  source={require("./assets/juno_text.png")} style={{
+        <Image  source={require("../assets/juno_text.png")} style={{
           position : "absolute",
           marginTop : topMargin,
           left : 20,
@@ -88,7 +88,7 @@ export function Back(props : BackProps ){
       <Text 
         style={{
           color : "white", 
-          fontFamily : "Poppins", 
+          fontFamily : "Poppins_400Regular", 
           fontSize : 22 , 
           marginLeft : 20,
           marginTop : 10,
@@ -240,7 +240,7 @@ export function PrimaryButton(props : any){
         ]}
         
       >
-        <Text style={[{ fontSize: 18, color: "black", fontFamily : "Poppins" }, props.textStyle]}>{props.text}</Text>
+        <Text style={[{ fontSize: 18, color: "black", fontFamily : "Poppins_400Regular" }, props.textStyle]}>{props.text}</Text>
         {props.children}
       </TouchableOpacity>
   )
@@ -268,7 +268,7 @@ export function SecondaryButton(props : any){
         ]}
         
       >
-        <Text style={[{ fontSize: 18, color: "white", fontFamily : "Poppins" },props.textStyle]}>{props.text}</Text>
+        <Text style={[{ fontSize: 18, color: "white", fontFamily : "Poppins_400Regular" },props.textStyle]}>{props.text}</Text>
         {props.children}
       </TouchableOpacity>
   )
@@ -377,7 +377,7 @@ export const DropDown: React.FC<DropDownProps> = ({ data, type, range, selected,
         onPress={() => handleSelect(item.value, isSelected, isMin)}
       >
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text style={{ fontSize: 17, color: "white", fontFamily: "Poppins" }}>
+          <Text style={{ fontSize: 17, color: "white", fontFamily: "Poppins_400Regular" }}>
             {item.label}
           </Text>
           {isSelected && <AntDesign name="check" size={20} color="white" style={{ marginTop: 3 }} />}
@@ -429,7 +429,7 @@ export const DropDown: React.FC<DropDownProps> = ({ data, type, range, selected,
             }}/> 
             : <></>}
 
-            <Text style={{ fontSize: 17, marginTop : 8, marginLeft : 4, color: "white", fontFamily: "Poppins" }}>
+            <Text style={{ fontSize: 17, marginTop : 8, marginLeft : 4, color: "white", fontFamily: "Poppins_400Regular" }}>
               {item.label}
             </Text>
           </View>
@@ -471,7 +471,7 @@ export const DropDown: React.FC<DropDownProps> = ({ data, type, range, selected,
         }}>
           {type === "range" ? (
             <>
-              <Text style={{ marginVertical: 0, fontSize: 17, fontFamily: "Poppins", color: "white", textAlign: "center" }}>
+              <Text style={{ marginVertical: 0, fontSize: 17, fontFamily: "Poppins_400Regular", color: "white", textAlign: "center" }}>
                 Min
               </Text>
               <FlatList
@@ -479,7 +479,7 @@ export const DropDown: React.FC<DropDownProps> = ({ data, type, range, selected,
                 renderItem={(item) => renderRangeItem(item, true)}
                 keyExtractor={(item) => item.value}
               />
-              <Text style={{ marginVertical: 5, fontSize: 17, fontFamily: "Poppins", color: "white", textAlign: "center" }}>
+              <Text style={{ marginVertical: 5, fontSize: 17, fontFamily: "Poppins_400Regular", color: "white", textAlign: "center" }}>
                 Max
               </Text>
               <FlatList
@@ -561,7 +561,7 @@ export const DropDown: React.FC<DropDownProps> = ({ data, type, range, selected,
           }}>
             {value.length !== 0 && <AntDesign name="check" size={14} color="white" style={{ margin: 4 }} />}
           </View>
-          <Text style={[{ fontFamily: "Poppins", fontSize: 18 }, textStyle]}>{title}</Text>
+          <Text style={[{ fontFamily: "Poppins_400Regular", fontSize: 18 }, textStyle]}>{title}</Text>
         </View>
       </TouchableOpacity>
     </View>
@@ -916,7 +916,7 @@ export function Sharing(props : ModalProps){
             borderTopRightRadius : 30,
           }}
         >
-            <Text style={{color : "white", fontSize : 30, alignSelf : "center", fontFamily : "Poppins", marginTop: 20,}}>
+            <Text style={{color : "white", fontSize : 30, alignSelf : "center", fontFamily : "Poppins_400Regular", marginTop: 20,}}>
               SHARE
             </Text>
 

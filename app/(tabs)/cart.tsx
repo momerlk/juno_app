@@ -4,11 +4,12 @@ import { StyleSheet,
 import * as Font from "expo-font";
 import {router} from "expo-router";
 import * as size from "react-native-size-matters";
-import {Logo, Loading, fmtPrice} from "../_common"
+import {Logo, Loading, fmtPrice} from "../components/_common"
 
-import * as api from "../api"
+import * as api from "../backend/api"
 
-import {DropDown as DropDownPicker, toTitle, shortTitle} from '../_common';
+import {DropDown as DropDownPicker, toTitle, shortTitle} from '../components/_common';
+import { fetchFonts } from '../backend/util';
 
 const SCREEN_WIDTH = Dimensions.get("screen").width;
 const SCREEN_HEIGHT = Dimensions.get("screen").height;
@@ -60,12 +61,7 @@ export default function CartPage() {
     </View>
   );
 }
-const fetchFonts = () => {
-  return Font.loadAsync({
-    'Poppins': require('../assets/fonts/Poppins-Medium.ttf'),
-    "Montserrat" : require("../assets/fonts/Montserrat.ttf"),
-  });
-};
+
 
 // TODO : create an api endpoint /cartupdate which just updates the cart based on these actions
 
@@ -97,7 +93,7 @@ export function Cart (props : any) {
   return(
     <View style={{marginTop : 40 , paddingBottom : 50}}>
       
-        <Text style={{marginTop : 10, color : "white", fontSize : 24, marginLeft : 14, fontFamily : "Poppins", }}>
+        <Text style={{marginTop : 10, color : "white", fontSize : 24, marginLeft : 14, fontFamily : "Poppins_400Regular", }}>
           {toTitle(vendor_data.vendor)}</Text>
         <FlatList
           contentContainerStyle={{alignSelf: 'flex-start',marginLeft : 4, flexGrow : 1}}
@@ -160,7 +156,7 @@ export function Cart (props : any) {
           })
         }}
       >
-        <Text style={{ fontSize: 18, color: "black", fontFamily : "Poppins" }}>Checkout</Text>
+        <Text style={{ fontSize: 18, color: "black", fontFamily : "Poppins_400Regular" }}>Checkout</Text>
       </Pressable>
       </View>
   )
@@ -239,7 +235,7 @@ function Card(props : any){
             color : "white",
             marginHorizontal : 10,
             fontSize : 18,
-            fontFamily : "Poppins",
+            fontFamily : "Poppins_400Regular",
             width : size.scale(140),
             }}>
               {shortTitle(props.item.title)}
@@ -250,7 +246,7 @@ function Card(props : any){
             marginHorizontal : 10,
             marginVertical : 6,
             fontSize : 18,
-            fontFamily : "Poppins",
+            fontFamily : "Poppins_400Regular",
             width : size.scale(140),
             }}>
               By {toTitle(props.item.vendor)}
@@ -263,7 +259,7 @@ function Card(props : any){
           }}>
             
             <Text style={{
-              fontSize: 15, fontFamily: "Poppins",
+              fontSize: 15, fontFamily: "Poppins_400Regular",
               color : "white"
             }}>Rs. {fmtPrice(price * quantity)}</Text>
           </View>
@@ -295,7 +291,7 @@ function Card(props : any){
         <TouchableOpacity style={{marginLeft : 10}} onPress={props.onDelete}>
           <Text style={{
 
-              fontSize: 18, fontFamily: "Poppins",
+              fontSize: 18, fontFamily: "Poppins_400Regular",
               color : "#FF2C2C",
             }}>Delete</Text>
         </TouchableOpacity>

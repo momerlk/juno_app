@@ -1,5 +1,5 @@
 import { Link } from "expo-router";
-import {Back} from "../../_common"
+import {Back} from "../../components/_common"
 
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
@@ -48,14 +48,14 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 26,
-    fontFamily : "Poppins",
+    fontFamily : "Poppins_400Regular",
     color: 'white',
     fontWeight: 'bold',
     marginBottom: 20,
   },
   subheading: {
     fontSize: 23,
-    fontFamily : "Poppins",
+    fontFamily : "Poppins_400Regular",
     color: 'white',
     fontWeight: 'bold',
     marginTop: 20,

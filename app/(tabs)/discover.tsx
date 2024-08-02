@@ -11,27 +11,22 @@ import {
 } from "react-native";
 import * as size from "react-native-size-matters";
 import * as Font from "expo-font";
-import * as api from "../api"
+import * as api from "../backend/api"
 
 import {SwipeView} from "."
 import {Feather, Ionicons} from "@expo/vector-icons"
-import {Search} from "../_search"
+import {Search} from "../components/_search"
 
 (Text as any).defaultProps = (Text as any).defaultProps || {};
 (Text as any).defaultProps.allowFontScaling = false;
 (TextInput as any).defaultProps = (TextInput as any).defaultProps || {};
 (TextInput as any).defaultProps.allowFontScaling = false;
 
-const fetchFonts = () => {
-  return Font.loadAsync({
-    'Poppins': require('../assets/fonts/Poppins-Medium.ttf'),
-    'Montserrat': require('../assets/fonts/Montserrat.ttf'),
-  });
-};
 
 import {router} from "expo-router";
-import {Logo , Back , toTitle , fmtPrice , shortTitle} from "../_common"
+import {Logo , Back , toTitle , fmtPrice , shortTitle} from "../components/_common"
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { fetchFonts } from "../backend/util";
 
 const styles = StyleSheet.create({
   category : {
@@ -111,7 +106,7 @@ function Card(props : any){
                   color : "white",
                   marginHorizontal : 10,
                   fontSize : 16,
-                  fontFamily : "Poppins"
+                  fontFamily : "Poppins_400Regular"
                   }}>{shortTitle(props.item.title as string)}</Text> 
                 <View style={{
                   display: "flex",
@@ -121,7 +116,7 @@ function Card(props : any){
                 }}>
                   
                   <Text style={{
-                    fontSize: 15, fontFamily: "Poppins",
+                    fontSize: 15, fontFamily: "Poppins_400Regular",
                     color : "white"
                   }}>{toTitle(props.item.vendor as string)}</Text>
                 </View>
@@ -217,7 +212,7 @@ export default class Home extends React.Component<{},HomeState> {
 
         <View style={{marginVertical : size.verticalScale(10)}}></View>
 
-        {/* <Text style={{color : "white", fontFamily : "Poppins", fontSize : 18 , marginLeft : 20}}>Discover Brands</Text> */}
+        {/* <Text style={{color : "white", fontFamily : "Poppins_400Regular", fontSize : 18 , marginLeft : 20}}>Discover Brands</Text> */}
 
 
         {/* <FlatList
@@ -241,7 +236,7 @@ export default class Home extends React.Component<{},HomeState> {
         {/* Discover products */}
         <View style={{marginVertical : size.verticalScale(10)}}></View>
 
-        <Text style={{color : "white", fontFamily : "Poppins", fontSize : 18 , marginLeft : 20}}>For You</Text>
+        <Text style={{color : "white", fontFamily : "Poppins_400Regular", fontSize : 18 , marginLeft : 20}}>For You</Text>
 
         <FlatList
           contentContainerStyle={{alignSelf: 'flex-start',marginLeft : 4}}
@@ -264,7 +259,7 @@ export default class Home extends React.Component<{},HomeState> {
         <View style={{paddingBottom : 40}}/>
 
         {/* Unstitched */}
-        <Text style={{color : "white", fontFamily : "Poppins", fontSize : 18 , marginLeft : 20}}>Unstitched</Text>
+        <Text style={{color : "white", fontFamily : "Poppins_400Regular", fontSize : 18 , marginLeft : 20}}>Unstitched</Text>
 
         <FlatList
           contentContainerStyle={{alignSelf: 'flex-start',marginLeft : 4}}
@@ -287,7 +282,7 @@ export default class Home extends React.Component<{},HomeState> {
         {/* Stitched */}
         <View style={{paddingBottom : 40}}/>
 
-        <Text style={{color : "white", fontFamily : "Poppins", fontSize : 18 , marginLeft : 20}}>Stitched</Text>
+        <Text style={{color : "white", fontFamily : "Poppins_400Regular", fontSize : 18 , marginLeft : 20}}>Stitched</Text>
 
         <FlatList
           contentContainerStyle={{alignSelf: 'flex-start',marginLeft : 4}}
@@ -310,7 +305,7 @@ export default class Home extends React.Component<{},HomeState> {
         <View style={{paddingBottom : 40}}/>
 
         {/* Two piece */}
-        <Text style={{color : "white", fontFamily : "Poppins", fontSize : 18 , marginLeft : 20}}>Two Piece</Text>
+        <Text style={{color : "white", fontFamily : "Poppins_400Regular", fontSize : 18 , marginLeft : 20}}>Two Piece</Text>
 
         <FlatList
           contentContainerStyle={{alignSelf: 'flex-start',marginLeft : 4}}
@@ -333,7 +328,7 @@ export default class Home extends React.Component<{},HomeState> {
         <View style={{paddingBottom : 40}}/>
 
           {/* three piece */}
-          <Text style={{color : "white", fontFamily : "Poppins", fontSize : 18 , marginLeft : 20}}>Three piece</Text>
+          <Text style={{color : "white", fontFamily : "Poppins_400Regular", fontSize : 18 , marginLeft : 20}}>Three piece</Text>
 
         <FlatList
           contentContainerStyle={{alignSelf: 'flex-start',marginLeft : 4}}
@@ -377,15 +372,15 @@ export default class Home extends React.Component<{},HomeState> {
     // TODO : Add activity indicator when loading
     return (
       <>
-        {/* <Text style={{color : "white", fontFamily : "Poppins", fontSize : 24, alignSelf  :"center"}}>Feed</Text> */}
+        {/* <Text style={{color : "white", fontFamily : "Poppins_400Regular", fontSize : 24, alignSelf  :"center"}}>Feed</Text> */}
 
         {this.renderHome()}
 
         {/* TODO : Add these two sections */}
 
-        {/* <Text style={{color : "white", fontFamily : "Poppins", fontSize : 18 , marginLeft : 20, marginVertical : size.verticalScale(25)}}>Top Categories</Text>
+        {/* <Text style={{color : "white", fontFamily : "Poppins_400Regular", fontSize : 18 , marginLeft : 20, marginVertical : size.verticalScale(25)}}>Top Categories</Text>
 
-        <Text style={{color : "white", fontFamily : "Poppins", fontSize : 18 , marginLeft : 20, marginVertical : size.verticalScale(25)}}>Top Brands</Text> */}
+        <Text style={{color : "white", fontFamily : "Poppins_400Regular", fontSize : 18 , marginLeft : 20, marginVertical : size.verticalScale(25)}}>Top Brands</Text> */}
 
       </>
     )

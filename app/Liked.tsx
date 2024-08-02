@@ -11,13 +11,13 @@ import {
 } from "react-native";
 import * as size from "react-native-size-matters";
 import * as Font from "expo-font";
-import * as api from "./api";
+import * as api from "./backend/api";
 
 
 import {Feather, Ionicons} from "@expo/vector-icons"
 import {router} from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Back , FastImageBackground, asyncTimeout, fmtPrice, toTitle, shortTitle} from "./_common";
+import { Back , FastImageBackground, asyncTimeout, fmtPrice, toTitle, shortTitle} from "./components/_common";
 
 
 const SCREEN_WIDTH = Dimensions.get("screen").width;
@@ -66,7 +66,7 @@ function Card(props : any){
                   color : "white",
                   marginHorizontal : 10,
                   fontSize : 16,
-                  fontFamily : "Poppins"
+                  fontFamily : "Poppins_400Regular"
                   }}>{shortTitle(props.item.title as string)}</Text> 
                 <View style={{
                   display: "flex",
@@ -76,7 +76,7 @@ function Card(props : any){
                 }}>
                   
                   <Text style={{
-                    fontSize: 15, fontFamily: "Poppins",
+                    fontSize: 15, fontFamily: "Poppins_400Regular",
                     color : "white"
                   }}>{toTitle(props.item.vendor as string)}</Text>
                 </View>
@@ -90,7 +90,7 @@ function Card(props : any){
                         <Text style={{
                           fontSize: 14,
                           color : "white",
-                          fontFamily : "Poppins",
+                          fontFamily : "Poppins_400Regular",
                           marginHorizontal : 10,
                         }}>Rs. {fmtPrice(parseInt(props.item.price))}</Text>
 
@@ -159,7 +159,7 @@ export default class Home extends React.Component<{},HomeState> {
         {this.state.products === null ? <Text style={{
           color : "white" , fontSize : 20,
           margin : 50,
-          fontFamily : "Poppins"
+          fontFamily : "Poppins_400Regular"
         }}>No Liked Products.</Text> : 
         <>
         <FlatList

@@ -1,8 +1,8 @@
 import { View, Text, Pressable, Image, StyleProp, ViewStyle, TextStyle } from 'react-native';
 import React, {useEffect , useState} from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
-import COLORS from './constants/colors';
-import Button from './components/Button';
+import COLORS from '../constants/colors';
+import Button from '../components/Button';
 
 import {router} from "expo-router"
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -19,7 +19,7 @@ const Welcome = () => {
       <View style={{ flex: 1, height : 600}}>
         <View>
           <Image
-            source={require("./assets/fashion/1.png")}
+            source={require("../assets/fashion/1.png")}
             style={{
               height: 100,
               width: 100,
@@ -35,7 +35,7 @@ const Welcome = () => {
           />
 
           <Image
-            source={require("./assets/fashion/2.png")}
+            source={require("../assets/fashion/2.png")}
             style={{
               height: 100,
               width: 100,
@@ -52,7 +52,7 @@ const Welcome = () => {
           />
 
           <Image
-            source={require("./assets/fashion/2.png")}
+            source={require("../assets/fashion/2.png")}
             style={{
               width: 100,
               height: 100,
@@ -69,7 +69,7 @@ const Welcome = () => {
           />
 
           <Image
-            source={require("./assets/fashion/3.png")}
+            source={require("../assets/fashion/3.png")}
             style={{
               height: 200,
               width: 200,
@@ -110,7 +110,7 @@ const Welcome = () => {
 
           <Button
             title="Join Now"
-            onPress={() => router.navigate("/sign-up")}
+            onPress={() => router.navigate("/auth/sign-up")}
             style={{
               marginTop: 22,
               width: "100%"
@@ -132,7 +132,7 @@ const Welcome = () => {
             >
               Already have an account ?
             </Text>
-            <Pressable onPress={() => router.navigate("/sign-in")}>
+            <Pressable onPress={() => router.navigate("/auth/sign-in")}>
               <Text
                 style={{
                   fontSize: 16,

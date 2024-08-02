@@ -1,21 +1,15 @@
 import { View, Text, Image, Pressable, ScrollView, TextInput } from 'react-native';
 import React, { useState, useEffect} from 'react';
 import { SafeAreaView } from "react-native-safe-area-context";
-import COLORS from './constants/colors';
+import COLORS from '../constants/colors';
 import { Ionicons } from "@expo/vector-icons";
 import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Font from "expo-font";
-import * as api from "./api"
-import { PrimaryButton } from './_common';
+import * as api from "../backend/api"
+import { PrimaryButton } from '../components/_common';
+import { fetchFonts } from '../backend/util';
 
-
-const fetchFonts = () => {
-  return Font.loadAsync({
-    'Poppins': require('./assets/fonts/Poppins-Medium.ttf'),
-    'Montserrat': require('./assets/fonts/Montserrat.ttf'),
-  });
-};
 
 // TODO : Error handling when message = ""
 
@@ -55,7 +49,7 @@ const Login = () => {
             fontSize: 22,
             fontWeight: 'bold',
             marginVertical: 12,
-            fontFamily : "Poppins",
+            fontFamily : "Poppins_400Regular",
             color: "white"
           }}>
             Sign in into your account
@@ -173,9 +167,9 @@ const Login = () => {
           justifyContent: "center",
           marginVertical: 22
         }}>
-          <Text style={{ fontSize: 16, color: "white",fontFamily : "Poppins",}}>Don't have an account ? </Text>
+          <Text style={{ fontSize: 16, color: "white",fontFamily : "Poppins_400Regular",}}>Don't have an account ? </Text>
           <Pressable
-            onPress={() => router.navigate("/sign-up")}
+            onPress={() => router.navigate("/auth/sign-up")}
           >
             <Text style={{
               fontSize: 17,

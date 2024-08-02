@@ -15,7 +15,7 @@ import * as size from "react-native-size-matters"
 import { AntDesign, Ionicons, Entypo, EvilIcons , Feather} from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { deepEqual, FastImageBackground  } from '../_common';
+import { deepEqual, FastImageBackground  } from '../components/_common';
 import {Image as FastImage} from "expo-image"
 
 
@@ -26,21 +26,17 @@ import {
   Filter,
   Loading,
   Sharing,
-} from "../_common"
+} from "../components/_common"
 
 import { tabBarHeight } from './_layout';
-import * as api from "../api";
+import * as api from "../backend/api";
+import { fetchFonts } from '../backend/util';
 
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
-const fetchFonts = () => {
-  return Font.loadAsync({
-    'Poppins': require('../assets/fonts/Poppins-Medium.ttf'),
-    'Montserrat': require('../assets/fonts/Montserrat.ttf'),
-  });
-};
+
 
 
 interface AppState {
@@ -226,7 +222,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
     // if user first time user redirect them to welcome
     const firstTime = await AsyncStorage.getItem("first_time")
     if (firstTime === null ||  firstTime !== "no"){
-      router.replace("/welcome")
+      router.replace("/auth/welcome")
     }
   }
 
@@ -354,12 +350,12 @@ export class SwipeView extends React.Component<AppProps, AppState> {
                   color : "white",
                   marginHorizontal : 10,
                   fontSize : 25,
-                  fontFamily : "Poppins"
+                  fontFamily : "Poppins_400Regular"
                   }}>{shortTitle(item.title as string)}</Text> 
                 
                   
                   <Text style={{
-                    fontSize: 23, fontFamily: "Poppins",
+                    fontSize: 23, fontFamily: "Poppins_400Regular",
                     color : "white",
                     marginHorizontal : 10,
                   }}>{toTitle(item.vendor as string)}</Text>
@@ -383,14 +379,14 @@ export class SwipeView extends React.Component<AppProps, AppState> {
                           <Text style={{
                             fontSize: 20, marginVertical: 5,
                             color : "white",
-                            fontFamily : "Poppins",
+                            fontFamily : "Poppins_400Regular",
                             marginHorizontal : 10,
                           }}>Rs. {fmtPrice(item.price)}</Text>
                           
                           <Text style={{
                               fontSize: 20, marginVertical: 5,
                               fontWeight : "bold",
-                              fontFamily : "Poppins",
+                              fontFamily : "Poppins_400Regular",
                               color : "white",
                               marginHorizontal : 10,
                               textDecorationLine : "line-through",
@@ -402,7 +398,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
                         <Text style={{
                           fontSize: 20, marginVertical: 5,
                           fontWeight : "bold",
-                          fontFamily : "Poppins",
+                          fontFamily : "Poppins_400Regular",
                           color : "#FF1D18",
                           marginHorizontal : 10,
                         }}>{item.discount}% Off</Text>
@@ -413,7 +409,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
                         <Text style={{
                           fontSize: 20, marginVertical: 5,
                           color : "white",
-                          fontFamily : "Poppins",
+                          fontFamily : "Poppins_400Regular",
                           marginHorizontal : 10,
                         }}>Rs. {fmtPrice(item.price)}</Text>
                       )
@@ -647,7 +643,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
                   width: "100%",
                   color: "white",
                   fontSize : 16,
-                  fontFamily : "Poppins",
+                  fontFamily : "Poppins_400Regular",
                   backgroundColor : "#222222",
                   height: 60,
                   borderTopRightRadius: 12,
@@ -673,7 +669,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
           <Text
             style={{
               fontSize : 19,
-              fontFamily : "Poppins",
+              fontFamily : "Poppins_400Regular",
               color : "white",
               marginTop : 10,
               marginBottom : 10,
@@ -706,7 +702,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
                 <Text style={{
                   fontSize : 18, 
                   marginLeft : 15,
-                  fontFamily : "Poppins", 
+                  fontFamily : "Poppins_400Regular", 
                   color : "white",
                 }}>
                   {item.item}
@@ -809,7 +805,7 @@ export class SwipeView extends React.Component<AppProps, AppState> {
             : <></>}
             <Text 
               style={{
-                fontFamily : "Poppins",
+                fontFamily : "Poppins_400Regular",
                 textAlign : "center",
                 alignSelf : "center",
                 fontSize : 16,
@@ -1008,7 +1004,7 @@ export default class Home extends React.Component<any , HomeState> {
 
     const firstTime = await AsyncStorage.getItem("first_time");
     if (firstTime === null || firstTime !== "no"){
-      router.replace("/welcome")
+      router.replace("/auth/welcome")
     }
 
     await AsyncStorage.setItem("filter" , "") // so that filter from previous session doesn't interfere

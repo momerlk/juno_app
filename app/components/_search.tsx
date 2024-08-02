@@ -8,6 +8,7 @@ import { TextInput } from 'react-native';
 import * as size from "react-native-size-matters"
 import { Ionicons , Entypo} from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { fetchFonts } from '../backend/util';
 
 const styles2 = StyleSheet.create({
   category : {
@@ -56,7 +57,7 @@ function Category(props : any){
       padding : 20,
       borderRadius : 8,
     }} colors={["rgba(0,0,0,0.6)", "transparent" , ]}>
-      <Text style={{color : "white" , fontSize : size.moderateScale(30) , fontFamily : "Poppins"}}>
+      <Text style={{color : "white" , fontSize : size.moderateScale(30) , fontFamily : "Poppins_400Regular"}}>
         {props.title}
       </Text>
     </LinearGradient>
@@ -68,12 +69,7 @@ function Category(props : any){
 // TODO : Add header
 // TODO : Add proper token
 
-const fetchFonts = () => {
-  return Font.loadAsync({
-    'Poppins': require('./assets/fonts/Poppins-Medium.ttf'),
-    "Montserrat" : require("./assets/fonts/Montserrat.ttf"),
-  });
-};
+
 
 
 
@@ -128,7 +124,7 @@ const styles = StyleSheet.create({
     marginHorizontal: size.moderateScale(46), // margin or padding
     marginVertical : size.verticalScale(15),
     paddingLeft : 50,
-    fontFamily : "Poppins",
+    fontFamily : "Poppins_400Regular",
     borderRadius: 20,
     borderColor: 'white',
     borderWidth: 2,

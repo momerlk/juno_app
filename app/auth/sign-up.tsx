@@ -3,23 +3,18 @@ import { View, Text, Image, Pressable,
     ScrollView} from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from "react-native-safe-area-context";
-import COLORS from './constants/colors';
+import COLORS from '../constants/colors';
 import { Ionicons } from "@expo/vector-icons";
 import Checkbox from "expo-checkbox";
 
 import {router} from "expo-router"
 
 import * as Font from "expo-font";
-import * as api from "./api"
+import * as api from "../backend/api"
 import * as size from "react-native-size-matters"
-import { PrimaryButton, SecondaryButton, DropDown as DropDownPicker } from './_common';
+import { PrimaryButton, SecondaryButton, DropDown as DropDownPicker } from '../components/_common';
+import { fetchFonts } from '../backend/util';
 
-const fetchFonts = () => {
-  return Font.loadAsync({
-    'Poppins': require('./assets/fonts/Poppins-Medium.ttf'),
-    'Montserrat': require('./assets/fonts/Montserrat.ttf'),
-  });
-};
 
 // TODO : Add Form Validation. Validate each of the fields.
 // TODO : Error handling when the message = ""
@@ -76,7 +71,7 @@ const Signup = () => {
           <Text style={{
             fontSize: 22,
             fontWeight: 'bold',
-            fontFamily : "Poppins",
+            fontFamily : "Poppins_400Regular",
             marginVertical: 12,
             color: "white"
           }}>
@@ -420,7 +415,7 @@ const Signup = () => {
           onPress={async () => {
                 try {
                   await handleSignup()
-                  router.navigate("/sign-in")
+                  router.navigate("/auth/sign-in")
               } catch (e){
                   alert(`couldn't create account . error = ${e}`)
               } 
@@ -434,9 +429,9 @@ const Signup = () => {
           justifyContent: "center",
           marginVertical: 22
         }}>
-          <Text style={{ fontSize: 16, color: "white", fontFamily : "Poppins" }}>Already have an account ?</Text>
+          <Text style={{ fontSize: 16, color: "white", fontFamily : "Poppins_400Regular" }}>Already have an account ?</Text>
           <Pressable
-            onPress={() => router.navigate("/sign-in")}
+            onPress={() => router.navigate("/auth/sign-in")}
           >
             <Text style={{
               fontSize: 17,

@@ -9,7 +9,7 @@ import { EvilIcons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 
-import {Back} from "../../_common"
+import {Back} from "../../components/_common"
 
 export default function ProfilePage(){
   return (
