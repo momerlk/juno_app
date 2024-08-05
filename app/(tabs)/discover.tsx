@@ -17,10 +17,7 @@ import {SwipeView} from "."
 import {Feather, Ionicons} from "@expo/vector-icons"
 import {Search} from "../components/_search"
 
-(Text as any).defaultProps = (Text as any).defaultProps || {};
-(Text as any).defaultProps.allowFontScaling = false;
-(TextInput as any).defaultProps = (TextInput as any).defaultProps || {};
-(TextInput as any).defaultProps.allowFontScaling = false;
+
 
 
 import {router} from "expo-router";
