@@ -7,7 +7,7 @@ import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Font from "expo-font";
 import * as api from "../backend/api"
-import { PrimaryButton } from '../components/_common';
+import { PrimaryButton } from '../components/button';
 import { fetchFonts } from '../backend/util';
 
 

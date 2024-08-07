@@ -9,53 +9,103 @@ import {
     Image
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { Feather, EvilIcons } from '@expo/vector-icons';
+import { Ionicons, Feather, EvilIcons } from '@expo/vector-icons';
 
 
 interface PrimaryInputProps {
-    label : string | undefined;
-    placeholder : string | undefined;
-    keyboardType : any | undefined;
-    multiline : boolean | undefined;
-    numberOfLines : number | undefined;
-    onChangeText : Function | undefined;
+    label : string;
+    placeholder? : string;
+    keyboardType? : any;
+    multiline? : boolean;
+    numberOfLines? : number;
+    onChangeText? : (text : string) => void;
 }
 
-export const PrimaryInput = ({ label, placeholder, keyboardType, multiline, numberOfLines, onChangeText } : PrimaryInputProps | any) => {
-  const [value , setValue] = useState("")
- return (
-    <View style={styles.container}>
-      <Text style={styles.label}>{label}</Text>
-      <View style={styles.inputContainer}>
-        
-        <TextInput
-          style={[styles.input , multiline ? {textAlignVertical : "top"} : {}]}
-          placeholder={placeholder}
-          placeholderTextColor="#888888"
-          value={value}
-          onChangeText={text => {
-            setValue(text)
-            if (onChangeText !== undefined){
-                onChangeText!(text)
-            }
-          }}
-          multiline={multiline}
-          numberOfLines={numberOfLines}
-          keyboardType={keyboardType}
-        />
+export const PrimaryInput = (props : PrimaryInputProps) => {
+    const [value , setValue] = useState("")
 
-        {value.length > 1 && multiline === false ?
+    return (
+        <View style={styles.container}>
+            <Text style={styles.label}>{props.label}</Text>
+            <View style={styles.inputContainer}>
+                
+                <TextInput
+                style={[styles.input , props.multiline ? {textAlignVertical : "top"} : {}]}
+                placeholder={props.placeholder}
+                placeholderTextColor="#888888"
+                value={value}
+                onChangeText={text => {
+                    setValue(text)
+                    if (props.onChangeText !== null && props.onChangeText !== undefined){
+                        props.onChangeText(text)
+                    }
+                }}
+                multiline={props.multiline}
+                numberOfLines={props.numberOfLines}
+                keyboardType={props.keyboardType}
+                />
 
-        <TouchableOpacity style={styles.iconRight} onPress={() => setValue("")}>
-            <EvilIcons name="close" size={24} color="#999999" />
-        </TouchableOpacity>
+                {value.length > 1 && props.multiline === false ?
 
-        : <></>}
+                <TouchableOpacity style={styles.iconRight} onPress={() => setValue("")}>
+                    <EvilIcons name="close" size={24} color="#999999" />
+                </TouchableOpacity>
 
-      </View>
-    </View>
-  );
+                : <></>}
+
+            </View>
+        </View>
+    );
 };
+
+
+export const PasswordInput = (props : PrimaryInputProps) => {
+    const [value , setValue] = useState("")
+    const [isPasswordShown, setIsPasswordShown] = useState(false);
+
+    return (
+        <View style={styles.container}>
+            <Text style={styles.label}>{props.label}</Text>
+            <View style={styles.inputContainer}>
+                
+                <TextInput
+                style={[styles.input , props.multiline ? {textAlignVertical : "top"} : {}]}
+                placeholder={props.placeholder}
+                placeholderTextColor="#888888"
+                value={value}
+                onChangeText={text => {
+                    setValue(text)
+                    if (props.onChangeText !== null && props.onChangeText !== undefined){
+                        props.onChangeText(text)
+                    }
+                }}
+                multiline={props.multiline}
+                secureTextEntry={!isPasswordShown}
+                numberOfLines={props.numberOfLines}
+                keyboardType={props.keyboardType}
+                />
+
+                <TouchableOpacity
+                    onPress={() => setIsPasswordShown(!isPasswordShown)}
+                    style={{
+                    position: "absolute",
+                    right: 12
+                    }}
+                >
+                    {isPasswordShown ? (
+                    <Ionicons name="eye-off" size={24} color={"white"} />
+                    ) : (
+                    <Ionicons name="eye" size={24} color={"white"} />
+                    )}
+                </TouchableOpacity>
+
+            </View>
+        </View>
+    );
+};
+
+
+
 
 function PaginationButton(props : {
     label : string;

@@ -2,7 +2,7 @@ import { View, Text, Pressable, Image, StyleProp, ViewStyle, TextStyle } from 'r
 import React, {useEffect , useState} from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import COLORS from '../constants/colors';
-import Button from '../components/Button';
+import {PrimaryButton} from '../components/button';
 
 import {router} from "expo-router"
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -108,13 +108,9 @@ const Welcome = () => {
 
           
 
-          <Button
-            title="Join Now"
+          <PrimaryButton
+            label="Join Now"
             onPress={() => router.navigate("/auth/sign-up")}
-            style={{
-              marginTop: 22,
-              width: "100%"
-            }}
           />
 
           <View

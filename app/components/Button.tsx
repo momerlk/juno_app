@@ -1,45 +1,56 @@
-import { Text, Pressable, StyleSheet, StyleProp, ViewStyle, TextStyle } from 'react-native';
+import { Text, TouchableOpacity , StyleSheet } from 'react-native';
 import React from 'react';
-import COLORS from '../constants/colors';
+import * as size from "react-native-size-matters"
 
-interface ButtonProps {
-  title: string;
-  onPress: () => void;
-  style?: StyleProp<ViewStyle>;
-  filled?: boolean;
-  color?: string;
+export function PrimaryButton(props : any){
+  return (
+    <TouchableOpacity
+        {...props}
+        style={[
+          {
+            paddingVertical: 10,
+            paddingHorizontal : 14,
+            marginTop : 20,
+            borderRadius: 4,
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex : 0,
+          },
+          { backgroundColor: "white" },
+          props.style,
+        ]}
+        
+      >
+        <Text style={[{ fontSize: 18, color: "black", fontFamily : "Poppins_400Regular" }, props.textStyle]}>{props.text}</Text>
+        {props.children}
+      </TouchableOpacity>
+  )
 }
 
-const Button: React.FC<ButtonProps> = (props) => {
-  const filledBgColor = props.color || COLORS.primary;
-  const outlinedColor = COLORS.white;
-  const bgColor = props.filled ? filledBgColor : outlinedColor;
-  const textColor = props.filled ? COLORS.white : COLORS.primary;
-
+export function SecondaryButton(props : any){
   return (
-    <Pressable
-      style={[
-        styles.button,
-        { backgroundColor: bgColor },
-        props.style
-      ]}
-      onPress={props.onPress}
-    >
-      <Text style={{ fontSize: 18, color: textColor }}>{props.title}</Text>
-    </Pressable>
-  );
-};
+    <TouchableOpacity
+        {...props}
+        style={[
+          {
+            paddingVertical: 10,
+            paddingHorizontal : size.scale(40),
+            marginTop : 20,
+            borderRadius: 4,
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex : 0,
 
-const styles = StyleSheet.create({
-  button: {
-    paddingBottom: 16,
-    paddingVertical: 10,
-    borderColor: COLORS.primary,
-    borderWidth: 2,
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
-});
-
-export default Button;
+            borderColor : "white",
+            borderWidth : 2,
+          },
+          { backgroundColor: "black" },
+          props.style,
+        ]}
+        
+      >
+        <Text style={[{ fontSize: 18, color: "white", fontFamily : "Poppins_400Regular" },props.textStyle]}>{props.text}</Text>
+        {props.children}
+      </TouchableOpacity>
+  )
+}
