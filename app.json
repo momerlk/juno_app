@@ -36,7 +36,8 @@
       "./plugins/withCustomAndroidManifest.js",
       "expo-router",
       "expo-font",
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-image-picker"
     ],
     "experiments": {
       "typedRoutes": true
