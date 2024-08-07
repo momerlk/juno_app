@@ -22,8 +22,9 @@ import {Search} from "../components/_search"
 
 import {router} from "expo-router";
 import {Logo , Back , toTitle , fmtPrice , shortTitle} from "../components/_common"
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { fetchFonts } from "../backend/util";
+import { storage } from "../backend/storage";
 
 const styles = StyleSheet.create({
   category : {
@@ -176,8 +177,6 @@ export default class Home extends React.Component<{},HomeState> {
   }
 
   async componentDidMount(){
-    const token = await AsyncStorage.getItem('token');
-    await fetchFonts();
     await this.getProducts();
   }
 

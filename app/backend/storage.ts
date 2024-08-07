@@ -1,6 +1,151 @@
-import * as SecureStore from 'expo-secure-store';
 import * as React from 'react';
 import { Platform } from 'react-native';
+
+import * as SecureStore from 'expo-secure-store';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const production_url = "https://junoapi-production.up.railway.app"
+const testing_url = "http://192.168.18.16:3001"
+
+const base_url = production_url
+
+const set = async (key: string, value: any): Promise<void> => {
+  try {
+    await AsyncStorage.setItem(key, JSON.stringify(value));
+  } catch (error) {
+    console.error("Error setting value", error);
+  }
+};
+
+const getString = async (key: string): Promise<string | null> => {
+  try {
+    const value = await AsyncStorage.getItem(key);
+    return value !== null ? JSON.parse(value) : null;
+  } catch (error) {
+    console.error("Error getting string value", error);
+    return null;
+  }
+};
+
+const getBoolean = async (key: string): Promise<boolean> => {
+  try {
+    const value = await AsyncStorage.getItem(key);
+    return value !== null ? JSON.parse(value) : false;
+  } catch (error) {
+    console.error("Error getting boolean value", error);
+    return false;
+  }
+};
+
+const getNumber = async (key: string): Promise<number | null> => {
+  try {
+    const value = await AsyncStorage.getItem(key);
+    return value !== null ? Number(JSON.parse(value)) : null;
+  } catch (error) {
+    console.error("Error getting number value", error);
+    return null;
+  }
+};
+
+const remove = async (key: string): Promise<void> => {
+  try {
+    await AsyncStorage.removeItem(key);
+  } catch (error) {
+    console.error("Error removing value", error);
+  }
+};
+
+export const storage = {
+  set,
+  getString,
+  getBoolean,
+  getNumber,
+  remove,
+};
+
+export function setToken(token : string){
+  if (token === null || token.length === 0){
+    return;
+  }
+  SecureStore.setItem('token', token);
+}
+
+export async function getToken() : Promise<null | string> {
+  const res = await SecureStore.getItemAsync("token")
+
+  if(res === null){
+    return null;
+  }
+  // verify token
+  const response = await fetch(`${base_url}/verify` , {
+    method : "GET",
+    headers : {
+      "Authorization" : res,
+      "Content-Type" : "application/json"
+    }
+  });
+  if (!response.ok){
+    return null;
+  }
+
+  return res;
+}
+
+export async function refreshToken() : Promise<null | string> {
+  const old_token = await getToken();
+  if(old_token === null){
+    return null;
+  }
+
+  // verify token
+  const response = await fetch(`${base_url}/refresh` , {
+    method : "GET",
+    headers : {
+      "Authorization" : old_token,
+      "Content-Type" : "application/json"
+    }
+  });
+
+  if (!response.ok){
+    return null;
+  }
+
+  const data = await response.json();
+
+  return data.token;
+}
+
+
+
+export async function setObject(key : string , obj : Record<string,any> | null){
+  if (obj === null){
+    storage.set(key , "")
+    return
+  }
+  await storage.set(key , JSON.stringify(obj))
+}
+
+export async function getObject(key : string) : Promise<Record<string,any> | null> {
+  const str = await storage.getString(key)
+  if (str === null){
+    return null;
+  }
+
+  let parsed = null;
+  try {
+    parsed = JSON.parse(str)
+  } catch(err){
+    return null;
+  }
+  
+  return parsed;
+}
+
+
+
+
+
 
 type UseStateHook<T> = [[boolean, T | null], (value: T | null) => void];
 

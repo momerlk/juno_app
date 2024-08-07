@@ -18,7 +18,8 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 import { Image as FastImage } from "expo-image"
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { storage , getObject, setObject } from "../backend/storage";
+
 
 const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
@@ -239,8 +240,8 @@ interface DropDownProps {
   type?: 'range' | "standard" | string;
   range?: any;
   selected : any | null;
-  onChange: Function;
-  onPress : Function | undefined;
+  onChange?: Function;
+  onPress? : Function;
   containerStyle? : object;
   buttonStyle?: object;
   textStyle?: object;
@@ -585,13 +586,7 @@ export function Filter(props : any){
       const data = await api.getFilter();
       
       // TODO : Save filter progress
-      const filterString = await AsyncStorage.getItem("filter");
-      let oldFilter = null;
-      if (filterString !== null){
-        try {
-        oldFilter = await JSON.parse(filterString);
-        } catch (e){}
-      }
+      const oldFilter = await getObject("filter")
       if(oldFilter !== null){
         try {
           setBrands(oldFilter["vendor"]["$in"]);
@@ -751,16 +746,7 @@ export function Filter(props : any){
                 if (priceSet === true){filter["price"] = price }
 
 
-                const filterString = await AsyncStorage.getItem("filter");
-                let oldFilter = null;
-                if (filterString !== null){
-                  try {
-                  oldFilter = await JSON.parse(filterString);
-                  }
-                  catch (e){
-
-                  }
-                }
+                const oldFilter = await getObject("filter")
                 if(oldFilter !== null){
                   if (deepEqual(oldFilter , filter) === true){
                     return;
@@ -792,17 +778,7 @@ export function Filter(props : any){
                 setBrands("")
                 setCategory("")
 
-                const filterString = await AsyncStorage.getItem("filter");
-                let oldFilter = null;
-                if (filterString !== null){
-                  try {
-                  oldFilter = await JSON.parse(filterString);
-                  } catch(e){
-
-                  }
-                } else {
-                  return;
-                }
+                const oldFilter = await getObject("filter")
                 if(oldFilter !== null){
                   if (deepEqual(oldFilter , {}) === true){
                     return;
@@ -812,7 +788,7 @@ export function Filter(props : any){
                 setBrands(null)
                 setLowerBound(null)
                 setUpperBound(null)
-                await AsyncStorage.setItem("filter" , "")
+                await setObject("filter" , null)
                 
                 
               }} 

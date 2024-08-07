@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons, Feather, EvilIcons } from '@expo/vector-icons';
-
+import { DropDown } from './_common';
 
 interface PrimaryInputProps {
     label : string;
@@ -18,6 +18,7 @@ interface PrimaryInputProps {
     keyboardType? : any;
     multiline? : boolean;
     numberOfLines? : number;
+    error? : boolean;
     onChangeText? : (text : string) => void;
 }
 
@@ -26,13 +27,13 @@ export const PrimaryInput = (props : PrimaryInputProps) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.label}>{props.label}</Text>
-            <View style={styles.inputContainer}>
+            <Text style={[styles.label, props.error && {color : "#f01e2c"}]}>{props.label}</Text>
+            <View style={[styles.inputContainer , props.error && {borderColor : "#f01e2c"}]}>
                 
                 <TextInput
-                style={[styles.input , props.multiline ? {textAlignVertical : "top"} : {}]}
+                style={[styles.input , props.multiline && {textAlignVertical : "top"}]}
                 placeholder={props.placeholder}
-                placeholderTextColor="#888888"
+                placeholderTextColor={props.error ? "#f94449" : "#888888"}
                 value={value}
                 onChangeText={text => {
                     setValue(text)
@@ -65,13 +66,13 @@ export const PasswordInput = (props : PrimaryInputProps) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.label}>{props.label}</Text>
-            <View style={styles.inputContainer}>
+            <Text style={[styles.label, props.error && {color : "#f01e2c"}]}>{props.label}</Text>
+            <View style={[styles.inputContainer , props.error && {borderColor : "#f01e2c"}]}>
                 
                 <TextInput
-                style={[styles.input , props.multiline ? {textAlignVertical : "top"} : {}]}
+                style={[styles.input , props.multiline && {textAlignVertical : "top"}]}
                 placeholder={props.placeholder}
-                placeholderTextColor="#888888"
+                placeholderTextColor={props.error ? "#f01e2c" : "#888888"}
                 value={value}
                 onChangeText={text => {
                     setValue(text)
@@ -157,7 +158,7 @@ export const ImageInput = (props : {label : string, placeholder : string, onSubm
             </View>
             }
 
-            {images === null ? 
+            {images === null &&
             <>
             <Text style={styles.label}>{props.label}</Text>
             <View style={styles.imageContainer}>
@@ -165,13 +166,74 @@ export const ImageInput = (props : {label : string, placeholder : string, onSubm
                 <Text style={styles.imageLabel}>{props.placeholder}</Text>
             </View>
             </>
-            : <></>}
+            }
         </Pressable>
     );
 };
 
+interface SelectItem {
+    label : any;
+    value : any;
+}
+interface SelectInputProps {
+    label? : string;
+    placeholder : string;
+    multiple? : boolean;
+    onChange : Function;
+
+    data : SelectItem[];
+}
+export function SelectInput(props : SelectInputProps){
+    return (
+        <View>
+            <Text style={styles.selectLabel}>{props.label}</Text>
+            <DropDown
+              data={props.data} 
+              title={props.placeholder}
+              onChange={props.onChange}
+              selected={null}
+              multiple={props.multiple}
+              range={{min : [], max : []}}
+              onPress={() => {}}
+              containerStyle={styles.selectContainer}
+              buttonStyle={styles.selectButton}
+              textStyle={styles.selectText}
+            />
+          </View>
+    )
+}
+
 
 const styles = StyleSheet.create({
+    selectLabel : {
+        fontSize: 16,
+        fontWeight: '400',
+        fontFamily : "Inter_500Medium",
+        marginVertical: 8,
+        marginHorizontal : 5,
+        color : "#E0E0E0",
+    },
+    selectContainer : {
+        width : "100%",
+        marginHorizontal : 0,
+        backgroundColor: '#222222',
+        borderColor: '#444444',
+        borderWidth: 1,
+        borderRadius : 9,
+    },
+    selectButton : {
+        width : "100%",
+        backgroundColor : "#222222",
+        marginHorizontal : 0,
+        height : 51,
+    },
+    selectText : {
+        color : "#CCCCCC",
+        marginTop : 4,
+        marginLeft : 6,  
+        fontSize: 15,
+        fontFamily : "Inter_500Medium",
+    },
     container: {
         marginVertical : 10,
     },

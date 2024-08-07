@@ -1,7 +1,9 @@
 // All api related functions will be kept here instead of distributed across different files
 
-import AsyncStorage from "@react-native-async-storage/async-storage"
 import { router } from "expo-router";
+import { isNull } from "lodash";
+import { storage, setToken, getToken, setObject, refreshToken } from "./storage";
+
 
 const production_url = "https://junoapi-production.up.railway.app"
 const testing_url = "http://192.168.18.16:3001"
@@ -179,6 +181,7 @@ export function createQuery(text : any | null, filter : any | null){
 }
 
 export async function signIn(email : string, password : string){
+    
     const response = await fetch(base_url + '/signIn', {
         method: 'POST',
         headers: {
@@ -186,13 +189,27 @@ export async function signIn(email : string, password : string){
         },
         body: JSON.stringify({ "username_email" : email, "password" : password })
     });
+    if(!response.ok){
+        return false;
+    }    
 
     const data = await response.json();
     if (response.ok) {
         alert('signed in successfully');
-        await AsyncStorage.setItem("authenticated" , "true")
-        await AsyncStorage.setItem("token" ,  data.token)
-        await AsyncStorage.setItem("first_time", "no"); 
+        await storage.set("authenticated" , "true")
+        setToken(data.token)
+        await storage.set("first_time" , "no")
+
+        // get refresh token with longer access time
+        const second = 1000;
+        const minute = second * 60;
+        setTimeout(async () => {
+          const token = await refreshToken()
+          if (token !== null){
+            setToken(token)
+          } 
+        }, minute * 2)
+
         return true;
     } else {
         console.error('failed to login, error: ' + data.message);
@@ -206,7 +223,7 @@ export interface SignUpData {
   age : number; 
   gender : string;
   password : string;
-  username : string;
+  location : Object;
   number : string;
   name : string;
 }
@@ -219,7 +236,7 @@ export async function signUp(accountData : SignUpData){
         body: JSON.stringify({
             "email" : accountData.email,
             "phone_number" : accountData.number  , 
-            "username" : accountData.username,
+            "location" : accountData.location,
             "gender" : accountData.gender,
             "name" : accountData.name,
             "age" : accountData.age,
@@ -227,25 +244,30 @@ export async function signUp(accountData : SignUpData){
         })
     });
 
-    const data = await response.json();
-    if (response.ok) {
-        alert(data.message);
-    } else {
-        alert('Error: ' + data.message);
+
+    if (response.ok){
+      return true;
     }
+    
+    let data = null
+    try {
+      data = await response.json();
+    } catch(e){}
+
+    return false;
 }
 
 export async function getProducts(n : number){
-  const token = await AsyncStorage.getItem("token")
+  const token = await getToken()
   if (token === null){
     alert(`Authenticate again`)
-    router.navigate("/auth/sign-in")
+    router.replace("/auth/sign-in")
     return null;
   }
   const requestOptions = {
     method: "GET",
     headers: {
-      "Authorization" : token!,
+      "Authorization" : token,
       "Content-Type" : "application/json",
     },
    };
@@ -253,11 +275,7 @@ export async function getProducts(n : number){
   try {
     // TODO : change endpoint to liked
     const resp = await fetch(`${base_url}/products?n=${n}`, requestOptions);
-    if (resp.status === 401){
-        alert(`token expired sign in again`)
-        router.replace("/auth/sign-in")
-        return null;
-    } else if (resp.status !== 200){
+    if (resp.status !== 200){
         return null;
     }
     const data = await resp.json();
@@ -273,13 +291,13 @@ export async function queryProducts(text : string, filter : any | null){
   if (filter === null){
     return
   }
-  const token = await AsyncStorage.getItem("token")
+  const token = await getToken();
   if (token === null){
     alert(`Authenticate again`)
     router.navigate("/auth/sign-in")
     return null;
   }
-  await AsyncStorage.setItem("filter" , JSON.stringify(filter));
+  await setObject("filter" , filter)
   const resp = await fetch(base_url + "/query", {
     method: "POST",
     headers: {
@@ -295,12 +313,6 @@ export async function queryProducts(text : string, filter : any | null){
   if(resp.status === 200){
     let products = await resp.json();
     return products;
-  }
-
-  if (resp.status === 401){
-    alert(`Authenticate again`)
-    router.replace("/auth/sign-in")
-    return null;
   }
   
   return null
@@ -336,7 +348,7 @@ export async function search(query : string, random? : "yes" | undefined, n? : n
 }
 
 export async function getLiked(){
-  const token = await AsyncStorage.getItem("token")
+  const token = await getToken();
   if (token === null){
     alert(`Authenticate again`)
     router.navigate("/auth/sign-in")
@@ -353,11 +365,7 @@ export async function getLiked(){
   try {
     // TODO : change endpoint to liked
     const resp = await fetch(`${base_url}/liked`, requestOptions);
-    if (resp.status === 401){
-        alert(`token expired sign in again`)
-        router.replace("/auth/sign-in")
-        return null;
-    } else if (resp.status !== 200){
+    if (resp.status !== 200){
         return null;
     }
     const data = await resp.json();
@@ -387,15 +395,10 @@ export async function getFilter(){
 }
 
 export async function getCart(){
-  let token = null
-  try {
-    token = await AsyncStorage.getItem("token");
-    if (token === null){
-      return null;
-    }
-  } catch(e){
+  let token = await getToken();
+if (token === null){
     return null;
-  }
+}
 
   const response = await fetch(`${base_url}/cart` , {
     method : "GET",
@@ -413,14 +416,9 @@ export async function getCart(){
 }
 
 export async function getDetails(){
-  let token = null
-  try {
-    token = await AsyncStorage.getItem("token");
-    if (token === null){
+  let token = await getToken()
+  if (token === null){
       return null;
-    }
-  } catch(e){
-    return null;
   }
 
   const response = await fetch(`${base_url}/details` , {
@@ -439,13 +437,8 @@ export async function getDetails(){
 }
 
 export async function postAction(action : any){
-  let token = null
-  try {
-    token = await AsyncStorage.getItem("token");
-    if (token === null){
-      return false;
-    }
-  } catch(e){
+  let token = await getToken()
+  if (token === null){
     return false;
   }
 

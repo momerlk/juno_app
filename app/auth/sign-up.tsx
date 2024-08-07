@@ -1,6 +1,7 @@
 import { View, Text, Image, Pressable,
    TextInput, TouchableOpacity,
-    ScrollView} from 'react-native';
+    ScrollView,
+    ImageBackground} from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from "react-native-safe-area-context";
 import COLORS from '../constants/colors';
@@ -12,54 +13,117 @@ import {router} from "expo-router"
 import * as Font from "expo-font";
 import * as api from "../backend/api"
 import * as size from "react-native-size-matters"
-import { DropDown as DropDownPicker } from '../components/_common';
-import { fetchFonts } from '../backend/util';
-import { PrimaryInput, PasswordInput } from '../components/input';
+import { asyncTimeout, DropDown as DropDownPicker } from '../components/_common';
+import { PrimaryInput, PasswordInput , SelectInput} from '../components/input';
 import { PrimaryButton, SecondaryButton} from '../components/button';
+import { validateEmail, validatePassword, validatePhoneNumber, validateLocation} from './validation';
 
 // TODO : Add Form Validation. Validate each of the fields.
 // TODO : Error handling when the message = ""
 
 const Signup = () => {
-  const [isPasswordShown, setIsPasswordShown] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
 
   const [password , setPassword] = useState("");
   const [confirmPassword , setConfirmPassword] = useState("")
+  const [location, setLocation] = useState("")
   const [email , setEmail] = useState("");
   const [username, setUsername] = useState("")
   const [number , setNumber] = useState("")
   const [name , setName] = useState("")
   const [gender , setGender] = useState("") 
   const [age, setAge] = useState(0) 
-  const [dateOfBirth , setDateOfBirth] = useState("")
-  
-  const [message , setMessage] = useState("")
-  
-  useEffect(() => {
-    fetchFonts();
-  }, [])
+
+  // form validation
+  const [emailError , setEmailError] = useState(false)
+  const [numError , setNumError] = useState(false)
+  const [passError, setPassError] = useState(false)
+  const [locationError, setLocationError] = useState(false)
+
+  const [loading, setLoading] = useState<any>(null)
+  const [done , setDone] = useState<any>(null);
+
 
   const handleSignup = async () => {
-        // e.preventDefault();
-        try {
-            await api.signUp({
-              username : username,
-              email : email,
-              password : password,
-              number : number,
-              age : age,
-              gender : gender,
-              name : name,
-            });
-            setEmail("")
-            setNumber("")
-            setPassword("")
-            setEmail("")
-            setAge(0)
-            setGender("")
-        } catch (error : any) {
-            setMessage('Error: ' + error.message);
+        setLoading(true); 
+
+        const eVal = validateEmail(email) // email validation
+        const nVal = validatePhoneNumber(number) // phone number validation
+        const pVal = validatePassword(password) // password validation
+        const lVal = validateLocation(location)
+
+        const locationObject = {
+          city : lVal.city,
+          state : lVal.state,
+          country : lVal.country,
+        }
+
+        setEmailError(!eVal.ok)
+        setNumError(!nVal.ok)
+        setPassError(!pVal.ok)
+        setLocationError(!lVal.ok)
+
+        let message = ""
+
+        if (!eVal.ok){
+          message += eVal.message + "\n"
+        }
+        if (!pVal.ok){
+          message += pVal.message + "\n"
+        }
+        if (!nVal.ok){
+          message += nVal.message + "\n"
+        }
+        if (!lVal.ok){
+          message += lVal.message + "\n"
+        }
+
+        if (!pVal.ok || !eVal.ok || !nVal.ok || !lVal.ok){
+          alert(message)
+          setLoading(false)
+          return
+        }
+        
+        if (pVal.ok){
+          if (password !== confirmPassword) {
+            alert(`passwords don't match`)
+            setPassError(true)
+            setLoading(false)
+            return;
+          }
+        }
+
+        const ok = await api.signUp({
+          location : locationObject,
+          email : email,
+          password : password,
+          number : number,
+          age : age,
+          gender : gender,
+          name : name,
+        });
+        setLocation("")
+        setEmail("")
+        setNumber("")
+        setPassword("")
+        setEmail("")
+        setAge(0)
+        setGender("")
+
+        setLoading(false);
+
+        if (!ok){
+          alert(`failed to create an account`);
+          return;
+        }
+        
+        setDone(true);
+        await asyncTimeout(1000);
+        setDone(false);
+
+        if (ok){
+          router.navigate("/auth/sign-in")
+        } else {
+          alert(`failed to sign up`)
         }
     };
 
@@ -68,12 +132,28 @@ const Signup = () => {
       <ScrollView style={{ flex: 1, paddingBottom : 100}}
         showsVerticalScrollIndicator={false} 
       >
-        <Image
+        <ImageBackground
           source={{
             uri : "https://daily.jstor.org/wp-content/uploads/2017/09/indian_dress_1050x700.jpg"
           }} 
-          style={{height : 400}}
-        />
+          style={{
+            height : 400,
+            justifyContent : "center",
+            alignItems : "center",
+          }}
+          imageStyle={{
+            opacity : 0.5,
+          }}
+        >
+          <Text style={{
+            fontFamily : "Montserrat_500Medium",
+            textAlign : "center",
+            marginHorizontal : 30,
+            color : "white",
+            opacity : 0.9,
+            fontSize : 22,
+          }}>Explore South Asian Beauty and Fashion</Text>
+        </ImageBackground>
         <View style={{marginHorizontal : 22}}>
           <View style={{ marginVertical: 22 }}>
             <Text style={{
@@ -86,25 +166,16 @@ const Signup = () => {
             </Text>
 
             <Text style={{
-              fontSize: 16,
-              color: "white",
+              fontFamily : "Inter_500Medium",
+              fontSize : 15,
+              color : "white",
             }}>Fill in all the details below to create your account!</Text>
           </View>
 
-
-
           <PrimaryInput 
-            label="Email"
-            placeholder='Enter your email address'
-            keyboardType="email-address"
-            onChangeText={text => setEmail(text)} 
-          />
-
-          <PrimaryInput 
-            label="Phone"
-            placeholder='With country code +92 or +91'
-            keyboardType="phone-pad"
-            onChangeText={text => setNumber(text)} 
+            label="Name"
+            placeholder='Enter your name'
+            onChangeText={text => setName(text)} 
           />
 
           <PrimaryInput 
@@ -114,87 +185,70 @@ const Signup = () => {
             onChangeText={text => setAge(parseInt(text))} 
           />
 
-          <View style={{ marginBottom: 15 }}>
-            <Text style={{
-              fontSize: 16,
-              fontWeight: '400',
-              marginVertical: 8,
-              color : "white",
-            }}>Gender </Text>
-            <DropDownPicker
-              data={[{label : "Male", value : "male"}, {label : "Female", value : "female"} , {label : "Other" , value : "Other"}]} 
-              title={"Gender"}
-              onChange={(v : string) => {
-                setGender(v[0])
-              }}
-              selected={null}
-              multiple={false}
-              range={{min : [], max : []}}
-              onPress={() => {}}
-              containerStyle={{
-                width : "100%",
-                marginHorizontal : 0,
-              }}
-              buttonStyle={{
-                width : "100%",
-                backgroundColor : "#222222",
-                marginHorizontal : 0,
-                height : 51,
-              }}
-              textStyle={{
-                color : "white",
-                marginTop : 4,
-                marginLeft : 6,  
-                fontSize : 15,
-                fontFamily : "Montserrat"
-              }}
-            />
-          </View>
+          <SelectInput 
+            label="Gender"
+            placeholder="Pick your gender" 
+            data={[{label : "Male" , value : "male"}, {label : "Female" , value : "female"}, {label : "Other" , value : "other"}]}
+            onChange={(val : string) => setGender(val[0])}
+            multiple={false}
+          />
+
+          <View style={{marginVertical : 10}}/>
+
+          <PrimaryInput 
+            label="Email *"
+            error={emailError}
+            placeholder='Enter your email address'
+            keyboardType="email-address"
+            onChangeText={text => setEmail(text)} 
+          />
+
+          <PrimaryInput 
+            label="Phone *"
+            error={numError}
+            placeholder='With country code +92 or +91'
+            keyboardType="phone-pad"
+            onChangeText={text => setNumber(text)} 
+          />
+
+          <PrimaryInput 
+            label="Location *"
+            error={locationError}
+            placeholder='Format like this city, state, country'
+            onChangeText={text => setLocation(text)} 
+          />
+
+          
+          <View style={{marginVertical : 10}}/>
 
           
           <PasswordInput 
             label="Password"
+            error={passError}
             placeholder='Enter a secure password'
             onChangeText={text => setPassword(text)} 
           />
 
           <PasswordInput 
             label="Confirm Password"
+            error={passError}
             placeholder='Enter your password again'
-            onChangeText={text => setPassword(text)} 
+            onChangeText={text => setConfirmPassword(text)} 
           />
 
+          <View style={{marginVertical : 10}}/>
 
           <PrimaryButton 
-            onPress={async () => {
-                  try {
-                    await handleSignup()
-                    router.navigate("/auth/sign-in")
-                } catch (e){
-                    alert(`couldn't create account . error = ${e}`)
-                } 
-            }}
-            text="Create account" 
+            onPress={handleSignup}
+            text="Create Account" 
+            loading={loading}
+            done={done}
           />
 
-
-          <View style={{
-            flexDirection: "row",
-            justifyContent: "center",
-            marginVertical: 22
-          }}>
-            <Text style={{ fontSize: 16, color: "white", fontFamily : "Poppins_400Regular" }}>Already have an account ?</Text>
-            <Pressable
-              onPress={() => router.navigate("/auth/sign-in")}
-            >
-              <Text style={{
-                fontSize: 17,
-                color: "white",
-                marginLeft: 6,
-                textDecorationLine : "underline",
-              }}>Login</Text>
-            </Pressable>
-          </View>
+          <SecondaryButton 
+            onPress={() => router.navigate("/auth/sign-in")}
+            text="Have An Account ?" 
+          />
 
           <View style={{paddingVertical : 200}}/>
       </View>

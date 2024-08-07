@@ -1,90 +1,30 @@
-import { View, Text, Pressable, Image, StyleProp, ViewStyle, TextStyle } from 'react-native';
+import { View, Text, Pressable, ImageBackground } from 'react-native';
 import React, {useEffect , useState} from 'react';
-import { LinearGradient } from 'expo-linear-gradient';
 import COLORS from '../constants/colors';
 import {PrimaryButton} from '../components/button';
 
 import {router} from "expo-router"
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { storage } from '../backend/storage';
+
 
 const Welcome = () => {
-  useEffect(() => {
-    AsyncStorage.setItem("authenticated" , "false")
-  } , [])
+  storage.set("Authenticated" , "false")
   return (
-    <LinearGradient
-      style={{ flex: 1}}
-      colors={[COLORS.secondary, COLORS.primary]}
+    <ImageBackground
+      style={{ flex: 1, backgroundColor : "black"}}
+      imageStyle={{
+        opacity : 0.45,
+      }}
+      source={require("../assets/fresco.jpg")}
     >
-      <View style={{ flex: 1, height : 600}}>
-        <View>
-          <Image
-            source={require("../assets/fashion/1.png")}
-            style={{
-              height: 100,
-              width: 100,
-              borderRadius: 20,
-              position: "absolute",
-              top: 10,
-              transform: [
-                { translateX: 20 },
-                { translateY: 50 },
-                { rotate: "-15deg" }
-              ]
-            }}
-          />
-
-          <Image
-            source={require("../assets/fashion/2.png")}
-            style={{
-              height: 100,
-              width: 100,
-              borderRadius: 20,
-              position: "absolute",
-              top: -30,
-              left: 100,
-              transform: [
-                { translateX: 50 },
-                { translateY: 50 },
-                { rotate: "-5deg" }
-              ]
-            }}
-          />
-
-          <Image
-            source={require("../assets/fashion/2.png")}
-            style={{
-              width: 100,
-              height: 100,
-              borderRadius: 20,
-              position: "absolute",
-              top: 130,
-              left: -50,
-              transform: [
-                { translateX: 50 },
-                { translateY: 50 },
-                { rotate: "15deg" }
-              ]
-            }}
-          />
-
-          <Image
-            source={require("../assets/fashion/3.png")}
-            style={{
-              height: 200,
-              width: 200,
-              borderRadius: 20,
-              position: "absolute",
-              top: 110,
-              left: 100,
-              transform: [
-                { translateX: 50 },
-                { translateY: 50 },
-                { rotate: "-15deg" }
-              ]
-            }}
-          />
-        </View>
+      <View 
+        style={{ 
+          flex: 1, 
+          height : 600,
+          justifyContent : "center",
+          alignItems : "center",
+        }}
+      >
 
         {/* Content */}
 
@@ -92,24 +32,24 @@ const Welcome = () => {
           style={{
             paddingHorizontal: 22,
             position: "absolute",
-            top: 400,
+            
             width: "100%"
           }}
         >
           <Text
             style={{
-              fontSize: 38,
-              fontWeight: '800',
-              color: COLORS.white
+              fontSize: 30,
+              fontFamily : "Inter_500Medium",
+              color : "white",
             }}
           >
-            Stop Scrolling,{"\n"}Start Swiping
+            A community of small & passionate sellers
           </Text>
 
           
 
           <PrimaryButton
-            label="Join Now"
+            text="Join Now"
             onPress={() => router.navigate("/auth/sign-up")}
           />
 
@@ -143,7 +83,7 @@ const Welcome = () => {
           </View>
         </View>
       </View>
-    </LinearGradient>
+    </ImageBackground>
   );
 };
 

@@ -1,10 +1,11 @@
 import React from 'react';
 import { useContext, createContext, type PropsWithChildren } from 'react';
 import { useStorageState } from './storage';
+import * as api from "../backend/api"
 
 // Define the context type
 type AuthContextType = {
-  signIn: () => void;
+  signIn: (email : string, password : string) => any;
   signOut: () => void;
   session?: string | null;
   isLoading: boolean;
@@ -12,7 +13,7 @@ type AuthContextType = {
 
 // Create the context with a default value
 const AuthContext = createContext<AuthContextType>({
-  signIn: () => null,
+  signIn: (email : string, password : string) => Promise<boolean>,
   signOut: () => null,
   session: null,
   isLoading: false,
@@ -39,9 +40,13 @@ export function SessionProvider({ children }: SessionProviderProps) {
   return (
     <AuthContext.Provider
       value={{
-        signIn: () => {
+        signIn: async (email : string, password : string) => {
           // Perform sign-in logic here
-          setSession('xxx');
+          const ok = await api.signIn(email, password);
+          if (ok){
+            setSession('true');
+          }
+          return ok;
         },
         signOut: () => {
           setSession(null);

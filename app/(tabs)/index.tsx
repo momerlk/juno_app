@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import * as Font from 'expo-font';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { router } from 'expo-router';
+
+import { Redirect, router } from 'expo-router';
 import {
   StyleSheet, 
   Text, View, Animated, PanResponder, Dimensions, 
@@ -21,16 +21,19 @@ import {Image as FastImage} from "expo-image"
 
 import {
   shortTitle , toTitle , fmtPrice, Logo, 
-  PrimaryButton, SecondaryButton,
   DropDown,
   Filter,
   Loading,
   Sharing,
 } from "../components/_common"
 
+
 import { tabBarHeight } from './_layout';
 import * as api from "../backend/api";
 import { fetchFonts } from '../backend/util';
+import { PrimaryButton, SecondaryButton } from '../components/button';
+import { storage, getObject, setObject, getToken } from '../backend/storage';
+import { useSession } from '../backend/ctx';
 
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -214,15 +217,9 @@ export class SwipeView extends React.Component<AppProps, AppState> {
 
 
   async componentDidMount() {
-    await fetchFonts();
 
     if(this.state.currentIndex !== 0){
       this.setState({currentIndex : 0})
-    }
-    // if user first time user redirect them to welcome
-    const firstTime = await AsyncStorage.getItem("first_time")
-    if (firstTime === null ||  firstTime !== "no"){
-      router.replace("/auth/welcome")
     }
   }
 
@@ -862,14 +859,8 @@ export class SwipeView extends React.Component<AppProps, AppState> {
             }}
             onPress={async () => {
                 // TODO : Add filter functionality
-                let filter = null;
+                let filter = await getObject("filter")
 
-                try {
-                  const filterString = await AsyncStorage.getItem("filter");
-                  if(filterString !== null && filterString !== ""){
-                    filter = await JSON.parse(filterString as string)
-                  }
-                } catch(e){}
                 if(filter === null || filter === undefined){
                   filter = {
                     category : "",
@@ -986,7 +977,7 @@ interface HomeState {
 }
 
 
-export default class Home extends React.Component<any , HomeState> {
+class Home extends React.Component<any , HomeState> {
   constructor(props : any) {
     super(props);
     this.state = {
@@ -1001,15 +992,20 @@ export default class Home extends React.Component<any , HomeState> {
   }
 
   async componentDidMount() {
-
-    const firstTime = await AsyncStorage.getItem("first_time");
-    if (firstTime === null || firstTime !== "no"){
+    // if user first time user redirect them to welcome
+    const firstTime = await storage.getString("first_time")
+    if (firstTime === null ||  firstTime !== "no"){
       router.replace("/auth/welcome")
     }
 
-    await AsyncStorage.setItem("filter" , "") // so that filter from previous session doesn't interfere
+    await setObject("filter" , null) // so that filter from previous session doesn't interfere
     
-    const token = await AsyncStorage.getItem('token');
+    const token = await getToken();
+    if (token === null){
+      alert(`Authenticate again`)
+      router.navigate("/auth/sign-in")
+    }
+
     const wsfeed = new api.WSFeed(token!, (data : any) => {
       this.setState({loading : false, products: this.state.products.concat(data)});
     });
@@ -1039,7 +1035,7 @@ export default class Home extends React.Component<any , HomeState> {
       this.state.WSFeed.close();
     }
 
-    await AsyncStorage.setItem("filter" , "") // so that filter from previous session doesn't interfere
+    await setObject("filter" , null) // so that filter from previous session doesn't interfere
   }
 
   handleSwipe = async (action_type : string , _ : number) => {
@@ -1047,11 +1043,7 @@ export default class Home extends React.Component<any , HomeState> {
     console.log(`products.length = ${this.state.products.length} , index = ${this.state.currentIndex}`)
     console.log(`WSFeed open = ${this.state.WSFeed?.open}`)
 
-    const filterString = await AsyncStorage.getItem('filter');
-    let filter = null
-    if(filterString !== null && filterString !== ""){
-      filter = JSON.parse(filterString as string);
-    }
+    const filter = await getObject("filter")
 
     const { WSFeed, products } = this.state;
     
@@ -1089,16 +1081,12 @@ export default class Home extends React.Component<any , HomeState> {
     }
 
     try {
-      const filterString = await AsyncStorage.getItem("filter")
-      let filter = null;
-      if(filterString !== null && filterString !== ""){
-        filter = (filterString as string);
-      }
+      const filter = await getObject("filter")
       if (deepEqual(filter , data)){
         return;
       }
       if (filter !== null && dataEmpty === true){
-        await AsyncStorage.setItem('filter', "");
+        await setObject("filter" , null)
         this.setState({loading : true, products: [], currentIndex : 0});
         const { WSFeed } = this.state;
         await WSFeed?.sendAction('open', '', null);
@@ -1112,7 +1100,7 @@ export default class Home extends React.Component<any , HomeState> {
 
     } catch(e){}
     try {
-      await AsyncStorage.setItem('filter', JSON.stringify(data));
+      await setObject("filter" , data)
       this.setState({loading : true, products: [], currentIndex : 0});
       const { WSFeed } = this.state;
       await WSFeed?.sendAction('open', '', api.createQuery(this.state.query, data));
@@ -1128,13 +1116,7 @@ export default class Home extends React.Component<any , HomeState> {
   // handle search
   async handleSearch(query : string){
     this.setState({loading : true , query : query})
-    const filterString = await AsyncStorage.getItem("filter")
-    let filter : any | null = null;
-    if(filterString !== null && filterString !== ""){
-      try {
-        filter = await JSON.parse(filterString);
-      } catch(e){}
-    }
+    const filter = await getObject("filter")
 
     if (filter === null){
       const products = await api.search(this.state.query);
@@ -1201,6 +1183,15 @@ export default class Home extends React.Component<any , HomeState> {
       </SafeAreaView>
     );
   }
+}
+
+export default function App(){
+  const { session } = useSession()
+
+  if (!session){
+    return <Redirect href="/auth/sign-in"/>
+  } 
+  return <Home />
 }
 
 

@@ -16,7 +16,6 @@ import * as api from "./backend/api";
 
 import {Feather, Ionicons} from "@expo/vector-icons"
 import {router} from "expo-router";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Back , FastImageBackground, asyncTimeout, fmtPrice, toTitle, shortTitle} from "./components/_common";
 
 

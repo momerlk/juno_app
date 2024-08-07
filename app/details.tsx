@@ -11,10 +11,12 @@ import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import PinchableCarousel from "./components/_image"
-import { Back , toTitle, fmtPrice, DropDown as DropDownPicker, PrimaryButton, SecondaryButton, asyncTimeout} from './components/_common';
+import { Back , toTitle, fmtPrice, DropDown as DropDownPicker, asyncTimeout} from './components/_common';
+
 
 import * as size from "react-native-size-matters"
 import * as api from "./backend/api"
+import { PrimaryButton, SecondaryButton } from './components/button';
 
 function DropDown(props : any){
   const [open , setOpen] = useState(false);
